@@ -9,7 +9,7 @@ public class ServerClient
         new ServerClient();
     }
 
-    private ArrayList<Client> clients;
+    private Map<Integer, Client> clients = new HashMap<>();
 
     public ServerClient()
     {
@@ -25,7 +25,6 @@ public class ServerClient
             System.out.println("Server started at: " + new Date());
 
 
-
             //Neeed to be able to send information from the server to the client
 
             //Loop that runs server function
@@ -36,11 +35,15 @@ public class ServerClient
                 ClientThread clientThread = new ClientThread(socket);
                 //Starts the thread
                 new Thread(clientThread).start();
+                //Needs to keep track of clients though? Or is it automaticly linked.
+                PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
+                output.println("");
+
                 //End thread functions
 
                 //Sending information to the user ->
-                BufferedReader serverTerminal = new BufferedReader(new InputStreamReader(System.in));
-                String serverInput = serverTerminal.readLine();
+                //Server will not be writing to the user itself.
+
 
 
 

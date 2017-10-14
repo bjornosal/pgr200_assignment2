@@ -1,7 +1,5 @@
 import java.io.*;
 import java.net.*;
-//We need a Scanner to receive input from the user
-import java.util.Scanner;
 
 public class Client
 {
@@ -30,11 +28,6 @@ public class Client
                 String userInput = userTerminal.readLine();
                 //Now we write it to the server
                 output.println(userInput);
-
-
-
-
-
             }
         } catch (IOException exception) {
             System.out.println("Error: " + exception);

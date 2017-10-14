@@ -26,6 +26,7 @@ public class ClientThread implements Runnable
             BufferedReader inputFromClient = new BufferedReader(new InputStreamReader(threadSocket.getInputStream()));
 
             //Tell the client that he/she has connected
+            //Is this from the server?
             outputToClient.println("You have connected at: " + new Date());
 
             while (true) {
