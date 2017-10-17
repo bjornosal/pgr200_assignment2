@@ -12,21 +12,21 @@ public class Client
     {
         try(Socket socket = new Socket("localhost",8888);
             PrintWriter outputToThread = new PrintWriter(socket.getOutputStream(), true);
-            BufferedReader serverInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in))) {
+            BufferedReader inputFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            BufferedReader inputFromClient = new BufferedReader(new InputStreamReader(System.in))) {
 
             //Again, here is the code that will run the client, this will continue looking for
             //input from the user then it will send that info to the server.
             while(true) {
                 //Here we look for input from the user
-                if(userInput.ready()) {
-                    String input = userInput.readLine();
+                if(inputFromClient.ready()) {
+                    String input = inputFromClient.readLine();
                     //Now we write it to the server/client
                     outputToThread.println(input);
                 }
 
-                if(serverInput.ready()) {
-                    String receivedMsg = serverInput.readLine();
+                if(inputFromServer.ready()) {
+                    String receivedMsg = inputFromServer.readLine();
                     System.out.println(receivedMsg);
                 }
             }

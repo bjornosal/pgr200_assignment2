@@ -1,12 +1,8 @@
-import java.net.*;
-        import java.util.*;
-        import java.io.*;
-
-/*public class ServerClient
+/*public class Server
 {
     public static void main(String[] args)
     {
-        new ServerClient();
+        new Server();
     }
 
     // Using hashmap to easily identify users by searching by username (to be implemented) to find \n
@@ -16,7 +12,7 @@ import java.net.*;
     private Map<Integer, ClientThread> clients = new HashMap<>();
     private PrintWriter output;
     private BufferedReader serverInput;
-    public ServerClient()
+    public Server()
     {
         runServer();
     }
@@ -75,22 +71,34 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Date;
+import java.util.HashMap;
 
-public class ServerClient {
+public class Server {
+
+    private HashMap<Integer, ClientThread> clientMap;
+    int counter;
 
     public static void main(String[] args) {
-        new ServerClient();
+        new Server();
     }
 
-    private ServerClient(){
+    private Server(){
+
+
 
         try(ServerSocket sSocket = new ServerSocket(8888)) {
             System.out.println("Server started at " + new Date());
+            clientMap = new HashMap<>();
+            counter = 0;
+            System.out.println("Connected clients: " + clientMap.size());
 
             while (true){
                 Socket socket = sSocket.accept();
-                ClientThread clientThread = new ClientThread(socket);
+                ClientThread clientThread = new ClientThread(counter, socket);
                 new Thread(clientThread).start();
+                counter++;
+                clientMap.put(clientThread.getId(), clientThread);
+                System.out.println("Connected clients: " + clientMap.size());
             }
 
         } catch (IOException e) {
