@@ -1,12 +1,28 @@
 
 public class Menu {
 
+    private String[] tableChoices;
+
     public Menu() {
         setTableChoices();
 
     }
 
-    private String[] tableChoices;
+    public String tableMenu() {
+        StringBuilder tableMenu = new StringBuilder();
+
+        tableMenu.append(menuHeader());
+        tableMenu.append(menuChoices(getTableChoices()));
+
+        return tableMenu.toString();
+    }
+
+
+    /**
+     * TODO Set up total menu logic
+     * Todo when logic is clear, switches can be set up with recursion?
+    */
+
 
     //Make it dynamic
     //One param, an array that contains all choices
@@ -23,7 +39,7 @@ public class Menu {
         return menuHeader.toString();
     }
 
-    public String menuChoices(String[] choices) {
+    private String menuChoices(String[] choices) {
 
         StringBuilder menuChoices = new StringBuilder();
 
@@ -40,17 +56,12 @@ public class Menu {
         tableChoices[1] = "Search for subject";
         tableChoices[2] = "Get information on all subjects";
         tableChoices[3] = "Quit";
-
     }
 
-    public String[] getTableChoices() {
+    private String[] getTableChoices() {
         return tableChoices;
     }
 
-    /*
-    "1: Read in information for tables\n" +
-            "2: Search for subject\n" +
-            "3: Get information on all subjects\n" +
-            "4: Quit\n";*/
+
 
 }

@@ -31,7 +31,7 @@ public class ClientThread implements Runnable
                     outputToClient.println(fromServer);
                 }*/
                 if(!hasSentMenu) {
-                    outputToClient.println(inputHandler.menu.menuChoices(inputHandler.menu.getTableChoices()));
+                    outputToClient.println("");
                     hasSentMenu = true;
                 }
             }
