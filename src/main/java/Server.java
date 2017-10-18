@@ -76,7 +76,7 @@ import java.util.HashMap;
 public class Server {
 
     private HashMap<Integer, ClientThread> clientMap;
-    int counter;
+    int clientCounter;
 
     public static void main(String[] args) {
         new Server();
@@ -89,18 +89,19 @@ public class Server {
         try(ServerSocket sSocket = new ServerSocket(8888)) {
             System.out.println("Server started at " + new Date());
             clientMap = new HashMap<>();
-            counter = 0;
+            clientCounter = 0;
             System.out.println("Connected clients: " + clientMap.size());
+
+            //TODO decrease clientCounter if a client disconnects
 
             while (true){
                 Socket socket = sSocket.accept();
-                ClientThread clientThread = new ClientThread(counter, socket);
+                ClientThread clientThread = new ClientThread(clientCounter, socket);
                 new Thread(clientThread).start();
-                counter++;
+                clientCounter++;
                 clientMap.put(clientThread.getId(), clientThread);
                 System.out.println("Connected clients: " + clientMap.size());
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }

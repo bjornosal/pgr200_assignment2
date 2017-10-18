@@ -5,13 +5,15 @@ public class ClientThread implements Runnable
 {
     private Socket threadSocket;
     private int id;
+    private InputHandler inputHandler = new InputHandler();
+    private boolean hasSentMenu = false;
+
 
     public ClientThread(int id, Socket socket)
     {
-        this.id = id;
+        setId(id);
         threadSocket = socket;
     }
-
 
     public void run()
     {
@@ -21,18 +23,33 @@ public class ClientThread implements Runnable
 
             while (true) {
                 if(inputFromClient.ready()) {
-                    String chatInput = inputFromClient.readLine();
-                    System.out.println(chatInput);
-                }
+                    String fromClient = inputFromClient.readLine();
+                    System.out.println(fromClient);
+                }/*
                 if(inputFromServer.ready()) {
-                    String server = inputFromServer.readLine();
-                    outputToClient.println(server);
+                    String fromServer = inputFromServer.readLine();
+                    outputToClient.println(fromServer);
+                }*/
+                if(!hasSentMenu) {
+                    outputToClient.println(inputHandler.menu.menuChoices(inputHandler.menu.getTableChoices()));
+                    hasSentMenu = true;
                 }
             }
         } catch(IOException exception) {
             System.out.println("Feilmelding: " + exception);
         }
     }
+
+    //TODO add menuHeader
+
+    //TODO add responses
+
+    //TODO add databaseConnection
+
+    //TODO add databaseHandler
+
+    //TODO add
+
 
     public int getId() {
         return id;
@@ -41,4 +58,5 @@ public class ClientThread implements Runnable
     public void setId(int id) {
         this.id = id;
     }
+
 }
