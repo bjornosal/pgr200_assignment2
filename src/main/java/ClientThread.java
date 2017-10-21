@@ -1,3 +1,5 @@
+import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -6,13 +8,14 @@ public class ClientThread implements Runnable
     private Socket threadSocket;
     private int id;
     private InputHandler inputHandler = new InputHandler();
-    private boolean hasSentMenu = false;
-
+    private boolean hasSentMainMenu = false;
+    private MysqlDataSource dataSource;
 
     public ClientThread(int id, Socket socket)
     {
         setId(id);
         threadSocket = socket;
+        dataSource = new MysqlDataSource();
     }
 
     public void run()
@@ -30,9 +33,9 @@ public class ClientThread implements Runnable
                     String fromServer = inputFromServer.readLine();
                     outputToClient.println(fromServer);
                 }*/
-                if(!hasSentMenu) {
-                    outputToClient.println(inputHandler.menu.getM);
-                    hasSentMenu = true;
+                if(!hasSentMainMenu) {
+                    inputHandler.setUpProperties(outputToClient,inputFromClient);
+
                 }
             }
         } catch(IOException exception) {

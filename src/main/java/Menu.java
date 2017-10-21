@@ -4,25 +4,26 @@ public class Menu {
 
     private String[] tableChoices;
     private String[] searchChoices;
-    private String[] mainMenu;
-
+    private String[] mainMenuChoices;
+    private String[] propertiesMenuChoices;
 
     public Menu() {
         setTableChoices();
         setSearchChoices();
         setMainMenuChoices();
+        setPropertiesMenu();
     }
 
     public String mainMenu() {
-        return menuHeader() + menuChoices(getMainMenuChoices());
+        return menuHeader() + menuChoices(getMainMenuChoices(), false);
     }
     public String tableMenu() {
-        return menuHeader() + menuChoices(getTableChoices());
+        return menuHeader() + menuChoices(getTableChoices(), true);
     }
     public String searchMenu() {
-        return  menuHeader() + menuChoices(getSearchChoices());
+        return  menuHeader() + menuChoices(getSearchChoices(), true);
     }
-
+    public String propertiesMenu() {return menuHeader() + menuChoices(getPropertiesMenuChoices(), false);}
 
 
     /**
@@ -36,7 +37,7 @@ public class Menu {
     private String menuHeader() {
         StringBuilder menuHeader = new StringBuilder();
 
-        String menuSeparator = "#####################################\n";
+        String menuSeparator = "###################################\n";
 
         menuHeader.append("\t\t\tMenu\n");
         menuHeader.append(menuSeparator);
@@ -46,14 +47,14 @@ public class Menu {
         return menuHeader.toString();
     }
 
-    private String menuChoices(String[] choices) {
+    private String menuChoices(String[] choices, boolean addEnd) {
 
         StringBuilder menuChoices = new StringBuilder();
 
         for(int i = 0; i < choices.length; i++) {
 
             menuChoices.append(i + 1).append(": ").append(choices[i]).append("\n");
-            if(i == choices.length - 1) {
+            if(i == choices.length - 1 && addEnd) {
                 menuChoices.append(i + 2 + ": Return to main menu\n");
                 menuChoices.append(i + 3 + ": Quit\n");
             }
@@ -84,9 +85,16 @@ public class Menu {
     }
 
     private void setMainMenuChoices() {
-        mainMenu = new String[2];
-        mainMenu[0] = "Get information";
-        mainMenu[1] = "Enter information";
+        mainMenuChoices = new String[2];
+        mainMenuChoices[0] = "Get information";
+        mainMenuChoices[1] = "Enter information";
+    }
+
+    private void setPropertiesMenu() {
+        propertiesMenuChoices = new String[3];
+        propertiesMenuChoices[0] = "Use default database properties";
+        propertiesMenuChoices[1] = "Use properties set by user";
+        propertiesMenuChoices[2] = "Set new database properties";
     }
 
     private String[] getTableChoices() {
@@ -98,6 +106,10 @@ public class Menu {
     }
 
     private String[] getMainMenuChoices() {
-        return mainMenu;
+        return mainMenuChoices;
+    }
+
+    private String[] getPropertiesMenuChoices() {
+        return propertiesMenuChoices;
     }
 }
