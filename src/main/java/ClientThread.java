@@ -8,7 +8,6 @@ public class ClientThread implements Runnable
     private Socket threadSocket;
     private int id;
     private InputHandler inputHandler = new InputHandler();
-    private boolean hasSentMainMenu = false;
     private MysqlDataSource dataSource;
 
     public ClientThread(int id, Socket socket)
@@ -25,16 +24,23 @@ public class ClientThread implements Runnable
              BufferedReader inputFromServer = new BufferedReader(new InputStreamReader(System.in))) {
 
             while (true) {
-                if(inputFromClient.ready()) {
+             /*   if(inputFromClient.ready()) {
                     String fromClient = inputFromClient.readLine();
                     System.out.println(fromClient);
-                }/*
+                }
                 if(inputFromServer.ready()) {
                     String fromServer = inputFromServer.readLine();
                     outputToClient.println(fromServer);
                 }*/
+                boolean hasSentMainMenu = false;
+                boolean propertiesIsSet = false;
                 if(!hasSentMainMenu) {
+                    //TODO Implement propertyFiles for each client using userID
                     inputHandler.setUpProperties(outputToClient,inputFromClient);
+                    //Enters loop in menu
+                    inputHandler.startMenuLoop(outputToClient, inputFromClient);
+
+
 
                 }
             }

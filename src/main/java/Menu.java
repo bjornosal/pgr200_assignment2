@@ -39,7 +39,7 @@ public class Menu {
 
         String menuSeparator = "###################################\n";
 
-        menuHeader.append("\t\t\tMenu\n");
+        menuHeader.append("\n\t\t\tMenu\n");
         menuHeader.append(menuSeparator);
         menuHeader.append("What would you like to do? \nEnter the number before action and press enter\n");
         menuHeader.append(menuSeparator);
@@ -53,14 +53,25 @@ public class Menu {
 
         for(int i = 0; i < choices.length; i++) {
 
-            menuChoices.append(i + 1).append(": ").append(choices[i]).append("\n");
+            menuChoices.append(i + 1).append(": ").append(choices[i]);
+            if(i < choices.length - 1) {
+                menuChoices.append("\n");
+            }
             if(i == choices.length - 1 && addEnd) {
+                menuChoices.append("\n");
                 menuChoices.append(i + 2 + ": Return to main menu\n");
                 menuChoices.append(i + 3 + ": Quit\n");
             }
         }
 
         return menuChoices.toString();
+    }
+
+
+    private void setMainMenuChoices() {
+        mainMenuChoices = new String[2];
+        mainMenuChoices[0] = "Get information.";
+        mainMenuChoices[1] = "Enter information.";
     }
 
     //menuchoices for all searches that a user can do.
@@ -81,13 +92,7 @@ public class Menu {
         tableChoices[0] = "Enter information for \'subject\' table";
         tableChoices[1] = "Enter information for \'room\' table";
         tableChoices[2] = "Enter information for \'lecturer\' table";
-        tableChoices[3] = "Use existing files n files folder";
-    }
-
-    private void setMainMenuChoices() {
-        mainMenuChoices = new String[2];
-        mainMenuChoices[0] = "Get information";
-        mainMenuChoices[1] = "Enter information";
+        tableChoices[3] = "Use existing files in files folder";
     }
 
     private void setPropertiesMenu() {
