@@ -5,6 +5,8 @@ import java.util.Properties;
 public class InputHandler {
 
 
+    //TODO Fix exception throws etc
+    //TODO put files in a property file maybe?
     private Menu menu;
     private DatabaseHandler databaseHandler;
 
@@ -92,7 +94,6 @@ public class InputHandler {
         while(true) {
             outputToClient.println(menu.mainMenu());
             menuChoice = inputFromClient.readLine();
-            System.out.println(databaseHandler.getPropertyFilePath());
 
             switch(menuChoice) {
                 case "1":
@@ -153,28 +154,28 @@ public class InputHandler {
 
             switch(menuChoice) {
                 case "1":
-                    outputToClient.println("Subject code: ");
+                    outputToClient.println("Please enter subject code: ");
                     String subject = inputFromClient.readLine();
-                    outputToClient.println(databaseHandler.getSubject(subject));
+                    outputToClient.println(databaseHandler.getSubjectByCode(subject));
                     break;
                 case "2":
                     outputToClient.println(databaseHandler.getAllSubjects());
                     break;
                 case "3":
-                    //Get information on all subjects
-                    //add this method in databasehandler
+                    outputToClient.println("Please enter name of lecturer: ");
+                    String lecturer = inputFromClient.readLine();
+                    outputToClient.println(databaseHandler.getLecturerByName(lecturer));
                     break;
                 case "4":
-                    //Get information on all subjects
-                    //add this method in databasehandler
+                    outputToClient.println(databaseHandler.getAllLecturers());
                     break;
                 case "5":
-                    //Get information on all subjects
-                    //add this method in databasehandler
+                    outputToClient.println("Please enter name of room: ");
+                    String room = inputFromClient.readLine();
+                    outputToClient.println(databaseHandler.getRoomByName(room));
                     break;
                 case "6":
-                    //Get information on all subjects
-                    //add this method in databasehandler
+                    outputToClient.println(databaseHandler.getAllRooms());
                     break;
                 case "7":
                     showMainMenu(outputToClient,inputFromClient);

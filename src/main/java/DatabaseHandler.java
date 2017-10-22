@@ -33,7 +33,6 @@ public class DatabaseHandler{
                 result += String.format(roomFormat, "Room", "Type", "Facilities");
                 break;
         }
-
         return result;
     }
 
@@ -150,11 +149,11 @@ public class DatabaseHandler{
         return columnNumber;
     }
 
-    public String getSubject(String subject) throws SQLException {
+    public String getSubjectByCode(String subjectCode) throws SQLException {
         String result = "";
-        String query = "SELECT id as 'Kode', name as 'Navn', attending_students as 'Studenter', teaching_form as 'Laeringsform', duration as 'Lengde'\n" +
+        String query = "SELECT id, name, attending_students, teaching_form, duration \n" +
                 "FROM subject\n" +
-                "WHERE id = '"+ subject + "';";
+                "WHERE id = '"+ subjectCode + "';";
 
         String[] rowResult = new String[getColumnCount("subject")];
         result += getResultHeader("subject");
@@ -180,7 +179,7 @@ public class DatabaseHandler{
 
     public String getAllSubjects() throws SQLException {
         String result = "";
-        String query = "SELECT id as 'Code', name as 'Navn', attending_students as 'Studenter', teaching_form as 'Laeringsform', duration as 'Lengde'\n" +
+        String query = "SELECT id, name, attending_students, teaching_form, duration\n" +
                 "FROM subject;";
         String[] rowResult = new String[getColumnCount("subject")];
         result += getResultHeader("subject");
@@ -204,6 +203,116 @@ public class DatabaseHandler{
         return result;
     }
 
+    public String getLecturerByName(String name) throws SQLException {
+        String result = "";
+        String query = "SELECT id, name\n" +
+                "FROM lecturer\n" +
+                "WHERE name ='" + name + "';";
+
+        String[] rowResult = new String[getColumnCount("lecturer")];
+        result += getResultHeader("lecturer");
+
+        MysqlDataSource dataSource = getDatabaseConnection().getDataSource();
+        try(Connection connection = dataSource.getConnection()) {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            while(rs.next()) {
+                for(int i = 1; i <= getColumnCount("lecturer"); i++) {
+                    rowResult[i-1] = rs.getObject(i).toString();
+                    if(i == getColumnCount("lecturer")) {
+                        result += "\n";
+                    }
+                }
+                result += String.format(lecturerFormat,
+                        rowResult[0], rowResult[1]);
+            }
+        }
+        return result;
+    }
+//TODO All the queries can be a lot more dynamic, more high cohesion method wise
+    public String getAllLecturers() throws SQLException {
+        String result = "";
+        String query = "SELECT id, name \n" +
+                "FROM lecturer;";
+        String[] rowResult = new String[getColumnCount("lecturer")];
+        result += getResultHeader("lecturer");
+
+        MysqlDataSource dataSource = getDatabaseConnection().getDataSource();
+        try(Connection connection = dataSource.getConnection()) {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            while(rs.next()) {
+                for(int i = 1; i <= getColumnCount("lecturer"); i++) {
+                    rowResult[i-1] = rs.getObject(i).toString();
+                    if(i == getColumnCount("lecturer")) {
+                        result += "\n";
+                    }
+                }
+                result += String.format(lecturerFormat,
+                        rowResult[0], rowResult[1]);
+            }
+        }
+        return result;
+
+    }
+
+    public String getRoomByName(String roomName) throws SQLException {
+        String result = "";
+        String query = "SELECT name, type, facilities\n" +
+                "FROM room\n" +
+                "WHERE name ='" + roomName + "';";
+        String[] rowResult = new String[getColumnCount("room")];
+        result += getResultHeader("room");
+
+        MysqlDataSource dataSource = getDatabaseConnection().getDataSource();
+        try(Connection connection = dataSource.getConnection()) {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            while(rs.next()) {
+                for(int i = 1; i <= getColumnCount("room"); i++) {
+                    rowResult[i-1] = rs.getObject(i).toString();
+                    if(i == getColumnCount("room")) {
+                        result += "\n";
+                    }
+                }
+                result += String.format(roomFormat,
+                        rowResult[0], rowResult[1], rowResult[2]);
+            }
+        }
+        return result;
+
+    }
+
+
+    public String getAllRooms() throws SQLException {
+        String result = "";
+        String query = "SELECT name, type, facilities\n" +
+                "FROM room;";
+        String[] rowResult = new String[getColumnCount("room")];
+        result += getResultHeader("room");
+
+        MysqlDataSource dataSource = getDatabaseConnection().getDataSource();
+        try(Connection connection = dataSource.getConnection()) {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            while(rs.next()) {
+                for(int i = 1; i <= getColumnCount("room"); i++) {
+                    rowResult[i-1] = rs.getObject(i).toString();
+                    if(i == getColumnCount("room")) {
+                        result += "\n";
+                    }
+                }
+                result += String.format(roomFormat,
+                        rowResult[0], rowResult[1], rowResult[2]);
+            }
+        }
+        return result;
+
+    }
 
     private ResultSetMetaData getFullResultSetMetaData(String tableName) throws SQLException {
         String query = "SELECT * FROM " + tableName + ";";
