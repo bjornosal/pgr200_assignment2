@@ -5,21 +5,29 @@ import java.util.Properties;
 public class InputHandler {
 
 
-    private Menu menu = new Menu();
-    private DatabaseConnection databaseConnection;
+    private Menu menu;
+    private DatabaseHandler databaseHandler;
 
     private File subjectFile;
     private File roomFile;
     private File lecturerFile;
 
     public InputHandler() throws IOException {
-        databaseConnection = new DatabaseConnection();
         setSubjectFile(new File("src/files/subject.csv"));
         setRoomFile(new File("src/files/room.csv"));
         setLecturerFile(new File("src/files/lecturer.csv"));
+        databaseHandler = new DatabaseHandler();
+        menu = new Menu();
     }
 
-    //Return boolean instead
+//TODO Change properties to be handled by the databasehandler
+// TODO instead of the databaseconnection which again handles all calls
+
+    public void startInputHandler(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException, SQLException {
+        setUpProperties(outputToClient,inputFromClient);
+        startMenuLoop(outputToClient,inputFromClient);
+    }
+
     public void setUpProperties(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException {
         boolean finished = false;
         String menuChoice;
@@ -32,13 +40,14 @@ public class InputHandler {
 
                 //Use default properties
                 case "1":
-                    databaseConnection.setPropertyFilePath("./src/files/defaultDatabaseLogin.properties");
+                    System.out.println();
+                    databaseHandler.setPropertyFilePath("./src/files/defaultDatabaseLogin.properties");
                     finished = true;
                     break;
 
                 //use properties previously set by user
                 case "2":
-                    databaseConnection.setPropertyFilePath("./src/files/userEnteredDatabaseLogin.properties");
+                    databaseHandler.setPropertyFilePath("./src/files/userEnteredDatabaseLogin.properties");
                     finished = true;
                     break;
 
@@ -63,7 +72,7 @@ public class InputHandler {
                     try(FileOutputStream fileOut = new FileOutputStream(userEnteredProperties)) {
                         properties.store(fileOut, "Added by user");
                         outputToClient.println("Property file set up. Attempting to connect.\n");
-                        databaseConnection.setPropertyFilePath("./src/files/userEnteredDatabaseLogin.properties");
+                        databaseHandler.setPropertyFilePath("./src/files/userEnteredDatabaseLogin.properties");
                         finished = true;
                     }
                     break;

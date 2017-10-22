@@ -6,18 +6,16 @@ import java.util.Properties;
 public class DatabaseConnection {
 
     private MysqlDataSource dataSource;
-    private String propertyFilePath;
 
-    public DatabaseConnection() throws IOException {
-        setPropertyFilePath("./src/files/defaultDatabaseLogin.properties");
-        setUpDatabase();
-    }
-
-    public void setUpDatabase() throws IOException {
+    public DatabaseConnection( ) throws IOException {
         dataSource = new MysqlDataSource();
 
+    }
+
+    public void setUpDatabase(String propertyFilePath) throws IOException {
+
         Properties properties = new Properties();
-        InputStream input = new FileInputStream(getPropertyFilePath());
+        InputStream input = new FileInputStream(propertyFilePath);
 
         properties.load(input);
 
@@ -27,13 +25,6 @@ public class DatabaseConnection {
         dataSource.setPassword(properties.getProperty("databasePassword"));
     }
 
-    public void setPropertyFilePath(String propertyFilePath) {
-        this.propertyFilePath = propertyFilePath;
-    }
-
-    public String getPropertyFilePath() {
-        return propertyFilePath;
-    }
 
     public MysqlDataSource getDataSource() {
         return dataSource;

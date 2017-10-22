@@ -32,10 +32,7 @@ public class ClientThread implements Runnable
                 }*/
 
                 //TODO Implement propertyFiles for each client using userID
-                inputHandler.setUpProperties(outputToClient,inputFromClient);
-                //Enters loop in menu
-                inputHandler.startMenuLoop(outputToClient, inputFromClient);
-
+                inputHandler.startInputHandler(outputToClient,inputFromClient);
             }
         } catch(IOException exception) {
             System.out.println("Feilmelding: " + exception);
@@ -43,16 +40,6 @@ public class ClientThread implements Runnable
             e.printStackTrace();
         }
     }
-
-    //TODO add menuHeader
-
-    //TODO add responses
-
-    //TODO add databaseConnection
-
-    //TODO add databaseHandler
-
-    //TODO add
 
 
     public int getId() {
