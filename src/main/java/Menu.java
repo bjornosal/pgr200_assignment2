@@ -26,10 +26,6 @@ public class Menu {
     public String propertiesMenu() {return menuHeader() + menuChoices(getPropertiesMenuChoices(), false);}
 
 
-    /**
-     * TODO Set up total menu logic
-     * Todo when logic is clear, switches can be set up with recursion?
-     */
 
 
     //Make it dynamic

@@ -1,4 +1,5 @@
 import java.io.*;
+import java.sql.SQLException;
 import java.util.Properties;
 
 public class InputHandler {
@@ -11,7 +12,7 @@ public class InputHandler {
     private File roomFile;
     private File lecturerFile;
 
-    public InputHandler() {
+    public InputHandler() throws IOException {
         databaseConnection = new DatabaseConnection();
         setSubjectFile(new File("src/files/subject.csv"));
         setRoomFile(new File("src/files/room.csv"));
@@ -31,13 +32,13 @@ public class InputHandler {
 
                 //Use default properties
                 case "1":
-                    databaseConnection.setDatabaseProperties("./src/files/defaultDatabaseLogin.properties");
+                    databaseConnection.setPropertyFilePath("./src/files/defaultDatabaseLogin.properties");
                     finished = true;
                     break;
 
                 //use properties previously set by user
                 case "2":
-                    databaseConnection.setDatabaseProperties("./src/files/userEnteredDatabaseLogin.properties");
+                    databaseConnection.setPropertyFilePath("./src/files/userEnteredDatabaseLogin.properties");
                     finished = true;
                     break;
 
@@ -62,7 +63,7 @@ public class InputHandler {
                     try(FileOutputStream fileOut = new FileOutputStream(userEnteredProperties)) {
                         properties.store(fileOut, "Added by user");
                         outputToClient.println("Property file set up. Attempting to connect.\n");
-                        databaseConnection.setDatabaseProperties("./src/files/userEnteredDatabaseLogin.properties");
+                        databaseConnection.setPropertyFilePath("./src/files/userEnteredDatabaseLogin.properties");
                         finished = true;
                     }
                     break;
@@ -75,11 +76,11 @@ public class InputHandler {
         }
     }
 
-    public void startMenuLoop(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException {
+    public void startMenuLoop(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException, SQLException {
         showMainMenu(outputToClient, inputFromClient);
     }
 
-    private void showMainMenu(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException {
+    private void showMainMenu(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException, SQLException {
         String menuChoice;
         while(true) {
             outputToClient.println(menu.mainMenu());
@@ -99,7 +100,7 @@ public class InputHandler {
         }
     }
 
-    private void showTableMenu(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException {
+    private void showTableMenu(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException, SQLException {
         String menuChoice;
         while(true) {
             outputToClient.println(menu.tableMenu());
@@ -127,8 +128,9 @@ public class InputHandler {
                     break;
                 case "6":
                     //Closes thread
-                    Thread.currentThread().interrupt();
-                    return;
+//                    Thread.currentThread().interrupt();
+//                    return;
+                    break;
                 default:
                     outputToClient.println("Incorrect choice, please try again.");
             }
@@ -136,7 +138,7 @@ public class InputHandler {
         }
     }
 
-    private void showSearchMenu(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException {
+    private void showSearchMenu(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException, SQLException {
         String menuChoice;
         while(true) {
             outputToClient.println(menu.searchMenu());
@@ -144,8 +146,8 @@ public class InputHandler {
 
             switch(menuChoice) {
                 case "1":
-                    //Get information on a subject.
-                    //Add method for printing out information
+                    DatabaseHandler dbh = new DatabaseHandler();
+                    dbh.getFullResultSetMetaData("subject");
                     break;
                 case "2":
                     //Get information on all subjects
@@ -172,14 +174,16 @@ public class InputHandler {
                     break;
                 case "8":
                     //Closes thread
-                    Thread.currentThread().interrupt();
-                    return;
+//                    Thread.currentThread().interrupt();
+//                    return;
+                    break;
                 default:
                     outputToClient.println("Incorrect choice, please try again.");
             }
 
         }
     }
+
 
     public File getSubjectFile() {
         return subjectFile;

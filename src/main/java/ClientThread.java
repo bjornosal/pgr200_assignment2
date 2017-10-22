@@ -2,19 +2,17 @@ import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 import java.io.*;
 import java.net.Socket;
+import java.sql.SQLException;
 
 public class ClientThread implements Runnable
 {
     private Socket threadSocket;
     private int id;
     private InputHandler inputHandler = new InputHandler();
-    private MysqlDataSource dataSource;
 
-    public ClientThread(int id, Socket socket)
-    {
+    public ClientThread(int id, Socket socket) throws IOException {
         setId(id);
         threadSocket = socket;
-        dataSource = new MysqlDataSource();
     }
 
     public void run()
@@ -32,20 +30,17 @@ public class ClientThread implements Runnable
                     String fromServer = inputFromServer.readLine();
                     outputToClient.println(fromServer);
                 }*/
-                boolean hasSentMainMenu = false;
-                boolean propertiesIsSet = false;
-                if(!hasSentMainMenu) {
-                    //TODO Implement propertyFiles for each client using userID
-                    inputHandler.setUpProperties(outputToClient,inputFromClient);
-                    //Enters loop in menu
-                    inputHandler.startMenuLoop(outputToClient, inputFromClient);
 
+                //TODO Implement propertyFiles for each client using userID
+                inputHandler.setUpProperties(outputToClient,inputFromClient);
+                //Enters loop in menu
+                inputHandler.startMenuLoop(outputToClient, inputFromClient);
 
-
-                }
             }
         } catch(IOException exception) {
             System.out.println("Feilmelding: " + exception);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
