@@ -16,15 +16,12 @@ public class InputHandler {
         setSubjectFile(new File("src/files/subject.csv"));
         setRoomFile(new File("src/files/room.csv"));
         setLecturerFile(new File("src/files/lecturer.csv"));
+
         databaseHandler = new DatabaseHandler();
         menu = new Menu();
     }
 
-//TODO Change properties to be handled by the databasehandler
-// TODO instead of the databaseconnection which again handles all calls
-
     public void startInputHandler(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException, SQLException {
-        setUpProperties(outputToClient,inputFromClient);
         startMenuLoop(outputToClient,inputFromClient);
     }
 
@@ -40,7 +37,6 @@ public class InputHandler {
 
                 //Use default properties
                 case "1":
-                    System.out.println();
                     databaseHandler.setPropertyFilePath("./src/files/defaultDatabaseLogin.properties");
                     finished = true;
                     break;
@@ -83,9 +79,11 @@ public class InputHandler {
 
             }
         }
+        databaseHandler.startDatabase();
     }
 
     public void startMenuLoop(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException, SQLException {
+        setUpProperties(outputToClient, inputFromClient);
         showMainMenu(outputToClient, inputFromClient);
     }
 
@@ -94,6 +92,7 @@ public class InputHandler {
         while(true) {
             outputToClient.println(menu.mainMenu());
             menuChoice = inputFromClient.readLine();
+            System.out.println(databaseHandler.getPropertyFilePath());
 
             switch(menuChoice) {
                 case "1":
@@ -105,7 +104,6 @@ public class InputHandler {
                 default:
                     outputToClient.println("Incorrect choice, please try again.");
             }
-
         }
     }
 
@@ -155,8 +153,7 @@ public class InputHandler {
 
             switch(menuChoice) {
                 case "1":
-                    DatabaseHandler dbh = new DatabaseHandler();
-                    dbh.getFullResultSetMetaData("subject");
+                    databaseHandler.getFullResultSetMetaData("subject");
                     break;
                 case "2":
                     //Get information on all subjects

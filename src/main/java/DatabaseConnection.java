@@ -13,7 +13,6 @@ public class DatabaseConnection {
     }
 
     public void setUpDatabase(String propertyFilePath) throws IOException {
-
         Properties properties = new Properties();
         InputStream input = new FileInputStream(propertyFilePath);
 

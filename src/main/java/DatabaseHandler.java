@@ -10,7 +10,7 @@ public class DatabaseHandler{
 
     public DatabaseHandler() throws IOException {
         databaseConnection = new DatabaseConnection();
-        setPropertyFilePath("");
+
     }
 
     //TODO remember to change, this is only for test purposes
@@ -18,7 +18,6 @@ public class DatabaseHandler{
         String query = "SELECT * FROM " + tableName + ";";
         ResultSetMetaData rsmd;
 
-        databaseConnection.setUpDatabase(getPropertyFilePath());
         MysqlDataSource dataSource = getDatabaseConnection().getDataSource();
         try(Connection connection = dataSource.getConnection()) {
             Statement stmt = connection.createStatement();
@@ -39,6 +38,11 @@ public class DatabaseHandler{
 
     public void setPropertyFilePath(String propertyFilePath) {
         this.propertyFilePath = propertyFilePath;
+    }
+
+    public void startDatabase() throws IOException {
+        databaseConnection.setUpDatabase(getPropertyFilePath());
+
     }
 
 }
