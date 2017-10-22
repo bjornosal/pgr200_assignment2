@@ -153,11 +153,12 @@ public class InputHandler {
 
             switch(menuChoice) {
                 case "1":
-                    databaseHandler.getFullResultSetMetaData("subject");
+                    outputToClient.println("Subject code: ");
+                    String subject = inputFromClient.readLine();
+                    outputToClient.println(databaseHandler.getSubject(subject));
                     break;
                 case "2":
-                    //Get information on all subjects
-                    //add this method in databasehandler
+                    outputToClient.println(databaseHandler.getAllSubjects());
                     break;
                 case "3":
                     //Get information on all subjects

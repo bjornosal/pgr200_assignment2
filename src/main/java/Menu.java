@@ -33,12 +33,13 @@ public class Menu {
     private String menuHeader() {
         StringBuilder menuHeader = new StringBuilder();
 
-        String menuSeparator = "###################################\n";
+        String menuSeparator = "----------------------------------------------";
 
-        menuHeader.append("\n\t\t\tMenu\n");
+//        menuHeader.append(String.format("%19s %4s %19s", "", "Menu", ""));
         menuHeader.append(menuSeparator);
-        menuHeader.append("What would you like to do? \nEnter the number before action and press enter\n");
+        menuHeader.append("\nEnter the number before action and press enter\n");
         menuHeader.append(menuSeparator);
+        menuHeader.append("\n");
 
         return menuHeader.toString();
     }
@@ -56,7 +57,7 @@ public class Menu {
             if(i == choices.length - 1 && addEnd) {
                 menuChoices.append("\n");
                 menuChoices.append(i + 2 + ": Return to main menu\n");
-                menuChoices.append(i + 3 + ": Quit\n");
+                menuChoices.append(i + 3 + ": Quit");
             }
         }
 
