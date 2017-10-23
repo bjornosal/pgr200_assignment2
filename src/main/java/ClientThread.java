@@ -19,7 +19,8 @@ public class ClientThread implements Runnable
     {
         try (PrintWriter outputToClient = new PrintWriter(threadSocket.getOutputStream(), true);
              BufferedReader inputFromClient = new BufferedReader(new InputStreamReader(threadSocket.getInputStream()));
-             BufferedReader inputFromServer = new BufferedReader(new InputStreamReader(System.in))) {
+//             BufferedReader inputFromServer = new BufferedReader(new InputStreamReader(System.in))
+        ) {
 
             while (true) {
              /*   if(inputFromClient.ready()) {

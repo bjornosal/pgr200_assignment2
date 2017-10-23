@@ -16,7 +16,6 @@ public class DatabaseHandler{
 
     protected DatabaseHandler() throws IOException {
         databaseConnection = new DatabaseConnection();
-
     }
 
 
@@ -348,6 +347,12 @@ public class DatabaseHandler{
             case "subject":
                 createSubjectTable();
                 break;
+            case "lecturer":
+                createLecturerTable();
+                break;
+            case "room":
+                createRoomTable();
+                break;
         }
     }
 
@@ -387,10 +392,7 @@ public class DatabaseHandler{
                     "name varchar(255) UNIQUE NOT NULL,\n" +
                     "attending_students INT(6),\n" +
                     "teaching_form varchar(50) NOT NULL,\n" +
-                    // Issue with data truncation might lie here.
-                    //Mysql has issues with float, use decimal instead.
                     "duration DECIMAL(11),\n" +
-                    //"duration FLOAT(11),\n" +
                     "PRIMARY KEY(id));");
         }
 

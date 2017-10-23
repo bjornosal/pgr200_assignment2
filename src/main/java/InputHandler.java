@@ -108,6 +108,7 @@ public class InputHandler {
         }
     }
 
+    //TODO missing option regarding filling information into DB
     private void showTableMenu(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException, SQLException {
         String menuChoice;
         while(true) {
@@ -132,9 +133,13 @@ public class InputHandler {
                     outputToClient.println("Existing files chosen");
                     break;
                 case "5":
-                    showMainMenu(outputToClient, inputFromClient);
+                    //TODO add fillTable method here
+                    outputToClient.print("Cleared tables and filled with information from files.");
                     break;
                 case "6":
+                    showMainMenu(outputToClient, inputFromClient);
+                    break;
+                case "7":
                     //Closes thread
 //                    Thread.currentThread().interrupt();
 //                    return;

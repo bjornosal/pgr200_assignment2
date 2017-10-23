@@ -31,17 +31,15 @@ public class Menu {
     //Make it dynamic
     //One param, an array that contains all choices
     private String menuHeader() {
-        StringBuilder menuHeader = new StringBuilder();
-
         String menuSeparator = "----------------------------------------------";
 
-//        menuHeader.append(String.format("%19s %4s %19s", "", "Menu", ""));
-        menuHeader.append(menuSeparator);
-        menuHeader.append("\nEnter the number before action and press enter\n");
-        menuHeader.append(menuSeparator);
-        menuHeader.append("\n");
 
-        return menuHeader.toString();
+//        menuHeader.append(String.format("%19s %4s %19s", "", "Menu", ""));
+
+        return menuSeparator +
+                "\nEnter the number before action and press enter\n" +
+                menuSeparator +
+                "\n";
     }
 
     private String menuChoices(String[] choices, boolean addEnd) {
@@ -67,8 +65,8 @@ public class Menu {
 
     private void setMainMenuChoices() {
         mainMenuChoices = new String[2];
-        mainMenuChoices[0] = "Get information.";
-        mainMenuChoices[1] = "Enter information.";
+        mainMenuChoices[0] = "Get information from table.";
+        mainMenuChoices[1] = "Add information to table.";
     }
 
     //menuchoices for all searches that a user can do.
@@ -85,11 +83,12 @@ public class Menu {
 
     //Choices that makes a change on tables
     private void setTableChoices() {
-        tableChoices = new String[4];
-        tableChoices[0] = "Enter information for \'subject\' table";
-        tableChoices[1] = "Enter information for \'room\' table";
-        tableChoices[2] = "Enter information for \'lecturer\' table";
+        tableChoices = new String[5];
+        tableChoices[0] = "Add new filepath for \'subject\' table information";
+        tableChoices[1] = "Add new filepath for \'room\' table information";
+        tableChoices[2] = "Add new filepath for \'lecturer\' table information";
         tableChoices[3] = "Use existing files in files folder";
+        tableChoices[4] = "Fill a table with information from file.";
     }
 
     private void setPropertiesMenu() {
