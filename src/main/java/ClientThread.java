@@ -33,7 +33,7 @@ public class ClientThread implements Runnable
                 }*/
 
                 //TODO Implement propertyFiles for each client using userID
-                inputHandler.startInputHandler(outputToClient,inputFromClient);
+                inputHandler.startMenuLoop(outputToClient,inputFromClient);
             }
         } catch(IOException exception) {
             System.out.println("Feilmelding: " + exception);

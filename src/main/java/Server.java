@@ -6,8 +6,6 @@ import java.util.HashMap;
 
 public class Server {
 
-    private HashMap<Integer, ClientThread> clientMap;
-
     public static void main(String[] args) {
         new Server();
     }
@@ -18,11 +16,13 @@ public class Server {
 
         try(ServerSocket sSocket = new ServerSocket(8888)) {
             System.out.println("Server started at " + new Date());
-            clientMap = new HashMap<>();
+            HashMap<Integer, ClientThread> clientMap = new HashMap<>();
             int clientCounter = 0;
             System.out.println("Connected clients: " + clientMap.size());
 
             //TODO decrease clientCounter if a client disconnects
+
+
 
             while (true){
                 Socket socket = sSocket.accept();

@@ -38,6 +38,20 @@ public class DatabaseHandler{
         return result;
     }
 
+    public void tearDownDatabaseAndSetBackUp(File subjectFile, File roomFile, File lecturerFile) throws SQLException, FileNotFoundException {
+        dropTable("subject");
+        dropTable("room");
+        dropTable("lecturer");
+
+        createDatabase();
+        createTable("subject");
+        createTable("room");
+        createTable("lecturer");
+        fillTable(subjectFile, "subject");
+        fillTable(roomFile, "room");
+        fillTable(lecturerFile, "lecturer");
+    }
+
     /*
      * Copied from assignment1
      *
@@ -414,7 +428,6 @@ public class DatabaseHandler{
             Statement stmt = connection.createStatement();
             stmt.executeUpdate("CREATE TABLE IF NOT EXISTS room (\n" +
                     "name varchar(255) UNIQUE, \n" +
-                    "type varchar(255),\n" +
                     "type ENUM('SMALLROOM', 'LARGEROOM', 'LARGEAUD', 'SMALLAUD'),\n" +
                     "facilities varchar(255)\n" +
                     ");");

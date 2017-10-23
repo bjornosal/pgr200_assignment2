@@ -15,19 +15,16 @@ public class Client
             BufferedReader inputFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             BufferedReader inputFromClient = new BufferedReader(new InputStreamReader(System.in))) {
 
-            //Again, here is the code that will run the client, this will continue looking for
-            //input from the user then it will send that info to the server.
+
             while(true) {
-                //Here we look for input from the user
                 if(inputFromClient.ready()) {
                     String input = inputFromClient.readLine();
-                    //Now we write it to the server/client
                     outputToThread.println(input);
                 }
 
                 if(inputFromServer.ready()) {
-                    String receivedMsg = inputFromServer.readLine();
-                    System.out.println(receivedMsg);
+                    String messageReceivedFromServer = inputFromServer.readLine();
+                    System.out.println(messageReceivedFromServer);
                 }
             }
         } catch (IOException exception) {

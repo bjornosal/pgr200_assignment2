@@ -23,11 +23,8 @@ public class InputHandler {
         menu = new Menu();
     }
 
-    public void startInputHandler(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException, SQLException {
-        startMenuLoop(outputToClient,inputFromClient);
-    }
 
-    public void setUpProperties(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException {
+    public void setUpProperties(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException, SQLException {
         boolean finished = false;
         String menuChoice;
 
@@ -81,11 +78,18 @@ public class InputHandler {
 
             }
         }
+
+        //Starts database with the properties chosen.
         databaseHandler.startDatabase();
+
     }
 
     public void startMenuLoop(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException, SQLException {
         setUpProperties(outputToClient, inputFromClient);
+
+        //Temporary setup for testing
+        databaseHandler.tearDownDatabaseAndSetBackUp(getSubjectFile(),getRoomFile(),getLecturerFile());
+
         showMainMenu(outputToClient, inputFromClient);
     }
 
