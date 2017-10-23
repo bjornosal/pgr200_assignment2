@@ -10,7 +10,7 @@ public class DatabaseHandler{
 
     private DatabaseConnection databaseConnection;
     private String propertyFilePath;
-    private String subjectFormat = "%-7s| %-40s| %-10s| %-15s| %-9s|";
+    private String subjectFormat = "%-7s| %-40s| %-10s| %-16s| %-9s|";
     private String lecturerFormat = "%-4s| %-15s|";
     private String roomFormat = "%-6s| %-11s| %-15s|";
 
@@ -19,12 +19,15 @@ public class DatabaseHandler{
 
     }
 
+
+    //TODO do prepared statements at the missing 3 classes.
+
     private String getResultHeader(String queryType) {
         String result = "";
 
         switch(queryType) {
             case "subject":
-                result += String.format(subjectFormat, "Code", "Name","Students", "Teachingform", "Duration");
+                result += String.format(subjectFormat, "Code", "Name","Students", "Teaching form", "Duration");
                 break;
             case "lecturer":
                 result += String.format(lecturerFormat, "ID", "Name");
@@ -153,15 +156,16 @@ public class DatabaseHandler{
         String result = "";
         String query = "SELECT id, name, attending_students, teaching_form, duration \n" +
                 "FROM subject\n" +
-                "WHERE id = '"+ subjectCode + "';";
+                "WHERE ID = ?;";
 
         String[] rowResult = new String[getColumnCount("subject")];
         result += getResultHeader("subject");
-
         MysqlDataSource dataSource = getDatabaseConnection().getDataSource();
-        try(Connection connection = dataSource.getConnection()) {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
+
+        try(Connection connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, subjectCode);
+            ResultSet rs = preparedStatement.executeQuery();
 
             while(rs.next()) {
                 for(int i = 1; i <= getColumnCount("subject"); i++) {
@@ -184,6 +188,8 @@ public class DatabaseHandler{
         String[] rowResult = new String[getColumnCount("subject")];
         result += getResultHeader("subject");
         MysqlDataSource dataSource = getDatabaseConnection().getDataSource();
+
+
         try (Connection connection = dataSource.getConnection()) {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
@@ -207,15 +213,16 @@ public class DatabaseHandler{
         String result = "";
         String query = "SELECT id, name\n" +
                 "FROM lecturer\n" +
-                "WHERE name ='" + name + "';";
+                "WHERE name = ?";
 
         String[] rowResult = new String[getColumnCount("lecturer")];
         result += getResultHeader("lecturer");
 
         MysqlDataSource dataSource = getDatabaseConnection().getDataSource();
         try(Connection connection = dataSource.getConnection()) {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, name);
+            ResultSet rs = preparedStatement.executeQuery();
 
             while(rs.next()) {
                 for(int i = 1; i <= getColumnCount("lecturer"); i++) {
@@ -262,14 +269,17 @@ public class DatabaseHandler{
         String result = "";
         String query = "SELECT name, type, facilities\n" +
                 "FROM room\n" +
-                "WHERE name ='" + roomName + "';";
+                "WHERE name = ?;";
         String[] rowResult = new String[getColumnCount("room")];
         result += getResultHeader("room");
 
         MysqlDataSource dataSource = getDatabaseConnection().getDataSource();
         try(Connection connection = dataSource.getConnection()) {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, roomName);
+            ResultSet rs = preparedStatement.executeQuery();
+            //TODO implement check if amount of rows in this resultSet is less than 1
+            //TODO do it in all
 
             while(rs.next()) {
                 for(int i = 1; i <= getColumnCount("room"); i++) {
