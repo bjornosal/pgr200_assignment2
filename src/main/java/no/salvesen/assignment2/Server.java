@@ -17,15 +17,12 @@ public class Server {
 
 
         try(ServerSocket sSocket = new ServerSocket(8888)) {
-            System.out.println("no.salvesen.assignment2.Server started at " + new Date());
+            System.out.println("Server started at " + new Date());
             HashMap<Integer, ClientThread> clientMap = new HashMap<>();
             int clientCounter = 0;
             System.out.println("Connected clients: " + clientMap.size());
 
             //TODO decrease clientCounter if a client disconnects
-
-
-
             while (true){
                 Socket socket = sSocket.accept();
                 ClientThread clientThread = new ClientThread(clientCounter, socket);

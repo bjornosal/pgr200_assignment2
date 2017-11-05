@@ -2,7 +2,6 @@ package no.salvesen.assignment2;
 
 import java.io.*;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Properties;
 
 public class InputHandler {
@@ -49,7 +48,7 @@ public class InputHandler {
 
                 //Enter new properties
                 case "3":
-                    outputToClient.println("no.salvesen.assignment2.Server name: ");
+                    outputToClient.println("Server name: ");
                     String serverName = inputFromClient.readLine();
                     outputToClient.println("Database name: ");
                     String databaseName = inputFromClient.readLine();
@@ -140,15 +139,12 @@ public class InputHandler {
                     break;
                 case "5":
                     chooseTableToFillWithInformation(outputToClient, inputFromClient);
-                    outputToClient.print("Cleared tables and filled with information from files.");
                     break;
                 case "6":
                     showMainMenu(outputToClient, inputFromClient);
                     break;
                 case "7":
-                    //Closes thread
-//                    Thread.currentThread().interrupt();
-//                    return;
+                    outputToClient.println("quit");
                     break;
                 default:
                     outputToClient.println("Incorrect choice, please try again.");
@@ -192,25 +188,12 @@ public class InputHandler {
                     showMainMenu(outputToClient,inputFromClient);
                     break;
                 case "8":
-                    //Closes thread
-//                    Thread.currentThread().interrupt();
-//                    return;
+                    outputToClient.println("quit");
                     break;
                 default:
                     outputToClient.println("Incorrect choice, please try again.");
             }
 
-        }
-    }
-
-    /**
-     * Prints all table names.
-     * @param outputToClient PrintWriter To send string to client
-     * @throws SQLException If unable to get connection.
-     */
-    private void printAllTableNames(PrintWriter outputToClient) throws SQLException {
-        for(String tableName : databaseHandler.getArrayListOfTableNames()) {
-            outputToClient.println(tableName);
         }
     }
 
@@ -225,16 +208,22 @@ public class InputHandler {
      */
     private void chooseTableToFillWithInformation(PrintWriter outputToClient, BufferedReader inputFromClient) throws SQLException, IOException {
         String chosenTable;
-        ArrayList<String> tableNames = databaseHandler.getArrayListOfTableNames();
         while (true) {
-            System.out.println("Possible tables are: ");
-            printAllTableNames(outputToClient);
+            outputToClient.println("Possible tables are: ");
+            for(String tableName : databaseHandler.getArrayListOfTableNames()) {
+                outputToClient.println(tableName);
+            }
+            outputToClient.println("Write return to return to main menu.");
             chosenTable = inputFromClient.readLine();
-            for (String tableName : tableNames) {
+            for (String tableName : databaseHandler.getArrayListOfTableNames()) {
                 if (chosenTable.equals(tableName)) {
                     databaseHandler.tearDownTableAndSetBackUpWithNewInformation(chosenTable);
+                    outputToClient.print("Cleared tables and filled with information from files.\n");
                     return;
                 }
+            }
+            if(chosenTable.equalsIgnoreCase("return")) {
+                return;
             }
         }
     }

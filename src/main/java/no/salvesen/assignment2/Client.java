@@ -25,10 +25,18 @@ public class Client
                 }
 
                 if(inputFromServer.ready()) {
+
                     String messageReceivedFromServer = inputFromServer.readLine();
-                    System.out.println(messageReceivedFromServer);
+                    if(messageReceivedFromServer.equals("quit")) {
+                        socket.close();
+                        break;
+                    } else {
+                        System.out.println(messageReceivedFromServer);
+
+                    }
                 }
             }
+            //TODO fix exception handling here
         } catch (IOException exception) {
             System.out.println("Feilmelding: " + exception);
         }
