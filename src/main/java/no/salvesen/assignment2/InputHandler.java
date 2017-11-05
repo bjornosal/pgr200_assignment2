@@ -1,3 +1,5 @@
+package no.salvesen.assignment2;
+
 import java.io.*;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -49,7 +51,7 @@ public class InputHandler {
 
                 //Enter new properties
                 case "3":
-                    outputToClient.println("Server name: ");
+                    outputToClient.println("no.salvesen.assignment2.Server name: ");
                     String serverName = inputFromClient.readLine();
                     outputToClient.println("Database name: ");
                     String databaseName = inputFromClient.readLine();

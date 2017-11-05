@@ -1,3 +1,4 @@
+package no.salvesen.assignment2;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,7 +22,7 @@ public class FileReader {
     private ArrayList<String> insertionValues;
 
     /**
-     * Constructor for class FileReader.
+     * Constructor for class no.salvesen.assignment2.FileReader.
      * Initializes files at corresponding paths for the three tables.
      */
     public FileReader() {

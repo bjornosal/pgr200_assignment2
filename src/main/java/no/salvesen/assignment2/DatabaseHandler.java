@@ -1,4 +1,4 @@
-
+package no.salvesen.assignment2;
 
 import java.io.*;
 import java.sql.*;
@@ -489,16 +489,16 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.Scanner;
 
-public class DatabaseHandler{
+public class no.salvesen.assignment2.DatabaseHandler{
 
-    private DatabaseConnection databaseConnection;
+    private no.salvesen.assignment2.DatabaseConnection databaseConnection;
     private String propertyFilePath;
     private String subjectFormat = "%-7s| %-40s| %-10s| %-16s| %-9s|";
     private String lecturerFormat = "%-4s| %-15s|";
     private String roomFormat = "%-6s| %-11s| %-15s|";
 
-    protected DatabaseHandler() throws IOException {
-        databaseConnection = new DatabaseConnection();
+    protected no.salvesen.assignment2.DatabaseHandler() throws IOException {
+        databaseConnection = new no.salvesen.assignment2.DatabaseConnection();
     }
 
 
@@ -1011,7 +1011,7 @@ public class DatabaseHandler{
      *
      *//*
 
-    protected DatabaseConnection getDatabaseConnection() {
+    protected no.salvesen.assignment2.DatabaseConnection getDatabaseConnection() {
         return databaseConnection;
     }
 

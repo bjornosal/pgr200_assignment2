@@ -1,3 +1,5 @@
+package no.salvesen.assignment2;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -15,7 +17,7 @@ public class Server {
 
 
         try(ServerSocket sSocket = new ServerSocket(8888)) {
-            System.out.println("Server started at " + new Date());
+            System.out.println("no.salvesen.assignment2.Server started at " + new Date());
             HashMap<Integer, ClientThread> clientMap = new HashMap<>();
             int clientCounter = 0;
             System.out.println("Connected clients: " + clientMap.size());
