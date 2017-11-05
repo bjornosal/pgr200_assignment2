@@ -9,15 +9,16 @@ public class InputHandler {
     //TODO put files in a property file maybe?
     private Menu menu;
     private DatabaseHandler databaseHandler;
+    private FileReader fileReader;
 
     private File subjectFile;
     private File roomFile;
     private File lecturerFile;
 
     public InputHandler() throws IOException {
-        setSubjectFile(new File("src/files/subject.csv"));
-        setRoomFile(new File("src/files/room.csv"));
-        setLecturerFile(new File("src/files/lecturer.csv"));
+        fileReader = new FileReader();
+
+
 
         databaseHandler = new DatabaseHandler();
         menu = new Menu();
@@ -80,7 +81,7 @@ public class InputHandler {
         }
 
         //Starts database with the properties chosen.
-        databaseHandler.startDatabase();
+        databaseHandler.startConnection();
 
     }
 
@@ -88,7 +89,7 @@ public class InputHandler {
         setUpProperties(outputToClient, inputFromClient);
 
         //Temporary setup for testing
-        databaseHandler.tearDownDatabaseAndSetBackUp(getSubjectFile(),getRoomFile(),getLecturerFile());
+        databaseHandler.tearDownDatabaseAndSetBackUp();
 
         showMainMenu(outputToClient, inputFromClient);
     }
@@ -112,7 +113,6 @@ public class InputHandler {
         }
     }
 
-    //TODO missing option regarding filling information into DB
     private void showTableMenu(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException, SQLException {
         String menuChoice;
         while(true) {
@@ -123,21 +123,21 @@ public class InputHandler {
             switch(menuChoice) {
                 case "1":
                     outputToClient.println(filePathMessage);
-                    setSubjectFile(new File(inputFromClient.readLine()));
+                    fileReader.setSubjectFile(new File(inputFromClient.readLine()));
                     break;
                 case "2":
                     outputToClient.println(filePathMessage);
-                    setRoomFile(new File(inputFromClient.readLine()));
+                    fileReader.setRoomFile(new File(inputFromClient.readLine()));
                     break;
                 case "3":
                     outputToClient.println(filePathMessage);
-                    setLecturerFile(new File(inputFromClient.readLine()));
+                    fileReader.setLecturerFile(new File(inputFromClient.readLine()));
                     break;
                 case "4":
                     outputToClient.println("Existing files chosen");
                     break;
                 case "5":
-                    //TODO add fillTable method here
+
                     outputToClient.print("Cleared tables and filled with information from files.");
                     break;
                 case "6":
@@ -165,26 +165,26 @@ public class InputHandler {
                 case "1":
                     outputToClient.println("Please enter subject code: ");
                     String subject = inputFromClient.readLine();
-                    outputToClient.println(databaseHandler.getSubjectRowBySubjectID(subject));
+                    outputToClient.println(databaseHandler.getRowsFromTableByColumnNameAndSearchColumnValue("subject","code",subject));
                     break;
                 case "2":
-                    outputToClient.println(databaseHandler.getAllRowsFromSubjectTable());
+                    outputToClient.println(databaseHandler.getAllRowsByTableName("subject"));
                     break;
                 case "3":
                     outputToClient.println("Please enter name of lecturer: ");
                     String lecturer = inputFromClient.readLine();
-                    outputToClient.println(databaseHandler.getLecturerRowByName(lecturer));
+                    outputToClient.println(databaseHandler.getRowsFromTableByColumnNameAndSearchColumnValue("lecturer","name",lecturer));
                     break;
                 case "4":
-                    outputToClient.println(databaseHandler.getAllRowsFromLecturerTable());
+                    outputToClient.println(databaseHandler.getAllRowsByTableName("lecturer"));
                     break;
                 case "5":
                     outputToClient.println("Please enter name of room: ");
                     String room = inputFromClient.readLine();
-                    outputToClient.println(databaseHandler.getRoomRowByName(room));
+                    outputToClient.println(databaseHandler.getRowsFromTableByColumnNameAndSearchColumnValue("room","name",room));
                     break;
                 case "6":
-                    outputToClient.println(databaseHandler.getAllRowsFromRoomTable());
+                    outputToClient.println(databaseHandler.getAllRowsByTableName("room"));
                     break;
                 case "7":
                     showMainMenu(outputToClient,inputFromClient);
@@ -199,30 +199,5 @@ public class InputHandler {
             }
 
         }
-    }
-
-
-    public File getSubjectFile() {
-        return subjectFile;
-    }
-
-    public void setSubjectFile(File subjectFile) {
-        this.subjectFile = subjectFile;
-    }
-
-    public File getRoomFile() {
-        return roomFile;
-    }
-
-    public void setRoomFile(File roomFile) {
-        this.roomFile = roomFile;
-    }
-
-    public File getLecturerFile() {
-        return lecturerFile;
-    }
-
-    public void setLecturerFile(File lecturerFile) {
-        this.lecturerFile = lecturerFile;
     }
 }

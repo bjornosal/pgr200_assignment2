@@ -1,0 +1,7 @@
+Room;3;0;0
+name;type;facilities
+VARCHAR(255) UNIQUE;ENUM('SMALLROOM', 'LARGEROOM', 'LARGEAUD', 'SMALLAUD');VARCHAR(255)
+Name;Type;Facilities
+F201;LARGEROOM;Prosjektor
+F311;SMALLAUD;Prosjektor
+F101;LARGEAUD;Overhead

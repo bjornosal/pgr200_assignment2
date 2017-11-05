@@ -1,18 +1,26 @@
+
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 import java.io.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Properties;
 
 public class DatabaseConnection {
 
     private MysqlDataSource dataSource;
 
-    public DatabaseConnection( ) throws IOException {
+    public DatabaseConnection() {
         dataSource = new MysqlDataSource();
-
     }
 
-    public void setUpDatabase(String propertyFilePath) throws IOException {
+    /**
+     * Sets up the properties for the datasource.
+     *
+     * @param propertyFilePath Filepath to a properties file.
+     * @throws IOException If no file is found or unable to load the inputstream.
+     */
+    public void initializeProperties(String propertyFilePath) throws IOException {
         Properties properties = new Properties();
         InputStream input = new FileInputStream(propertyFilePath);
 
@@ -24,8 +32,12 @@ public class DatabaseConnection {
         dataSource.setPassword(properties.getProperty("databasePassword"));
     }
 
-
-    public MysqlDataSource getDataSource() {
-        return dataSource;
+    /**
+     * Returns a connection to the database.
+     * @return A MysqlDataSource Connection.
+     * @throws SQLException If unable to get a connection.
+     */
+    public Connection getConnection() throws SQLException {
+        return dataSource.getConnection();
     }
 }

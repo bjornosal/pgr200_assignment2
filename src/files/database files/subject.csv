@@ -1,0 +1,8 @@
+Subject;5;1;0
+code;name;attending_students;teaching_form;duration
+varchar(6);VARCHAR(75) UNIQUE NOT NULL;INT(6);VARCHAR(50) NOT NULL;DECIMAL(11);code
+Code;Name;Attending Students;Teaching Form;Duration
+PGR200;Avansert Javaprogrammering;65;sequential;4.0
+PGR100;Objektorientert Programmering;215;sequential;4.0
+PRO100;Kreativt Webprosjekt;215;sequential;4.0
+PRO101;Webprosjekt;199;sequential;4.0
