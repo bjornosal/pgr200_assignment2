@@ -2,6 +2,7 @@ package no.salvesen.assignment2;
 
 import java.io.*;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Properties;
 
 public class InputHandler {
@@ -13,9 +14,6 @@ public class InputHandler {
     private DatabaseHandler databaseHandler;
     private FileReader fileReader;
 
-    private File subjectFile;
-    private File roomFile;
-    private File lecturerFile;
 
     public InputHandler() throws IOException {
         fileReader = new FileReader();
@@ -96,6 +94,7 @@ public class InputHandler {
         showMainMenu(outputToClient, inputFromClient);
     }
 
+
     private void showMainMenu(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException, SQLException {
         String menuChoice;
         while(true) {
@@ -114,6 +113,7 @@ public class InputHandler {
             }
         }
     }
+
 
     private void showTableMenu(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException, SQLException {
         String menuChoice;
@@ -139,7 +139,7 @@ public class InputHandler {
                     outputToClient.println("Existing files chosen");
                     break;
                 case "5":
-
+                    chooseTableToFillWithInformation(outputToClient, inputFromClient);
                     outputToClient.print("Cleared tables and filled with information from files.");
                     break;
                 case "6":
@@ -200,6 +200,42 @@ public class InputHandler {
                     outputToClient.println("Incorrect choice, please try again.");
             }
 
+        }
+    }
+
+    /**
+     * Prints all table names.
+     * @param outputToClient PrintWriter To send string to client
+     * @throws SQLException If unable to get connection.
+     */
+    private void printAllTableNames(PrintWriter outputToClient) throws SQLException {
+        for(String tableName : databaseHandler.getArrayListOfTableNames()) {
+            outputToClient.println(tableName);
+        }
+    }
+
+    /**
+     *
+     * Prints out a list of possible tables to choose from.
+     * Until a correct table is chosen, will stay in loop.
+     * @param outputToClient PrintWriter To send string to client
+     * @param inputFromClient BufferReader to read input from the user.
+     * @throws SQLException If unable to get connection.
+     * @throws FileNotFoundException If unable to find the file.
+     */
+    private void chooseTableToFillWithInformation(PrintWriter outputToClient, BufferedReader inputFromClient) throws SQLException, IOException {
+        String chosenTable;
+        ArrayList<String> tableNames = databaseHandler.getArrayListOfTableNames();
+        while (true) {
+            System.out.println("Possible tables are: ");
+            printAllTableNames(outputToClient);
+            chosenTable = inputFromClient.readLine();
+            for (String tableName : tableNames) {
+                if (chosenTable.equals(tableName)) {
+                    databaseHandler.tearDownTableAndSetBackUpWithNewInformation(chosenTable);
+                    return;
+                }
+            }
         }
     }
 }
