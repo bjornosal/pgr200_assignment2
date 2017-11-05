@@ -44,9 +44,9 @@ public class DatabaseHandler{
         dropTable("lecturer");
 
         createDatabase();
-        createTable("subject");
-        createTable("room");
-        createTable("lecturer");
+        createTableWithTableName("subject");
+        createTableWithTableName("room");
+        createTableWithTableName("lecturer");
         fillTable(subjectFile, "subject");
         fillTable(roomFile, "room");
         fillTable(lecturerFile, "lecturer");
@@ -56,11 +56,24 @@ public class DatabaseHandler{
      * Copied from assignment1
      *
      */
-    public int getColumnCount(String tableName) throws SQLException {
-        return getFullResultSetMetaData(tableName).getColumnCount();
+
+    /**
+     *
+     * @param tableName
+     * @return
+     * @throws SQLException
+     */
+    private int getColumnCountOfTable(String tableName) throws SQLException {
+        return getResultSetMetaDataForEntireTable(tableName).getColumnCount();
     }
 
-    public int getRowCount(String tableName) throws SQLException {
+    /**
+     *
+     * @param tableName
+     * @return
+     * @throws SQLException
+     */
+    public int getRowCountOfTable(String tableName) throws SQLException {
         MysqlDataSource dataSource = getDatabaseConnection().getDataSource();
         String selectAllQuery = "SELECT * FROM " + tableName + ";";
         int rowCount = 0;
@@ -76,8 +89,14 @@ public class DatabaseHandler{
         return rowCount;
     }
 
+    /**
+     *
+     * @param tableName
+     * @return
+     * @throws SQLException
+     */
     private String[] getColumnNames(String tableName) throws SQLException {
-        String[] columnNames = new String[getColumnCount(tableName)];
+        String[] columnNames = new String[getColumnCountOfTable(tableName)];
         String query = "SELECT * FROM " + tableName + ";";
         //Shorten code by taking entire try - with resource out of methods??
         MysqlDataSource dataSource = getDatabaseConnection().getDataSource();
@@ -87,7 +106,7 @@ public class DatabaseHandler{
             ResultSet rs = stmt.executeQuery(query);
             ResultSetMetaData rsmd = rs.getMetaData();
 
-            for(int i = 1; i < getColumnCount(tableName); i++) {
+            for(int i = 1; i < getColumnCountOfTable(tableName); i++) {
                 columnNames[i-1] = rsmd.getColumnName(i);
             }
         }
@@ -97,8 +116,15 @@ public class DatabaseHandler{
 
     //SOURCE: https://stackoverflow.com/questions/12367828/how-can-i-get-different-datatypes-from-resultsetmetadata-in-java
     // Ment to be used to make mostly generic. Resolved using objects instead of 17 if's
+
+    /**
+     *
+     * @param tableName
+     * @return
+     * @throws SQLException
+     */
     private String[] getDataTypes(String tableName) throws SQLException {
-        String[] dataTypes = new String[getColumnCount(tableName)];
+        String[] dataTypes = new String[getColumnCountOfTable(tableName)];
         String query = "SELECT * FROM " + tableName + ";";
 
         MysqlDataSource dataSource = getDatabaseConnection().getDataSource();
@@ -107,7 +133,7 @@ public class DatabaseHandler{
             ResultSet rs = stmt.executeQuery(query);
             ResultSetMetaData rsmd = rs.getMetaData();
 
-            for(int i = 1; i < getColumnCount(tableName); i++) {
+            for(int i = 1; i < getColumnCountOfTable(tableName); i++) {
                 String dataType = rsmd.getColumnTypeName(i);
                 dataTypes[i-1] = dataType;
             }
@@ -115,7 +141,14 @@ public class DatabaseHandler{
         return dataTypes;
     }
 
-    public void fillTable(File tableInformation, String tableName) throws SQLException, FileNotFoundException {
+    /**
+     *
+     * @param tableInformation
+     * @param tableName
+     * @throws SQLException
+     * @throws FileNotFoundException
+     */
+    private void fillTable(File tableInformation, String tableName) throws SQLException, FileNotFoundException {
         Scanner fileStream = new Scanner(tableInformation);
         fileStream.useDelimiter(";|\\r\\n|\\n");
 
@@ -125,7 +158,7 @@ public class DatabaseHandler{
 
             while (fileStream.hasNext()) {
                 PreparedStatement preparedStatement = connection.prepareStatement(prpStmt);
-                for(int i = 1; i < getColumnCount(tableName)+1; i++) {
+                for(int i = 1; i < getColumnCountOfTable(tableName)+1; i++) {
                     preparedStatement.setObject(i, fileStream.next());
                 }
                 preparedStatement.executeUpdate();
@@ -133,16 +166,23 @@ public class DatabaseHandler{
         }
     }
 
+    /**
+     * Puts together a prepared statement based on a table name.
+     *
+     * @param tableName
+     * @return a prepared query
+     * @throws SQLException
+     */
     private String prepareInsertStatement(String tableName) throws SQLException {
-        String prpStatement = "INSERT INTO " + tableName + " VALUES (";
-        int columns = getColumnCount(tableName);
+        String preparedStatement = "INSERT INTO " + tableName + " VALUES (";
+        int columns = getColumnCountOfTable(tableName);
         for(int i = 1; i < columns; i++) {
-            prpStatement += "?, ";
+            preparedStatement += "?, ";
             if (i == columns - 1) {
-                prpStatement += "?);";
+                preparedStatement += "?);";
             }
         }
-        return prpStatement;
+        return preparedStatement;
     }
 
     /***
@@ -165,25 +205,25 @@ public class DatabaseHandler{
         return columnNumber;
     }
 
-    public String getSubjectByCode(String subjectCode) throws SQLException {
+    public String getSubjectRowBySubjectID(String subjectID) throws SQLException {
         String result = "";
         String query = "SELECT id, name, attending_students, teaching_form, duration \n" +
                 "FROM subject\n" +
                 "WHERE ID = ?;";
 
-        String[] rowResult = new String[getColumnCount("subject")];
+        String[] rowResult = new String[getColumnCountOfTable("subject")];
         result += getResultHeader("subject");
         MysqlDataSource dataSource = getDatabaseConnection().getDataSource();
 
         try(Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, subjectCode);
+            preparedStatement.setString(1, subjectID);
             ResultSet rs = preparedStatement.executeQuery();
 
             while(rs.next()) {
-                for(int i = 1; i <= getColumnCount("subject"); i++) {
+                for(int i = 1; i <= getColumnCountOfTable("subject"); i++) {
                     rowResult[i-1] = rs.getObject(i).toString();
-                    if(i == getColumnCount("subject")) {
+                    if(i == getColumnCountOfTable("subject")) {
                         result += "\n";
                     }
                 }
@@ -194,11 +234,16 @@ public class DatabaseHandler{
         return result;
     }
 
-    public String getAllSubjects() throws SQLException {
+    /**
+     *
+     * @return
+     * @throws SQLException
+     */
+    public String getAllRowsFromSubjectTable() throws SQLException {
         String result = "";
         String query = "SELECT id, name, attending_students, teaching_form, duration\n" +
                 "FROM subject;";
-        String[] rowResult = new String[getColumnCount("subject")];
+        String[] rowResult = new String[getColumnCountOfTable("subject")];
         result += getResultHeader("subject");
         MysqlDataSource dataSource = getDatabaseConnection().getDataSource();
 
@@ -207,10 +252,10 @@ public class DatabaseHandler{
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while(rs.next()) {
-                for(int i = 1; i <= getColumnCount("subject"); i++) {
+                for(int i = 1; i <= getColumnCountOfTable("subject"); i++) {
                   rowResult[i-1] = rs.getObject(i).toString();
 
-                    if(i == getColumnCount("subject")) {
+                    if(i == getColumnCountOfTable("subject")) {
                         result += "\n";
                     }
                 }
@@ -222,13 +267,19 @@ public class DatabaseHandler{
         return result;
     }
 
-    public String getLecturerByName(String name) throws SQLException {
+    /**
+     *
+     * @param name
+     * @return
+     * @throws SQLException
+     */
+    public String getLecturerRowByName(String name) throws SQLException {
         String result = "";
         String query = "SELECT id, name\n" +
                 "FROM lecturer\n" +
                 "WHERE name = ?";
 
-        String[] rowResult = new String[getColumnCount("lecturer")];
+        String[] rowResult = new String[getColumnCountOfTable("lecturer")];
         result += getResultHeader("lecturer");
 
         MysqlDataSource dataSource = getDatabaseConnection().getDataSource();
@@ -238,9 +289,9 @@ public class DatabaseHandler{
             ResultSet rs = preparedStatement.executeQuery();
 
             while(rs.next()) {
-                for(int i = 1; i <= getColumnCount("lecturer"); i++) {
+                for(int i = 1; i <= getColumnCountOfTable("lecturer"); i++) {
                     rowResult[i-1] = rs.getObject(i).toString();
-                    if(i == getColumnCount("lecturer")) {
+                    if(i == getColumnCountOfTable("lecturer")) {
                         result += "\n";
                     }
                 }
@@ -251,11 +302,12 @@ public class DatabaseHandler{
         return result;
     }
 //TODO All the queries can be a lot more dynamic, more high cohesion method wise
-    public String getAllLecturers() throws SQLException {
+    public String getAllRowsFromLecturerTable() throws SQLException {
         String result = "";
+        //Query has to be dynamic, and not a static choice of columns
         String query = "SELECT id, name \n" +
                 "FROM lecturer;";
-        String[] rowResult = new String[getColumnCount("lecturer")];
+        String[] rowResult = new String[getColumnCountOfTable("lecturer")];
         result += getResultHeader("lecturer");
 
         MysqlDataSource dataSource = getDatabaseConnection().getDataSource();
@@ -264,9 +316,9 @@ public class DatabaseHandler{
             ResultSet rs = stmt.executeQuery(query);
 
             while(rs.next()) {
-                for(int i = 1; i <= getColumnCount("lecturer"); i++) {
+                for(int i = 1; i <= getColumnCountOfTable("lecturer"); i++) {
                     rowResult[i-1] = rs.getObject(i).toString();
-                    if(i == getColumnCount("lecturer")) {
+                    if(i == getColumnCountOfTable("lecturer")) {
                         result += "\n";
                     }
                 }
@@ -278,12 +330,18 @@ public class DatabaseHandler{
 
     }
 
-    public String getRoomByName(String roomName) throws SQLException {
+    /**
+     *
+     * @param roomName
+     * @return
+     * @throws SQLException
+     */
+    public String getRoomRowByName(String roomName) throws SQLException {
         String result = "";
         String query = "SELECT name, type, facilities\n" +
                 "FROM room\n" +
                 "WHERE name = ?;";
-        String[] rowResult = new String[getColumnCount("room")];
+        String[] rowResult = new String[getColumnCountOfTable("room")];
         result += getResultHeader("room");
 
         MysqlDataSource dataSource = getDatabaseConnection().getDataSource();
@@ -295,9 +353,9 @@ public class DatabaseHandler{
             //TODO do it in all
 
             while(rs.next()) {
-                for(int i = 1; i <= getColumnCount("room"); i++) {
+                for(int i = 1; i <= getColumnCountOfTable("room"); i++) {
                     rowResult[i-1] = rs.getObject(i).toString();
-                    if(i == getColumnCount("room")) {
+                    if(i == getColumnCountOfTable("room")) {
                         result += "\n";
                     }
                 }
@@ -310,11 +368,11 @@ public class DatabaseHandler{
     }
 
 
-    public String getAllRooms() throws SQLException {
+    public String getAllRowsFromRoomTable() throws SQLException {
         String result = "";
         String query = "SELECT name, type, facilities\n" +
                 "FROM room;";
-        String[] rowResult = new String[getColumnCount("room")];
+        String[] rowResult = new String[getColumnCountOfTable("room")];
         result += getResultHeader("room");
 
         MysqlDataSource dataSource = getDatabaseConnection().getDataSource();
@@ -323,9 +381,9 @@ public class DatabaseHandler{
             ResultSet rs = stmt.executeQuery(query);
 
             while(rs.next()) {
-                for(int i = 1; i <= getColumnCount("room"); i++) {
+                for(int i = 1; i <= getColumnCountOfTable("room"); i++) {
                     rowResult[i-1] = rs.getObject(i).toString();
-                    if(i == getColumnCount("room")) {
+                    if(i == getColumnCountOfTable("room")) {
                         result += "\n";
                     }
                 }
@@ -337,26 +395,32 @@ public class DatabaseHandler{
 
     }
 
-    private ResultSetMetaData getFullResultSetMetaData(String tableName) throws SQLException {
+    /**
+     * Helping method for getting metadata for a table
+     * @param tableName
+     * @return metadata of a resultset for table of name param
+     * @throws SQLException
+     */
+    private ResultSetMetaData getResultSetMetaDataForEntireTable(String tableName) throws SQLException {
         String query = "SELECT * FROM " + tableName + ";";
-        ResultSetMetaData rsmd;
+        ResultSetMetaData resultSetMetaData;
 
         MysqlDataSource dataSource = getDatabaseConnection().getDataSource();
         try(Connection connection = dataSource.getConnection()) {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
-            rsmd = rs.getMetaData();
+            resultSetMetaData = rs.getMetaData();
         }
-        return rsmd;
+        return resultSetMetaData;
     }
 
 
     /**
-     * This part is methods that creates all stuff required.
      *
-     *
+     * @param tableName
+     * @throws SQLException
      */
-    protected void createTable(String tableName) throws SQLException {
+    private void createTableWithTableName(String tableName) throws SQLException {
         switch (tableName) {
             case "subject":
                 createSubjectTable();
@@ -375,7 +439,6 @@ public class DatabaseHandler{
         boolean exists = false;
         try (Connection connection = getDatabaseConnection().getDataSource().getConnection()) {
             ResultSet rs = connection.getMetaData().getTables(null, null, tableName, null);
-            System.out.println(rs);
             if(rs.next()) {
                 exists = true;
             }
@@ -398,10 +461,9 @@ public class DatabaseHandler{
     }
 
     private void createSubjectTable() throws SQLException {
-        String tableName = "subject";
         try(Connection connection = getDatabaseConnection().getDataSource().getConnection()) {
             Statement stmt = connection.createStatement();
-            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS " + tableName + " (\n" +
+            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS subject (\n" +
                     "id VARCHAR(255) UNIQUE,\n" +
                     "name varchar(255) UNIQUE NOT NULL,\n" +
                     "attending_students INT(6),\n" +
@@ -409,7 +471,6 @@ public class DatabaseHandler{
                     "duration DECIMAL(11),\n" +
                     "PRIMARY KEY(id));");
         }
-
     }
 
     private void createLecturerTable() throws SQLException {

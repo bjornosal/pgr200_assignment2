@@ -24,7 +24,7 @@ public class InputHandler {
     }
 
 
-    public void setUpProperties(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException, SQLException {
+    private void setUpProperties(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException, SQLException {
         boolean finished = false;
         String menuChoice;
 
@@ -165,26 +165,26 @@ public class InputHandler {
                 case "1":
                     outputToClient.println("Please enter subject code: ");
                     String subject = inputFromClient.readLine();
-                    outputToClient.println(databaseHandler.getSubjectByCode(subject));
+                    outputToClient.println(databaseHandler.getSubjectRowBySubjectID(subject));
                     break;
                 case "2":
-                    outputToClient.println(databaseHandler.getAllSubjects());
+                    outputToClient.println(databaseHandler.getAllRowsFromSubjectTable());
                     break;
                 case "3":
                     outputToClient.println("Please enter name of lecturer: ");
                     String lecturer = inputFromClient.readLine();
-                    outputToClient.println(databaseHandler.getLecturerByName(lecturer));
+                    outputToClient.println(databaseHandler.getLecturerRowByName(lecturer));
                     break;
                 case "4":
-                    outputToClient.println(databaseHandler.getAllLecturers());
+                    outputToClient.println(databaseHandler.getAllRowsFromLecturerTable());
                     break;
                 case "5":
                     outputToClient.println("Please enter name of room: ");
                     String room = inputFromClient.readLine();
-                    outputToClient.println(databaseHandler.getRoomByName(room));
+                    outputToClient.println(databaseHandler.getRoomRowByName(room));
                     break;
                 case "6":
-                    outputToClient.println(databaseHandler.getAllRooms());
+                    outputToClient.println(databaseHandler.getAllRowsFromRoomTable());
                     break;
                 case "7":
                     showMainMenu(outputToClient,inputFromClient);
