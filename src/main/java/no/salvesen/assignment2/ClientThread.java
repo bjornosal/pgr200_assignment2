@@ -2,6 +2,7 @@ package no.salvesen.assignment2;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 import java.sql.SQLException;
 
 public class ClientThread implements Runnable
@@ -18,15 +19,19 @@ public class ClientThread implements Runnable
     public void run()
     {
         try (PrintWriter outputToClient = new PrintWriter(threadSocket.getOutputStream(), true);
-             BufferedReader inputFromClient = new BufferedReader(new InputStreamReader(threadSocket.getInputStream()));
+             BufferedReader inputFromClient = new BufferedReader(new InputStreamReader(threadSocket.getInputStream()))
         ) {
 
             while (true) {
                 inputHandler = new InputHandler(outputToClient, inputFromClient);
                 inputHandler.startMenuLoop();
+
             }
+            //TODO sort exception handling here
+        } catch(SocketException e) {
+            System.out.println("Client disconnected");
         } catch(IOException exception) {
-            System.out.println("Feilmelding: " + exception);
+            System.out.println("###########: " + exception);
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -40,7 +40,7 @@ public class ExceptionHandler {
 
     public String outputDatabaseSQLException() {
 
-        return "ERROR:\nPlease check that database is set up prior to connecting. \n If set up, check username and password.";
+        return "ERROR:\nPlease check that database is set up prior to connecting. \nIf database is set up, please check username and password.";
     }
 
 }

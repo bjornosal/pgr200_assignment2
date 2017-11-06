@@ -8,7 +8,6 @@ public class InputHandler {
 
 
     //TODO Fix exception throws etc
-    //TODO put files in a property file maybe?
     private Menu menu;
     private DatabaseHandler databaseHandler;
     private FileReader fileReader;

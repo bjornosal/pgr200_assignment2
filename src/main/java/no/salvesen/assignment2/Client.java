@@ -17,7 +17,6 @@ public class Client
             BufferedReader inputFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             BufferedReader inputFromClient = new BufferedReader(new InputStreamReader(System.in))) {
 
-
             while(true) {
                 if(inputFromClient.ready()) {
                     String input = inputFromClient.readLine();
@@ -25,14 +24,13 @@ public class Client
                 }
 
                 if(inputFromServer.ready()) {
-
                     String messageReceivedFromServer = inputFromServer.readLine();
                     if(messageReceivedFromServer.equals("CLOSE_SOCKET")) {
+                        outputToThread.println("CLOSING_CONNECTION");
                         socket.close();
                         break;
                     } else {
                         System.out.println(messageReceivedFromServer);
-
                     }
                 }
             }
