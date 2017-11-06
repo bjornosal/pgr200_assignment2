@@ -142,7 +142,7 @@ public class InputHandler {
                     showMainMenu(outputToClient, inputFromClient);
                     break;
                 case "7":
-                    outputToClient.println("quit");
+                    outputToClient.println("CLOSE_SOCKET");
                     break;
                 default:
                     outputToClient.println("Incorrect choice, please try again.");
@@ -186,8 +186,8 @@ public class InputHandler {
                     showMainMenu(outputToClient,inputFromClient);
                     break;
                 case "8":
-                    outputToClient.println("quit");
-                    break;
+                    outputToClient.println("CLOSE_SOCKET");
+                    return;
                 default:
                     outputToClient.println("Incorrect choice, please try again.");
             }
