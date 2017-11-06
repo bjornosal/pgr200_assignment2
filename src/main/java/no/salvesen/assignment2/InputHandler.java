@@ -82,19 +82,21 @@ public class InputHandler {
 
     private void showMainMenu() throws IOException, SQLException {
         String menuChoice;
-        while(true) {
+        while (true) {
             outputToClient.println(menu.mainMenu());
             menuChoice = inputFromClient.readLine();
 
-            switch(menuChoice) {
-                case "1":
-                    showSearchMenu();
-                    break;
-                case "2":
-                    showTableMenu();
-                    break;
-                default:
-                    outputToClient.println("Incorrect choice, please try again.");
+            if (menuChoice != null) {
+                switch (menuChoice) {
+                    case "1":
+                        showSearchMenu();
+                        break;
+                    case "2":
+                        showTableMenu();
+                        break;
+                    default:
+                        outputToClient.println("Incorrect choice, please try again.");
+                }
             }
         }
     }

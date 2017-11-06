@@ -25,7 +25,6 @@ public class ClientThread implements Runnable
             while (true) {
                 inputHandler = new InputHandler(outputToClient, inputFromClient);
                 inputHandler.startMenuLoop();
-
             }
             //TODO sort exception handling here
         } catch(SocketException e) {

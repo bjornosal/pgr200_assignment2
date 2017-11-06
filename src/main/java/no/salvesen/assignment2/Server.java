@@ -26,9 +26,9 @@ public class Server {
                 ClientThread clientThread = new ClientThread(clientCounter, socket);
                 new Thread(clientThread).start();
                 clientCounter++;
+                System.out.println("Client number " + clientCounter + " connected with: ");
                 printInformationForThread(socket, clientThread);
                 clientMap.put(clientThread.getId(), clientThread);
-                System.out.println("Clients that has connected: " + clientMap.size());
             }
         } catch (IOException e) {
             System.out.println("#####");
@@ -37,7 +37,6 @@ public class Server {
     }
 
     private void printInformationForThread(Socket socket, ClientThread clientThread) {
-        System.out.println("Client connected:");
         System.out.println("IP address: " + socket.getInetAddress());
         System.out.println("Thread ID: " + clientThread.getId());
     }
