@@ -22,7 +22,9 @@ public class Server {
             int clientCounter = 0;
             System.out.println("Connected clients: " + clientMap.size());
 
+            //TODO implement decrease if client disconnects, as that can be used for testing.
             //TODO decrease clientCounter if a client disconnects
+            //TODO fix unknownHostConnection osv
             while (true){
                 Socket socket = sSocket.accept();
                 ClientThread clientThread = new ClientThread(clientCounter, socket);

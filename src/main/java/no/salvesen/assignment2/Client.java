@@ -27,7 +27,7 @@ public class Client
                 if(inputFromServer.ready()) {
 
                     String messageReceivedFromServer = inputFromServer.readLine();
-                    if(messageReceivedFromServer.equals("quit")) {
+                    if(messageReceivedFromServer.equals("CLOSE_SOCKET")) {
                         socket.close();
                         break;
                     } else {

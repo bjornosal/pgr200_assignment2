@@ -21,7 +21,7 @@ public class InputHandler {
         menu = new Menu();
     }
 
-//TODO Add Javadoc
+    //TODO Add Javadoc
     private void setUpProperties(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException, SQLException {
         boolean finished = false;
         String menuChoice;
