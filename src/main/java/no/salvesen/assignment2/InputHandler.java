@@ -14,15 +14,21 @@ public class InputHandler {
     private FileReader fileReader;
     private ExceptionHandler exceptionHandler;
 
-    public InputHandler() throws IOException {
+    private PrintWriter outputToClient;
+    private BufferedReader inputFromClient;
+
+
+    public InputHandler(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException {
         fileReader = new FileReader();
         exceptionHandler = new ExceptionHandler();
         databaseHandler = new DatabaseHandler();
         menu = new Menu();
+        this.outputToClient = outputToClient;
+        this.inputFromClient = inputFromClient;
     }
 
     //TODO Add Javadoc
-    private void setUpProperties(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException, SQLException {
+    public void setUpProperties() throws IOException, SQLException {
         boolean finished = false;
         String menuChoice;
 
@@ -30,46 +36,23 @@ public class InputHandler {
             Properties properties = new Properties();
             outputToClient.println(menu.propertiesMenu());
             menuChoice = inputFromClient.readLine();
-            switch(menuChoice) {
+            switch (menuChoice) {
 
                 //Use default properties
                 case "1":
                     databaseHandler.setPropertyFilePath("./src/files/defaultDatabaseLogin.properties");
                     finished = true;
                     break;
-
                 //use properties previously set by user
                 case "2":
                     databaseHandler.setPropertyFilePath("./src/files/userEnteredDatabaseLogin.properties");
                     finished = true;
                     break;
-
                 //Enter new properties
                 case "3":
-                    outputToClient.println("Server name: ");
-                    String serverName = inputFromClient.readLine();
-                    outputToClient.println("Database name: ");
-                    String databaseName = inputFromClient.readLine();
-                    outputToClient.println("Username: ");
-                    String databaseUser = inputFromClient.readLine();
-                    outputToClient.println("Password: ");
-                    String databasePassword = inputFromClient.readLine();
-
-                    //Filling property file
-                    properties.setProperty("serverName", serverName);
-                    properties.setProperty("databaseName", databaseName);
-                    properties.setProperty("databaseUser", databaseUser);
-                    properties.setProperty("databasePassword", databasePassword);
-                    File userEnteredProperties = new File("./src/files/userEnteredDatabaseLogin.properties");
-
-                    try(FileOutputStream fileOut = new FileOutputStream(userEnteredProperties)) {
-                        properties.store(fileOut, "Added by user");
-                        outputToClient.println("Property file set up. Attempting to connect.\n");
-                        databaseHandler.setPropertyFilePath("./src/files/userEnteredDatabaseLogin.properties");
-                        finished = true;
-                    }
+                    setUserProperties(properties);
+                    finished = true;
                     break;
-
                 default:
                     outputToClient.println("Incorrect choice, please try again.");
                     break;
@@ -78,21 +61,27 @@ public class InputHandler {
         }
 
         //Starts database with the properties chosen.
+
         databaseHandler.startConnection();
 
+        //Handling the issues of wrong properties
+        try {
+            databaseHandler.createDatabase();
+        } catch (SQLException e) {
+            outputDatabaseExceptionOccurred();
+            setUpProperties();
+        }
     }
 
-    public void startMenuLoop(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException, SQLException {
-        setUpProperties(outputToClient, inputFromClient);
-
-        //Temporary setup for testing
+    public void startMenuLoop() throws IOException, SQLException {
+        setUpProperties();
+        outputToClient.println("Connected to database.");
         databaseHandler.tearDownDatabaseAndSetBackUp();
-
-        showMainMenu(outputToClient, inputFromClient);
+        showMainMenu();
     }
 
 
-    private void showMainMenu(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException, SQLException {
+    private void showMainMenu() throws IOException, SQLException {
         String menuChoice;
         while(true) {
             outputToClient.println(menu.mainMenu());
@@ -100,10 +89,10 @@ public class InputHandler {
 
             switch(menuChoice) {
                 case "1":
-                    showSearchMenu(outputToClient, inputFromClient);
+                    showSearchMenu();
                     break;
                 case "2":
-                    showTableMenu(outputToClient, inputFromClient);
+                    showTableMenu();
                     break;
                 default:
                     outputToClient.println("Incorrect choice, please try again.");
@@ -112,7 +101,7 @@ public class InputHandler {
     }
 
 
-    private void showTableMenu(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException, SQLException {
+    private void showTableMenu() throws IOException, SQLException {
         String menuChoice;
         while(true) {
             outputToClient.println(menu.tableMenu());
@@ -136,10 +125,10 @@ public class InputHandler {
                     outputToClient.println("Existing files chosen");
                     break;
                 case "5":
-                    chooseTableToFillWithInformation(outputToClient, inputFromClient);
+                    chooseTableToFillWithInformation();
                     break;
                 case "6":
-                    showMainMenu(outputToClient, inputFromClient);
+                    showMainMenu();
                     break;
                 case "7":
                     outputToClient.println("CLOSE_SOCKET");
@@ -151,7 +140,7 @@ public class InputHandler {
         }
     }
 
-    private void showSearchMenu(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException, SQLException {
+    private void showSearchMenu() throws IOException, SQLException {
         String menuChoice;
         while(true) {
             outputToClient.println(menu.searchMenu());
@@ -183,7 +172,7 @@ public class InputHandler {
                     outputToClient.println(databaseHandler.getAllRowsByTableName("room"));
                     break;
                 case "7":
-                    showMainMenu(outputToClient,inputFromClient);
+                    showMainMenu();
                     break;
                 case "8":
                     outputToClient.println("CLOSE_SOCKET");
@@ -199,12 +188,10 @@ public class InputHandler {
      *
      * Prints out a list of possible tables to choose from.
      * Until a correct table is chosen, will stay in loop.
-     * @param outputToClient PrintWriter To send string to client
-     * @param inputFromClient BufferReader to read input from the user.
      * @throws SQLException If unable to get connection.
      * @throws FileNotFoundException If unable to find the file.
      */
-    private void chooseTableToFillWithInformation(PrintWriter outputToClient, BufferedReader inputFromClient) throws SQLException, IOException {
+    private void chooseTableToFillWithInformation() throws SQLException, IOException {
         String chosenTable;
         while (true) {
             outputToClient.println("Possible tables are: ");
@@ -223,6 +210,35 @@ public class InputHandler {
             if(chosenTable.equalsIgnoreCase("return")) {
                 return;
             }
+        }
+    }
+
+    private void outputDatabaseExceptionOccurred() {
+        outputToClient.println(exceptionHandler.outputDatabaseSQLException());
+    }
+
+    private void setUserProperties(Properties properties) throws IOException {
+        outputToClient.println("Server name: ");
+        String serverName = inputFromClient.readLine();
+        outputToClient.println("Database name: ");
+        String databaseName = inputFromClient.readLine();
+        outputToClient.println("Username: ");
+        String databaseUser = inputFromClient.readLine();
+        outputToClient.println("Password: ");
+        String databasePassword = inputFromClient.readLine();
+
+        //Filling property file
+        properties.setProperty("serverName", serverName);
+        properties.setProperty("databaseName", databaseName);
+        properties.setProperty("databaseUser", databaseUser);
+        properties.setProperty("databasePassword", databasePassword);
+        File userEnteredProperties = new File("./src/files/userEnteredDatabaseLogin.properties");
+
+        try (FileOutputStream fileOut = new FileOutputStream(userEnteredProperties)) {
+            properties.store(fileOut, "Added by user");
+            outputToClient.println("Property file set up. Attempting to connect.\n");
+            databaseHandler.setPropertyFilePath("./src/files/userEnteredDatabaseLogin.properties");
+
         }
     }
 }

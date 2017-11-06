@@ -363,7 +363,7 @@ public class DatabaseHandler {
      * @throws SQLException If unable to get connection.
      * @throws IOException  If unable to get access to the properties file.
      */
-    private void createDatabase() throws SQLException, IOException {
+    public void createDatabase() throws SQLException, IOException {
         try (Connection connection = databaseConnection.getConnection()) {
             Statement stmt = connection.createStatement();
             String query = "CREATE SCHEMA IF NOT EXISTS " + getDatabaseNameFromProperties() + ";";

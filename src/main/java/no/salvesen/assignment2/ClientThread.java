@@ -8,7 +8,7 @@ public class ClientThread implements Runnable
 {
     private Socket threadSocket;
     private int id;
-    private InputHandler inputHandler = new InputHandler();
+    private InputHandler inputHandler;
 
     public ClientThread(int id, Socket socket) throws IOException {
         setId(id);
@@ -22,8 +22,8 @@ public class ClientThread implements Runnable
         ) {
 
             while (true) {
-
-                inputHandler.startMenuLoop(outputToClient,inputFromClient);
+                inputHandler = new InputHandler(outputToClient, inputFromClient);
+                inputHandler.startMenuLoop();
             }
         } catch(IOException exception) {
             System.out.println("Feilmelding: " + exception);
