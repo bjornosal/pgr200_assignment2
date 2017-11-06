@@ -22,7 +22,7 @@ public class FileReader {
     private ArrayList<String> insertionValues;
 
     /**
-     * Constructor for class no.salvesen.assignment2.FileReader.
+     * Constructor for class FileReader.
      * Initializes files at corresponding paths for the three tables.
      */
     public FileReader() {
