@@ -12,18 +12,16 @@ public class InputHandler {
     private Menu menu;
     private DatabaseHandler databaseHandler;
     private FileReader fileReader;
-
+    private ExceptionHandler exceptionHandler;
 
     public InputHandler() throws IOException {
         fileReader = new FileReader();
-
-
-
+        exceptionHandler = new ExceptionHandler();
         databaseHandler = new DatabaseHandler();
         menu = new Menu();
     }
 
-
+//TODO Add Javadoc
     private void setUpProperties(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException, SQLException {
         boolean finished = false;
         String menuChoice;

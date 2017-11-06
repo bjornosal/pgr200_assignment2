@@ -19,20 +19,10 @@ public class ClientThread implements Runnable
     {
         try (PrintWriter outputToClient = new PrintWriter(threadSocket.getOutputStream(), true);
              BufferedReader inputFromClient = new BufferedReader(new InputStreamReader(threadSocket.getInputStream()));
-//             BufferedReader inputFromServer = new BufferedReader(new InputStreamReader(System.in))
         ) {
 
             while (true) {
-             /*   if(inputFromClient.ready()) {
-                    String fromClient = inputFromClient.readLine();
-                    System.out.println(fromClient);
-                }
-                if(inputFromServer.ready()) {
-                    String fromServer = inputFromServer.readLine();
-                    outputToClient.println(fromServer);
-                }*/
 
-                //TODO Implement propertyFiles for each client using userID
                 inputHandler.startMenuLoop(outputToClient,inputFromClient);
             }
         } catch(IOException exception) {
