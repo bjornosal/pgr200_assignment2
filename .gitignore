@@ -57,14 +57,3 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-.gitignore
-.idea/compiler.xml
-.idea/copyright/
-.idea/inspectionProfiles/
-.idea/misc.xml
-.idea/modules.xml
-.idea/uiDesigner.xml
-.idea/workspace.xml
-assignment2.iml
-src/main/resources/
-src/test/
