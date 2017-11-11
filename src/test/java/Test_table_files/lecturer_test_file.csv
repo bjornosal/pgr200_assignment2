@@ -1,7 +1,11 @@
-Lecturer;2;1;0
-employee_id;name
-int(11) auto_increment;VARCHAR(255);employee_id
-Employee ID;Name
-1;Tor-MortenTest
-2;PerTest
-3;AndreaTest
+Lecturer;3;1;0
+employee_id;name;mail
+INT NOT NULL;VARCHAR(255);VARCHAR(255);employee_id
+Employee ID;Name;E-mail
+1;Tor-Morten Gronli;tormortengronli@westerdals.no
+2;Per Lauvas Unit Testing;perlauvas@westerdals.no
+3;Andrea TestGod Arcuri;andreaarcuri@westerdals.no
+4;Wanda Presthus;wandatesthus@westerdals.no
+5;Kjetil Raaen;kjetestraaen@westerdals.no
+6;Hanne Sorum;hannesorum@testerdals.no
+7;Rolando Gonzales;rollo@westertester.no
