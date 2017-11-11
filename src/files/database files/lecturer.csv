@@ -1,6 +1,6 @@
 Lecturer;2;1;0
 employee_id;name
-int(11) auto_increment;VARCHAR(255);employee_id
+INT NOT NULL;VARCHAR(255);employee_id
 Employee ID;Name
 1;Tor-Morten
 2;Per

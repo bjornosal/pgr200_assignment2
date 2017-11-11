@@ -32,6 +32,7 @@ public class ClientThread implements Runnable
         } catch(IOException exception) {
             System.out.println("###########: " + exception);
         } catch (SQLException e) {
+            System.out.println("Issues with Foreign Key constraint");
             e.printStackTrace();
         }
     }

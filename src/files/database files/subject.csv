@@ -1,8 +1,8 @@
-Subject;5;1;1;lecturer(id)
-code;name;attending_students;teaching_form;duration
-varchar(6);VARCHAR(75) UNIQUE NOT NULL;INT(6);VARCHAR(50) NOT NULL;DECIMAL(11);code
-Code;Name;Attending Students;Teaching Form;Duration
-PGR200;Avansert Testing;65;sequential;4.0
-PGR100;Objektorientert Testing;215;sequential;4.0
-PRO100;Kreativ Testing;215;sequential;4.0
-PRO101;Webtesting;199;sequential;4.0
+Subject;6;1;1
+code;name;attending_students;teaching_form;duration;teached_by
+varchar(6);VARCHAR(75) UNIQUE NOT NULL;INT(6);VARCHAR(50) NOT NULL;DECIMAL(11);INT;code;teached_by;lecturer(employee_id)
+Code;Name;Attending Students;Teaching Form;Duration;Teached By
+PGR200;Avansert Testing;65;sequential;4.0;1
+PGR100;Objektorientert Testing;215;sequential;4.0;1
+PRO100;Kreativ Testing;215;sequential;4.0;1
+PRO101;Webtesting;199;sequential;4.0;1

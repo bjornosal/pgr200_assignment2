@@ -1,8 +1,11 @@
 package no.salvesen.assignment2;
 
+import com.sun.org.apache.xpath.internal.SourceTree;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 

@@ -82,8 +82,6 @@ public class FileReader {
         for(int i = 0; i < getTableColumnCount() + getAmountOfPrimaryKeys() + (getAmountOfForeignKeys()*2); i++) {
             columnSQLValues.add(fileParser.next());
         }
-        System.out.println("Columnames: " + columnNames);
-        System.out.println("column sql: " + columnSQLValues);
     }
 
     /**

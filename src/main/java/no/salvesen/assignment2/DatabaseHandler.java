@@ -37,16 +37,17 @@ public class DatabaseHandler {
         dropTable(lecturerTable);
 
         createDatabase();
-
-        createTableFromMetaData(subjectTable);
+//TODO Filling and creation of tables has to be done in a specific order due to FK constraint, fix?
         createTableFromMetaData(roomTable);
         createTableFromMetaData(lecturerTable);
+        createTableFromMetaData(subjectTable);
 
         addAllForeignKeysToTables();
 
-        fillTableFromFileByTableName(subjectTable);
+        //TODO check if PK is init
         fillTableFromFileByTableName(roomTable);
         fillTableFromFileByTableName(lecturerTable);
+        fillTableFromFileByTableName(subjectTable);
 
     }
 
@@ -162,6 +163,7 @@ public class DatabaseHandler {
             for (String foreignKeyQuery : foreignKeysToBeAdded) {
                 statement.addBatch(foreignKeyQuery);
             }
+
             statement.executeBatch();
 
         }
