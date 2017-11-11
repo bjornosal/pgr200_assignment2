@@ -1,7 +1,11 @@
-Lecturer;2;1;0
-employee_id;name
-INT NOT NULL;VARCHAR(255);employee_id
-Employee ID;Name
-1;Tor-Morten
-2;Per
-3;Andrea
+Lecturer;3;1;0
+employee_id;name;mail
+INT NOT NULL;VARCHAR(255);VARCHAR(255);employee_id
+Employee ID;Name;E-mail
+1;Tor-Morten Gronli;tormortengronli@westerdals.no
+2;Per Lauvas;perlauvas@westerdals.no
+3;Andrea Arcuri;andreaarcuri@westerdals.no
+4;Wanda Presthus;wandapresthus@westerdals.no
+5;Kjetil Raaen;kjetilraaen@westerdals.no
+6;Hanne Sorum;hannesorum@westerdals.no
+7;Rolando Gonzales;rollo@westerdals.no

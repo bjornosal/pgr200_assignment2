@@ -174,7 +174,7 @@ public class InputHandler {
                     break;
                 case "7":
                     outputToClient.println("Getting information on subjects with lecturer.");
-                    outputToClient.println(databaseHandler.getAllRowsByTableName("lecturer_in_subject"));
+                    outputToClient.println(databaseHandler.getSubjectNameAndLecturerNameBasedOnPrimaryKeys());
                     break;
                 case "8":
                     showMainMenu();

@@ -33,10 +33,10 @@ public class DatabaseHandler {
         String lecturerTable = "lecturer";
         String lecturerInSubjectTable = "lecturer_in_subject";
 
+        dropTable(lecturerInSubjectTable);
         dropTable(subjectTable);
         dropTable(roomTable);
         dropTable(lecturerTable);
-        dropTable(lecturerInSubjectTable);
 
         createDatabase();
 //TODO Filling and creation of tables has to be done in a specific order due to FK constraint, fix?
@@ -185,8 +185,8 @@ public class DatabaseHandler {
      */
     public String getRowsFromTableByColumnNameAndSearchColumnValue(String tableName, String columnName, String columnValue) throws FileNotFoundException, SQLException {
         fileReader.readFile(fileReader.getFileByTableName(tableName));
-        String result = "";
         String query = buildSelectQuery(true, tableName, columnName);
+        String result = "";
 
         try (Connection connection = databaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -197,6 +197,21 @@ public class DatabaseHandler {
         return result;
     }
 
+    //TODO implement in dynamic query building?
+    public String getSubjectNameAndLecturerNameBasedOnPrimaryKeys() throws SQLException, FileNotFoundException {
+        String result = "";
+        String query = "SELECT s.name, lec.name\n" +
+                "FROM subject as s\n" +
+                "JOIN lecturer_in_subject ON s.code = lecturer_in_subject.subject_code\n" +
+                "JOIN lecturer as lec ON lecturer_in_subject.lecturer_id = lec.employee_id;";
+
+        try (Connection connection = databaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            result += resultStringBuilder(resultSet);
+        }
+        return result;
+    }
     /**
      * Builds a select query, based on parameters.
      *
@@ -222,6 +237,7 @@ public class DatabaseHandler {
 
         return searchQuery.toString();
     }
+
 
     /**
      * Dynamic creation of result based on information from table file and ResultSet
@@ -449,7 +465,6 @@ public class DatabaseHandler {
             foreignKeyToBeAddedToQuery.append(") REFERENCES ");
             foreignKeyToBeAddedToQuery.append(fileReader.getColumnSQLValues().get(indexInSQLValueArrayList + fileReader.getAmountOfPrimaryKeys() + i + 1));
             foreignKeyToBeAddedToQuery.append(";");
-            System.out.println(foreignKeyToBeAddedToQuery.toString());
             foreignKeysToBeAdded.add(foreignKeyToBeAddedToQuery.toString());
         }
     }
