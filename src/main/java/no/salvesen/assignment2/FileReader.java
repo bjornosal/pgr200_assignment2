@@ -30,7 +30,6 @@ public class FileReader {
         setSubjectFile(new File("src/files/database files/subject.csv"));
         setRoomFile(new File("src/files/database files/room.csv"));
         setLecturerFile(new File("src/files/database files/lecturer.csv"));
-
         setLecturer_in_subject_file(new File("src/files/database files/lecturer_in_subject.csv"));
     }
 

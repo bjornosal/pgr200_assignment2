@@ -199,6 +199,7 @@ public class DatabaseHandler {
 
     //TODO implement in dynamic query building?
     public String getSubjectNameAndLecturerNameBasedOnPrimaryKeys() throws SQLException, FileNotFoundException {
+        fileReader.readFile(fileReader.getFileByTableName("lecturer_in_subject"));
         String result = "";
         String query = "SELECT s.name, lec.name\n" +
                 "FROM subject as s\n" +
@@ -248,7 +249,9 @@ public class DatabaseHandler {
      * @throws FileNotFoundException If unable to find file.
      */
     private String resultStringBuilder(ResultSet resultSet) throws SQLException, FileNotFoundException {
-        String[] rowResult = new String[getColumnCountOfTable(fileReader.getTableName())];
+        String[] rowResult = new String[fileReader.getTableColumnCount()];
+        System.out.println("####: "+fileReader.getTableColumnCount());
+        System.out.println("******:"+getColumnCountOfTable(fileReader.getTableName()));
         StringBuilder result = new StringBuilder();
         result.append(getResultHeader(fileReader.getTableName()));
         while (resultSet.next()) {
