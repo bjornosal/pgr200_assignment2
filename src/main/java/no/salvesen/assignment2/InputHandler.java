@@ -207,6 +207,16 @@ public class InputHandler {
             chosenTable = inputFromClient.readLine();
             for (String tableName : databaseHandler.getArrayListOfTableNames()) {
                 if (chosenTable.equals(tableName)) {
+                    if(checkIfDependentOnLinkTable(chosenTable)) {
+                        System.out.println("Lecturer_in_subject table requires this table.");
+                        System.out.println("Tear down and set it back up together with " + tableName + "-table ?");
+                        System.out.println("Y/N");
+                        if(inputFromClient.readLine().equalsIgnoreCase("Y")) {
+                            databaseHandler.tearDownTableAndSetBackUpWithNewInformation("lecturer_in_subject");
+                        } else {
+                            break;
+                        }
+                    }
                     databaseHandler.tearDownTableAndSetBackUpWithNewInformation(chosenTable);
                     outputToClient.print("Cleared tables and filled with information from files.\n");
                     return;
@@ -216,6 +226,13 @@ public class InputHandler {
                 return;
             }
         }
+    }
+
+    private boolean checkIfDependentOnLinkTable(String tableName) throws FileNotFoundException, SQLException {
+        if (tableName.equalsIgnoreCase("subject") || tableName.equalsIgnoreCase("lecturer")) {
+           return true;
+        }
+        return false;
     }
 
     private void outputDatabaseExceptionOccurred() {
