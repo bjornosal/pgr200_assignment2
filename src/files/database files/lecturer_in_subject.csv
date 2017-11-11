@@ -1,0 +1,7 @@
+Lecturer_in_subject;2;2;2
+subject_code;lecturer_id
+varchar(6);int not null;subject_code;lecturer_id;subject_code;subject(code);lecturer_id;lecturer(employee_id)
+Subject;Lecturer
+PGR200;1
+PRO100;2
+PG4200;3

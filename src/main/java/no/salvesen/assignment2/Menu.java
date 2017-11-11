@@ -70,13 +70,14 @@ public class Menu {
      */
     //TODO after adding foreign key, add an option regarding subject's that lecturer's can lecture, or which rooms that subjects can have depending on type?
     private void setSearchMenuOptions() {
-        searchChoices = new String[6];
+        searchChoices = new String[7];
         searchChoices[0] = "Get information on a subject";
         searchChoices[1] = "Get information on all subjects";
         searchChoices[2] = "Get information on a lecturer";
         searchChoices[3] = "Get information on all lecturers";
         searchChoices[4] = "Get information on a room";
         searchChoices[5] = "Get information on all rooms";
+        searchChoices[6] = "Get information on subject and lecturer";
     }
 
     /**

@@ -10,6 +10,7 @@ public class FileReader {
     private File subjectFile;
     private File roomFile;
     private File lecturerFile;
+    private File lecturer_in_subject_file;
 
     private String tableName;
     private int tableColumnCount;
@@ -29,6 +30,8 @@ public class FileReader {
         setSubjectFile(new File("src/files/database files/subject.csv"));
         setRoomFile(new File("src/files/database files/room.csv"));
         setLecturerFile(new File("src/files/database files/lecturer.csv"));
+
+        setLecturer_in_subject_file(new File("src/files/database files/lecturer_in_subject.csv"));
     }
 
     /**
@@ -55,9 +58,9 @@ public class FileReader {
 
     /*
      * Description of file:
-     * First line: tableName;columnCount;primaryKeys;foreignKeys;ForeignKeyReferences(Table(column))
+     * First line: tableName;columnCount;primaryKeys;foreignKeys;
      * Second line: columnName * columnCount
-     * Third line: MySQL values * columnCount
+     * Third line: MySQL values * columnCount;primary key column * amount;foreign key column * amount; foreign key references (Table(column))
      * Fourth line: Display Names * columnCount
      * Fifth -> lines: Insertion values
      */
@@ -120,8 +123,18 @@ public class FileReader {
                 return getRoomFile();
             case "lecturer":
                 return getLecturerFile();
+            case "lecturer_in_subject":
+                return getLecturer_in_subject_file();
         }
         return null;
+    }
+
+    public File getLecturer_in_subject_file() {
+        return lecturer_in_subject_file;
+    }
+
+    public void setLecturer_in_subject_file(File lecturer_in_subject_file) {
+        this.lecturer_in_subject_file = lecturer_in_subject_file;
     }
 
     private File getSubjectFile() {

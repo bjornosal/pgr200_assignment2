@@ -31,16 +31,19 @@ public class DatabaseHandler {
         String subjectTable = "subject";
         String roomTable = "room";
         String lecturerTable = "lecturer";
+        String lecturerInSubjectTable = "lecturer_in_subject";
 
         dropTable(subjectTable);
         dropTable(roomTable);
         dropTable(lecturerTable);
+        dropTable(lecturerInSubjectTable);
 
         createDatabase();
 //TODO Filling and creation of tables has to be done in a specific order due to FK constraint, fix?
         createTableFromMetaData(roomTable);
         createTableFromMetaData(lecturerTable);
         createTableFromMetaData(subjectTable);
+        createTableFromMetaData(lecturerInSubjectTable);
 
         addAllForeignKeysToTables();
 
@@ -48,6 +51,7 @@ public class DatabaseHandler {
         fillTableFromFileByTableName(roomTable);
         fillTableFromFileByTableName(lecturerTable);
         fillTableFromFileByTableName(subjectTable);
+        fillTableFromFileByTableName(lecturerInSubjectTable);
 
     }
 
@@ -163,7 +167,6 @@ public class DatabaseHandler {
             for (String foreignKeyQuery : foreignKeysToBeAdded) {
                 statement.addBatch(foreignKeyQuery);
             }
-
             statement.executeBatch();
 
         }
@@ -437,14 +440,16 @@ public class DatabaseHandler {
      * @param indexInSQLValueArrayList At which index in the ArrayList to start.
      */
     private void addForeignKeyToList(int indexInSQLValueArrayList) {
-        StringBuilder foreignKeyToBeAddedToQuery = new StringBuilder();
-        for (int i = 1; i < fileReader.getAmountOfForeignKeys() + 1; i++) {
+        StringBuilder foreignKeyToBeAddedToQuery;
+        for (int i = 1; i < fileReader.getAmountOfForeignKeys()*2; i+=2) {
+            foreignKeyToBeAddedToQuery = new StringBuilder();
             foreignKeyToBeAddedToQuery.append("ALTER TABLE ").append(fileReader.getTableName()).append("\n");
             foreignKeyToBeAddedToQuery.append("ADD FOREIGN KEY (");
             foreignKeyToBeAddedToQuery.append(fileReader.getColumnSQLValues().get(indexInSQLValueArrayList + fileReader.getAmountOfPrimaryKeys() + i));
             foreignKeyToBeAddedToQuery.append(") REFERENCES ");
             foreignKeyToBeAddedToQuery.append(fileReader.getColumnSQLValues().get(indexInSQLValueArrayList + fileReader.getAmountOfPrimaryKeys() + i + 1));
             foreignKeyToBeAddedToQuery.append(";");
+            System.out.println(foreignKeyToBeAddedToQuery.toString());
             foreignKeysToBeAdded.add(foreignKeyToBeAddedToQuery.toString());
         }
     }

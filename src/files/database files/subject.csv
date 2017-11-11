@@ -1,9 +1,9 @@
-Subject;6;1;1
-code;name;attending_students;teaching_form;duration;teached_by
-varchar(6);VARCHAR(75) UNIQUE NOT NULL;INT(6);VARCHAR(50) NOT NULL;DECIMAL(11);INT;code;teached_by;lecturer(employee_id)
-Code;Name;Attending Students;Teaching Form;Duration;Teached By
-PGR200;Avansert Javaprogrammering;65;sequential;4.0;1
-PGR100;Object-oriented Programming;215;sequential;4.0;3
-PRO100;Creative Webproject;215;sequential;4.0;2
-PRO101;Webproject;199;sequential;4.0;2
-PG4200;Algorithms;30;sequential;4.0;3
+Subject;5;1;0
+code;name;attending_students;teaching_form;duration
+varchar(6);VARCHAR(75) UNIQUE NOT NULL;INT(6);VARCHAR(50) NOT NULL;DECIMAL(11);code
+Code;Name;Attending Students;Teaching Form;Duration
+PGR200;Avansert Javaprogrammering;65;sequential;4.0
+PGR100;Object-oriented Programming;215;sequential;4.0
+PRO100;Creative Webproject;215;sequential;4.0
+PRO101;Webproject;199;sequential;4.0
+PG4200;Algorithms;30;sequential;4.0

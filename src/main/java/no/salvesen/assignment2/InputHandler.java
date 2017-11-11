@@ -173,9 +173,13 @@ public class InputHandler {
                     outputToClient.println(databaseHandler.getAllRowsByTableName("room"));
                     break;
                 case "7":
-                    showMainMenu();
+                    outputToClient.println("Getting information on subjects with lecturer.");
+                    outputToClient.println(databaseHandler.getAllRowsByTableName("lecturer_in_subject"));
                     break;
                 case "8":
+                    showMainMenu();
+                    break;
+                case "9":
                     outputToClient.println("CLOSE_SOCKET");
                     return;
                 default:
