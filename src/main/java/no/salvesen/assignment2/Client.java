@@ -30,9 +30,8 @@ public class Client
                     forwardMessageFromServer(inputFromServer, socket);
                 }
             }
-            //TODO fix exception handling here
         }  catch (IOException e) {
-            e.printStackTrace();
+            exceptionHandler.outputIOException("message");
         }
     }
 
@@ -41,7 +40,7 @@ public class Client
         try {
             input = inputFromClient.readLine();
         } catch (IOException e) {
-            exceptionHandler.outputIOException("unknown");
+            exceptionHandler.outputIOException("message");
         }
         outputToServer.println(input);
     }
@@ -57,7 +56,7 @@ public class Client
             try {
                 socket.close();
             } catch (IOException e) {
-                exceptionHandler.outputIOException("Issue with socket on ClientThread.");
+                exceptionHandler.outputIOException("message");
             }
         } else {
             System.out.println(messageReceivedFromServer);

@@ -25,7 +25,11 @@ public class InputHandler {
         this.inputFromClient = inputFromClient;
     }
 
-    //TODO Add Javadoc
+    /**
+     * Used for setting up properties.
+     * @throws IOException If issues with file.
+     * @throws SQLException if issue with SQL queries.
+     */
     public void setUpProperties() throws IOException, SQLException {
         boolean finished = false;
         String menuChoice;
@@ -57,12 +61,8 @@ public class InputHandler {
 
             }
         }
-
-        //Starts database with the properties chosen.
-
         databaseHandler.startConnection();
 
-        //Handling the issues of wrong properties
         try {
             databaseHandler.createDatabase();
         } catch (SQLException e) {
@@ -71,6 +71,10 @@ public class InputHandler {
         }
     }
 
+    /**
+     * Starts the application loop,
+     * and handles exceptions thrown by the methods.
+     */
     public void startMenuLoop() {
         try {
             setUpProperties();
@@ -101,7 +105,11 @@ public class InputHandler {
         }
     }
 
-
+    /**
+     * Main menu loop with two choices.
+     * @throws IOException If issue with printing.
+     * @throws SQLException If issue with queries further down.
+     */
     private void showMainMenu() throws IOException, SQLException {
         String menuChoice;
         while (connected) {
@@ -123,6 +131,11 @@ public class InputHandler {
         }
     }
 
+    /**
+     * Shows the table menu
+     * @throws IOException if issue with file or printing.
+     * @throws SQLException if issue with SQL queries.
+     */
     private void showTableMenu() throws IOException, SQLException {
         String menuChoice;
         while(connected) {
@@ -166,6 +179,11 @@ public class InputHandler {
         }
     }
 
+    /**
+     * Shows the search menu.
+     * @throws IOException If issue with file or sending message.
+     * @throws SQLException If issue with queries further down.
+     */
     private void showSearchMenu() throws IOException, SQLException {
         String menuChoice;
         while(connected) {
@@ -216,7 +234,6 @@ public class InputHandler {
     }
 
     /**
-     *
      * Prints out a list of possible tables to choose from.
      * Until a correct table is chosen, will stay in loop.
      * @throws SQLException If unable to get connection.
@@ -233,7 +250,7 @@ public class InputHandler {
             chosenTable = inputFromClient.readLine();
             for (String tableName : databaseHandler.getArrayListOfTableNames()) {
                 if (chosenTable.equals(tableName)) {
-                    if(checkIfDependentOnLinkTable(chosenTable)) {
+                    if(checkIfDependentForLinkTable(chosenTable)) {
                         outputToClient.println("Lecturer_in_subject table requires this table.");
                         outputToClient.println("Tear down and set it back up together with " + tableName + "-table ?");
                         outputToClient.println("Y/N");
@@ -254,13 +271,25 @@ public class InputHandler {
         }
     }
 
-    private boolean checkIfDependentOnLinkTable(String tableName) throws FileNotFoundException, SQLException {
+    /**
+     * Checks if the link table is depending on the table.
+     * @param tableName table which might be depending.
+     * @return true if dependant
+     * @throws FileNotFoundException if issue with file.
+     * @throws SQLException if issue with queries.
+     */
+    private boolean checkIfDependentForLinkTable(String tableName) throws FileNotFoundException, SQLException {
         if (tableName.equalsIgnoreCase("subject") || tableName.equalsIgnoreCase("lecturer")) {
             return true;
         }
         return false;
     }
 
+    /**
+     * Used to set up the user properties if the user chooses to do so him/herself.
+     * @param properties Properties that is being set up in caller method.
+     * @throws IOException If issue with file or printing.
+     */
     private void setUserProperties(Properties properties) throws IOException {
         outputToClient.println("Server name: ");
         String serverName = inputFromClient.readLine();
@@ -286,6 +315,10 @@ public class InputHandler {
         }
     }
 
+    /**
+     * Sets the connected status of the client.
+     * @param connected false if disconnecting.
+     */
     public void setConnected(boolean connected) {
         this.connected = connected;
     }

@@ -50,7 +50,6 @@ public class DatabaseHandler{
         dropTable(roomTable);
         dropTable(lecturerTable);
 
-//TODO Filling and creation of tables has to be done in a specific order due to FK constraint, fix?
         createTableFromMetaData(roomTable);
         createTableFromMetaData(lecturerTable);
         createTableFromMetaData(subjectTable);

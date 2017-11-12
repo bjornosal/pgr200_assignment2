@@ -68,7 +68,6 @@ public class Menu {
     /**
      * Sets the content of the search menu.
      */
-    //TODO after adding foreign key, add an option regarding subject's that lecturer's can lecture, or which rooms that subjects can have depending on type?
     private void setSearchMenuOptions() {
         searchChoices = new String[7];
         searchChoices[0] = "Get information on a subject";
