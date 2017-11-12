@@ -7,7 +7,6 @@ import java.util.Properties;
 public class InputHandler {
 
 
-    //TODO Fix exception throws etc
     private Menu menu;
     private DatabaseHandler databaseHandler;
     private FileReader fileReader;
@@ -67,16 +66,39 @@ public class InputHandler {
         try {
             databaseHandler.createDatabase();
         } catch (SQLException e) {
-            outputDatabaseExceptionOccurred();
+            exceptionHandler.outputDatabaseSQLException();
             setUpProperties();
         }
     }
 
-    public void startMenuLoop() throws IOException, SQLException {
-        setUpProperties();
-        outputToClient.println("Connected to database.");
-        databaseHandler.tearDownDatabaseAndSetBackUp();
-        showMainMenu();
+    public void startMenuLoop() {
+        try {
+            setUpProperties();
+        } catch (IOException e) {
+            exceptionHandler.outputIOException("WriteProp");
+        } catch(SQLException e) {
+            exceptionHandler.outputIOException("createdatabase");
+        }
+        try {
+            databaseHandler.tearDownDatabaseAndSetBackUp();
+            connected = true;
+        } catch (SQLException e) {
+            exceptionHandler.outputSQLException("connect");
+        } catch (FileNotFoundException e) {
+            exceptionHandler.outputFileNotFoundException();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            showMainMenu();
+        } catch (SQLException e) {
+            exceptionHandler.outputSQLException("createTable");
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            exceptionHandler.outputFileNotFoundException();
+        } catch(IOException e) {
+            exceptionHandler.outputIOException("fileissue");
+        }
     }
 
 
@@ -237,10 +259,6 @@ public class InputHandler {
             return true;
         }
         return false;
-    }
-
-    private void outputDatabaseExceptionOccurred() {
-        outputToClient.println(exceptionHandler.outputDatabaseSQLException());
     }
 
     private void setUserProperties(Properties properties) throws IOException {

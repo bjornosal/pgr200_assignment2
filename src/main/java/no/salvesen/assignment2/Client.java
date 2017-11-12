@@ -5,6 +5,8 @@ import java.net.*;
 
 public class Client
 {
+    private ExceptionHandler exceptionHandler;
+
     public static void main(String[] args)
     {
         new Client();
@@ -12,30 +14,53 @@ public class Client
 
     public Client()
     {
+        exceptionHandler = new ExceptionHandler();
+
         try(Socket socket = new Socket("localhost",8888);
-            PrintWriter outputToThread = new PrintWriter(socket.getOutputStream(), true);
+            PrintWriter outputToServer = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader inputFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             BufferedReader inputFromClient = new BufferedReader(new InputStreamReader(System.in))) {
 
             while(true) {
                 if(inputFromClient.ready()) {
-                    String input = inputFromClient.readLine();
-                    outputToThread.println(input);
+                    forwardMessageFromClient(outputToServer, inputFromClient);
                 }
 
                 if(inputFromServer.ready()) {
-                    String messageReceivedFromServer = inputFromServer.readLine();
-                    if(messageReceivedFromServer.equals("CLOSE_SOCKET")) {
-                        socket.close();
-                        break;
-                    } else {
-                        System.out.println(messageReceivedFromServer);
-                    }
+                    forwardMessageFromServer(inputFromServer, socket);
                 }
             }
             //TODO fix exception handling here
-        } catch (IOException exception) {
-            System.out.println("Feilmelding: " + exception);
+        }  catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void forwardMessageFromClient(PrintWriter outputToServer, BufferedReader inputFromClient) {
+        String input = null;
+        try {
+            input = inputFromClient.readLine();
+        } catch (IOException e) {
+            exceptionHandler.outputIOException("unknown");
+        }
+        outputToServer.println(input);
+    }
+
+    public void forwardMessageFromServer(BufferedReader inputFromServer, Socket socket)  {
+        String messageReceivedFromServer = null;
+        try {
+            messageReceivedFromServer = inputFromServer.readLine();
+        } catch (IOException e) {
+            exceptionHandler.outputIOException("message");
+        }
+        if(messageReceivedFromServer.equals("CLOSE_SOCKET")) {
+            try {
+                socket.close();
+            } catch (IOException e) {
+                exceptionHandler.outputIOException("Issue with socket on ClientThread.");
+            }
+        } else {
+            System.out.println(messageReceivedFromServer);
         }
     }
 }
