@@ -22,10 +22,8 @@ public class ClientThread implements Runnable
              BufferedReader inputFromClient = new BufferedReader(new InputStreamReader(threadSocket.getInputStream()))
         ) {
 
-            while (true) {
-                inputHandler = new InputHandler(outputToClient, inputFromClient);
-                inputHandler.startMenuLoop();
-            }
+            inputHandler = new InputHandler(outputToClient, inputFromClient);
+            inputHandler.startMenuLoop();
             //TODO sort exception handling here
         } catch(SocketException e) {
             System.out.println("Client disconnected");

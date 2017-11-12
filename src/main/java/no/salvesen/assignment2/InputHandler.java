@@ -15,7 +15,7 @@ public class InputHandler {
 
     private PrintWriter outputToClient;
     private BufferedReader inputFromClient;
-
+    private boolean connected = true;
 
     public InputHandler(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException, SQLException {
         fileReader = new FileReader();
@@ -31,7 +31,7 @@ public class InputHandler {
         boolean finished = false;
         String menuChoice;
 
-        while (!finished) {
+        while (!finished && connected) {
             Properties properties = new Properties();
             outputToClient.println(menu.propertiesMenu());
             menuChoice = inputFromClient.readLine();
@@ -82,7 +82,7 @@ public class InputHandler {
 
     private void showMainMenu() throws IOException, SQLException {
         String menuChoice;
-        while (true) {
+        while (connected) {
             outputToClient.println(menu.mainMenu());
             menuChoice = inputFromClient.readLine();
 
@@ -103,7 +103,7 @@ public class InputHandler {
 
     private void showTableMenu() throws IOException, SQLException {
         String menuChoice;
-        while(true) {
+        while(connected) {
             outputToClient.println(menu.tableMenu());
             menuChoice = inputFromClient.readLine();
             String filePathMessage = "Please enter the file-path to the csv file.";
@@ -141,13 +141,12 @@ public class InputHandler {
                 default:
                     outputToClient.println("Incorrect choice, please try again.");
             }
-
         }
     }
 
     private void showSearchMenu() throws IOException, SQLException {
         String menuChoice;
-        while(true) {
+        while(connected) {
             outputToClient.println(menu.searchMenu());
             menuChoice = inputFromClient.readLine();
 
@@ -185,6 +184,7 @@ public class InputHandler {
                     break;
                 case "9":
                     outputToClient.println("CLOSE_SOCKET");
+                    setConnected(false);
                     return;
                 default:
                     outputToClient.println("Incorrect choice, please try again.");
@@ -202,7 +202,7 @@ public class InputHandler {
      */
     private void chooseTableToFillWithInformation() throws SQLException, IOException {
         String chosenTable;
-        while (true) {
+        while (connected) {
             outputToClient.println("Possible tables are: ");
             for(String tableName : databaseHandler.getArrayListOfTableNames()) {
                 outputToClient.println(tableName);
@@ -212,9 +212,9 @@ public class InputHandler {
             for (String tableName : databaseHandler.getArrayListOfTableNames()) {
                 if (chosenTable.equals(tableName)) {
                     if(checkIfDependentOnLinkTable(chosenTable)) {
-                        System.out.println("Lecturer_in_subject table requires this table.");
-                        System.out.println("Tear down and set it back up together with " + tableName + "-table ?");
-                        System.out.println("Y/N");
+                        outputToClient.println("Lecturer_in_subject table requires this table.");
+                        outputToClient.println("Tear down and set it back up together with " + tableName + "-table ?");
+                        outputToClient.println("Y/N");
                         if(inputFromClient.readLine().equalsIgnoreCase("Y")) {
                             databaseHandler.tearDownTableAndSetBackUpWithNewInformation("lecturer_in_subject");
                         } else {
@@ -266,5 +266,9 @@ public class InputHandler {
             databaseHandler.setPropertyFilePath("./src/files/userEnteredDatabaseLogin.properties");
 
         }
+    }
+
+    public void setConnected(boolean connected) {
+        this.connected = connected;
     }
 }

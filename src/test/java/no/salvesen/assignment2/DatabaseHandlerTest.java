@@ -13,51 +13,40 @@ import static org.junit.Assert.*;
 
 public class DatabaseHandlerTest {
     private DatabaseHandler databaseHandler;
-    private FileReader fileReader;
-    private ArrayList<String> foreignKeysToBeAdded;
+
+    private final String subjectFilePathName = "src/test/files/Test_table_files/subject_test_file.csv";
+    private final String lecturerFilePathName = "src/test/files/Test_table_files/lecturer_test_file.csv";
+    private final String roomFilePathName = "src/test/files/Test_table_files/room_test_file.csv";
+    private final String lecturerInSubjectPathName = "src/test/files/Test_table_files/lecturer_in_subject_test_file.csv";
 
     public DatabaseHandlerTest() throws IOException, SQLException {
-        databaseHandler = new DatabaseHandler();
-        fileReader = new FileReader();
-        foreignKeysToBeAdded = new ArrayList<>();
+        databaseHandler = new DatabaseHandler(subjectFilePathName, roomFilePathName, lecturerFilePathName, lecturerInSubjectPathName);
     }
 
     @Before
     public void setUp() throws Exception {
-        fileReader.setSubjectFile(new File("src/test/Test_table_files/subject_test_file.csv"));
-        fileReader.setLecturerFile(new File("src/test/Test_table_files/lecturer_test_file.csv"));
-        fileReader.setRoomFile(new File("src/test/Test_table_files/room_test_file.csv"));
-
-        databaseHandler.setPropertyFilePath("src/files/testDatabaseLogin.properties");
+        databaseHandler.setPropertyFilePath("src/test/files/testDatabaseLogin.properties");
         databaseHandler.startConnection();
+        databaseHandler.setUpDatabase();
     }
 
     @Test
     public void tearDownDatabaseAndSetBackUp() throws Exception {
+        assertThat(databaseHandler.getArrayListOfTableNames().size(), is(4));
         databaseHandler.tearDownDatabaseAndSetBackUp();
-        assertThat(databaseHandler.getArrayListOfTableNames().size(), is(3));
+        assertThat(databaseHandler.getArrayListOfTableNames().size(), is(4));
     }
 
     @Test
     public void tearDownTableAndSetBackUpWithNewInformation() throws Exception {
+        assertThat(databaseHandler.getArrayListOfTableNames().size(), is(4));
         databaseHandler.tearDownTableAndSetBackUpWithNewInformation("subject");
-        assert(databaseHandler.getAllRowsByTableName("subject").contains("Code   | Name                          | Attending Students | Teaching Form | Duration |"));
+        assertThat(databaseHandler.getArrayListOfTableNames().size(), is(4));
     }
 
     @Test
     public void getRowsFromTableByColumnNameAndSearchColumnValue() throws Exception {
-    }
-
-    @Test
-    public void getAllRowsByTableName() throws Exception {
-    }
-
-    @Test
-    public void createDatabase() throws Exception {
-    }
-
-    @Test
-    public void startConnection() throws Exception {
+        assert(databaseHandler.getRowsFromTableByColumnNameAndSearchColumnValue("subject","code","pro100").contains("Creative Testing"));
     }
 
 }

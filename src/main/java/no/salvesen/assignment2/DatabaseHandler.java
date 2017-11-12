@@ -26,7 +26,7 @@ public class DatabaseHandler{
 
     }
 
-    private void setUpDatabase() throws IOException, SQLException {
+    public void setUpDatabase() throws IOException, SQLException {
         createDatabase();
         databaseConnection.setDataSourceDatabaseName(getPropertyFilePath());
     }
@@ -174,7 +174,6 @@ public class DatabaseHandler{
                 statement.addBatch(foreignKeyQuery);
             }
             statement.executeBatch();
-
         }
     }
 
