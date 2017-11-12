@@ -28,10 +28,11 @@ public class DatabaseConnection {
         properties.load(input);
 
         dataSource.setServerName(properties.getProperty("serverName"));
-        dataSource.setDatabaseName(properties.getProperty("databaseName"));
+//        dataSource.setDatabaseName(properties.getProperty("databaseName"));
         dataSource.setUser(properties.getProperty("databaseUser"));
         dataSource.setPassword(properties.getProperty("databasePassword"));
     }
+
 
     /**
      * Returns a connection to the database.
@@ -40,5 +41,22 @@ public class DatabaseConnection {
      */
     public Connection getConnection() throws SQLException {
         return dataSource.getConnection();
+    }
+
+    public void setDataSourceDatabaseName(String propertyFilePath) {
+        Properties properties = new Properties();
+        InputStream input = null;
+        try {
+            input = new FileInputStream(propertyFilePath);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            properties.load(input);
+        } catch (IOException e) {
+            System.out.println("ERROR IN DATABASECONNECTION");
+        }
+        dataSource.setDatabaseName(properties.getProperty("databaseName"));
     }
 }

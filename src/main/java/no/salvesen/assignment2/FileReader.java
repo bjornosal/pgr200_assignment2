@@ -24,13 +24,24 @@ public class FileReader {
 
     /**
      * Constructor for class FileReader.
-     * Initializes files at corresponding paths for the three tables.
+     * Initializes files at corresponding paths for the four tables.
      */
     public FileReader() {
         setSubjectFile(new File("src/files/database files/subject.csv"));
         setRoomFile(new File("src/files/database files/room.csv"));
         setLecturerFile(new File("src/files/database files/lecturer.csv"));
         setLecturer_in_subject_file(new File("src/files/database files/lecturer_in_subject.csv"));
+    }
+
+    /**
+     * Constructor for class FileReader.
+     * Initializes files at param paths. Specifically for testing.
+     */
+    public FileReader(String subjectPathName, String roomPathName, String lecturerPathName, String lecturerInSubjectPathName) {
+        setSubjectFile(new File(subjectPathName));
+        setRoomFile(new File(roomPathName));
+        setLecturerFile(new File(lecturerPathName));
+        setLecturer_in_subject_file(new File(lecturerInSubjectPathName));
     }
 
     /**

@@ -13,8 +13,10 @@ public class ExceptionHandler {
                 return "Issues writing properties to file.";
             case "connect":
                 return "There was an issue with the database name";
+            case "fileissue":
+                return "There was an issue with the property file.";
         }
-        return "";
+        return "An issue with IO. Unable to locate location of error.";
     }
 
     /**
@@ -34,6 +36,8 @@ public class ExceptionHandler {
                 return "There was an issue connecting to the database with the properties-file. \nPlease try again.";
             case "createTable":
                 return "There was an issue creating table with information in the file.";
+            case "createdatabase":
+                return "There was an issue with the database.";
         }
         return "Some error with SQL. Unable to locate location of error.";
     }
