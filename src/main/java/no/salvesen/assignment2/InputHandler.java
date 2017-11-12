@@ -17,7 +17,7 @@ public class InputHandler {
     private BufferedReader inputFromClient;
 
 
-    public InputHandler(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException {
+    public InputHandler(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException, SQLException {
         fileReader = new FileReader();
         exceptionHandler = new ExceptionHandler();
         databaseHandler = new DatabaseHandler();
@@ -101,7 +101,6 @@ public class InputHandler {
         }
     }
 
-
     private void showTableMenu() throws IOException, SQLException {
         String menuChoice;
         while(true) {
@@ -122,16 +121,21 @@ public class InputHandler {
                     outputToClient.println(filePathMessage);
                     fileReader.setLecturerFile(new File(inputFromClient.readLine()));
                     break;
+
                 case "4":
-                    outputToClient.println("Existing files chosen");
+                    outputToClient.println(filePathMessage);
+                    fileReader.setLecturer_in_subject_file(new File(inputFromClient.readLine()));
                     break;
                 case "5":
-                    chooseTableToFillWithInformation();
+                    outputToClient.println("Existing files chosen");
                     break;
                 case "6":
-                    showMainMenu();
+                    chooseTableToFillWithInformation();
                     break;
                 case "7":
+                    showMainMenu();
+                    break;
+                case "8":
                     outputToClient.println("CLOSE_SOCKET");
                     break;
                 default:
@@ -230,7 +234,7 @@ public class InputHandler {
 
     private boolean checkIfDependentOnLinkTable(String tableName) throws FileNotFoundException, SQLException {
         if (tableName.equalsIgnoreCase("subject") || tableName.equalsIgnoreCase("lecturer")) {
-           return true;
+            return true;
         }
         return false;
     }

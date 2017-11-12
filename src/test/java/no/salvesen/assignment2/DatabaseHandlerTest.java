@@ -4,6 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static org.hamcrest.core.Is.is;
@@ -14,7 +16,7 @@ public class DatabaseHandlerTest {
     private FileReader fileReader;
     private ArrayList<String> foreignKeysToBeAdded;
 
-    public DatabaseHandlerTest() {
+    public DatabaseHandlerTest() throws IOException, SQLException {
         databaseHandler = new DatabaseHandler();
         fileReader = new FileReader();
         foreignKeysToBeAdded = new ArrayList<>();

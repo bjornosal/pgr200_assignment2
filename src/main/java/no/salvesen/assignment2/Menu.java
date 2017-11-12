@@ -84,12 +84,13 @@ public class Menu {
      * Sets the content of the fill table menu.
      */
     private void setTableMenuOptions() {
-        tableChoices = new String[5];
+        tableChoices = new String[6];
         tableChoices[0] = "Add new filepath for \'subject\' table information";
         tableChoices[1] = "Add new filepath for \'room\' table information";
         tableChoices[2] = "Add new filepath for \'lecturer\' table information";
-        tableChoices[3] = "Use existing files in files folder";
-        tableChoices[4] = "Fill a table with information from file.";
+        tableChoices[3] = "Add new filepath for \'lecturer_in_subject\' table information";
+        tableChoices[4] = "Use existing files in files folder";
+        tableChoices[5] = "Fill a table with information from file.";
     }
 
     /**
