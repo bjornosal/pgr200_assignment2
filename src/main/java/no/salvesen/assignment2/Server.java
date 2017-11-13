@@ -26,8 +26,7 @@ public class Server {
                 printInformationForThread(socket, clientThread);
             }
         } catch (IOException e) {
-            System.out.println("#####");
-            e.printStackTrace();
+            System.out.println("Issue with socket.");
         }
     }
 

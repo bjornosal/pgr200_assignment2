@@ -62,7 +62,7 @@ public class Menu {
     private void setPropertiesMenuOptions() {
         propertiesMenuChoices = new String[2];
         propertiesMenuChoices[0] = "Use default database properties.";
-        propertiesMenuChoices[1] = "Set session-login.";
+        propertiesMenuChoices[1] = "Set server-side session-properties.";
     }
 
     /**

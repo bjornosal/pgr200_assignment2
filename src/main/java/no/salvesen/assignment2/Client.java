@@ -13,6 +13,8 @@ public class Client
     private final String SERVER_HOST = "localhost";
     private final int SERVER_PORT = 8888;
 
+    private boolean clientIsConnected = true;
+
     /**
      * The entry point of application.
      *
@@ -35,35 +37,12 @@ public class Client
             BufferedReader inputFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             BufferedReader inputFromClient = new BufferedReader(new InputStreamReader(System.in))) {
 
-            while (true) {
 
-//                forwardMessageFromClient(outputToServer, inputFromClient);
-                try {
-                    if (inputFromClient.ready()) {
-                        String input = inputFromClient.readLine();
-
-                        outputToServer.println(input);
-                    }
-                } catch(IOException e){
-                    exceptionHandler.outputIOException("message");
-                }
-
-                try {
-                    if (inputFromServer.ready()) {
-                        String messageReceivedFromServer = inputFromServer.readLine();
-
-                        if (messageReceivedFromServer.equals("CLOSE_SOCKET")) {
-                            socket.close();
-                        } else {
-                            System.out.println(messageReceivedFromServer);
-                        }
-                    }
-                } catch (IOException e) {
-                    exceptionHandler.outputIOException("message");
-                }
-//                messageFromServer(inputFromServer, socket);
+            while(clientIsConnected) {
+                forwardMessageFromClient(outputToServer, inputFromClient);
+                messageFromServer(inputFromServer, socket);
             }
-        }catch(IOException e) {
+        } catch(IOException e) {
             exceptionHandler.outputIOException("message");
         }
     }
@@ -88,7 +67,7 @@ public class Client
     }
 
     /**
-     * Message from server.
+     * Prints message from server.
      *
      * @param inputFromServer the input from server
      * @param socket          the socket
@@ -99,7 +78,10 @@ public class Client
                 String messageReceivedFromServer = inputFromServer.readLine();
 
                 if (messageReceivedFromServer.equals("CLOSE_SOCKET")) {
+                    System.out.println("Have a nice day!");
+
                     socket.close();
+                    clientIsConnected = false;
                 } else {
                     System.out.println(messageReceivedFromServer);
                 }
