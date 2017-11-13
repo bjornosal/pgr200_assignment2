@@ -14,7 +14,9 @@ public class InputHandler {
     private DatabaseHandler databaseHandler;
     private FileReader fileReader;
     private ExceptionHandler exceptionHandler;
+    private PropertiesHandler propertiesHandler;
 
+    private String sessionPropertiesFilePath;
     private PrintWriter outputToClient;
     private BufferedReader inputFromClient;
     private boolean connected = true;
@@ -27,11 +29,14 @@ public class InputHandler {
      * @throws IOException  the io exception
      * @throws SQLException the sql exception
      */
-    public InputHandler(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException, SQLException {
+    public InputHandler(PrintWriter outputToClient, BufferedReader inputFromClient, String sessionPropertiesFilePath) throws IOException, SQLException {
         fileReader = new FileReader();
         exceptionHandler = new ExceptionHandler();
-        databaseHandler = new DatabaseHandler();
         menu = new Menu();
+        propertiesHandler = new PropertiesHandler();
+        databaseHandler = new DatabaseHandler(propertiesHandler);
+
+        this.sessionPropertiesFilePath = sessionPropertiesFilePath;
         this.outputToClient = outputToClient;
         this.inputFromClient = inputFromClient;
     }
@@ -52,11 +57,11 @@ public class InputHandler {
             switch (menuChoice) {
                 case "1":
                     if(!isDefaultDatabaseLoginPropertiesFileIsEmpty()) {
-                        outputToClient.println("Default login has not been set up,\n\rplease set up before continuing.");
+                        outputToClient.println("Default login has not been set up,\nplease set up before continuing.");
                         setUserProperties(properties);
                     }
                     else {
-                        databaseHandler.setPropertyFilePath("./src/files/defaultDatabaseLogin.properties");
+                        propertiesHandler.setPropertyFilePath("./src/files/defaultDatabaseLogin.properties");
                     }
                     finished = true;
                     break;
@@ -318,13 +323,13 @@ public class InputHandler {
         if(inputFromClient.readLine().equalsIgnoreCase("Y")) {
             chosenTypeOfLogin = new File("src/files/defaultDatabaseLogin.properties");
         } else {
-            chosenTypeOfLogin = new File("./src/files/userEnteredDatabaseLogin.properties");
+            chosenTypeOfLogin = new File(sessionPropertiesFilePath);
         }
 
         try (FileOutputStream fileOut = new FileOutputStream(chosenTypeOfLogin)) {
             properties.store(fileOut, "Added by user");
             outputToClient.println("Property file set up. Attempting to connect.\n");
-            databaseHandler.setPropertyFilePath(chosenTypeOfLogin.getPath());
+            propertiesHandler.setPropertyFilePath(chosenTypeOfLogin.getPath());
         }
     }
 

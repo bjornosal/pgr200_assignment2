@@ -1,10 +1,8 @@
 package no.salvesen.assignment2;
 
-
 import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Properties;
 
 public class DatabaseHandler{
 
@@ -12,6 +10,7 @@ public class DatabaseHandler{
     private FileReader fileReader;
     private String propertyFilePath;
     private ArrayList<String> foreignKeysToBeAdded;
+    private PropertiesHandler propertiesHandler;
 
     /**
      * Instantiates a new Database handler.
@@ -19,9 +18,10 @@ public class DatabaseHandler{
      * @throws IOException  the io exception
      * @throws SQLException the sql exception
      */
-    public  DatabaseHandler() throws IOException, SQLException {
-        databaseConnection = new DatabaseConnection();
+    public  DatabaseHandler(PropertiesHandler propertiesHandler) throws IOException, SQLException {
         fileReader  = new FileReader();
+        this.propertiesHandler = propertiesHandler;
+        databaseConnection = new DatabaseConnection(propertiesHandler);
         foreignKeysToBeAdded = new ArrayList<>();
     }
 
@@ -36,7 +36,7 @@ public class DatabaseHandler{
      * @throws SQLException the sql exception
      */
     public  DatabaseHandler(String subjectPathName, String roomPathName, String lecturerPathName, String lecturerInSubjectPathName) throws IOException, SQLException {
-        databaseConnection = new DatabaseConnection();
+        databaseConnection = new DatabaseConnection(propertiesHandler);
         fileReader  = new FileReader(subjectPathName, roomPathName, lecturerPathName, lecturerInSubjectPathName);
         foreignKeysToBeAdded = new ArrayList<>();
 
@@ -50,7 +50,7 @@ public class DatabaseHandler{
      */
     public void setUpDatabase() throws IOException, SQLException {
         createDatabase();
-        databaseConnection.setDataSourceDatabaseName(getPropertyFilePath());
+        databaseConnection.setDataSourceDatabaseName();
     }
     /**
      * Removes all existing tables and recreate them.
@@ -408,7 +408,7 @@ public class DatabaseHandler{
     public void createDatabase() throws SQLException, IOException {
         try(Connection connection = databaseConnection.getConnection()) {
             Statement stmt = connection.createStatement();
-            String query = "CREATE SCHEMA IF NOT EXISTS " + getDatabaseNameFromProperties() + ";";
+            String query = "CREATE SCHEMA IF NOT EXISTS " + propertiesHandler.getDatabaseNameFromProperties() + ";";
             stmt.executeUpdate(query);
         }
     }
@@ -421,7 +421,7 @@ public class DatabaseHandler{
     protected void dropDatabase() throws SQLException, IOException {
         try (Connection connection = databaseConnection.getConnection()) {
             Statement stmt = connection.createStatement();
-            String query = "DROP SCHEMA " + getDatabaseNameFromProperties() + ";";
+            String query = "DROP SCHEMA " + propertiesHandler.getDatabaseNameFromProperties() + ";";
             stmt.executeUpdate(query);
         }
     }
@@ -521,28 +521,28 @@ public class DatabaseHandler{
      * @return String Database name
      * @throws IOException If unable to find properties file.
      */
-    private String getDatabaseNameFromProperties() throws IOException {
-        Properties properties = new Properties();
-        InputStream input = new FileInputStream(getPropertyFilePath());
-
-        properties.load(input);
-
-        return properties.getProperty("databaseName");
-    }
+//    private String getDatabaseNameFromProperties() throws IOException {
+//        Properties properties = new Properties();
+//        InputStream input = new FileInputStream(getPropertyFilePath());
+//
+//        properties.load(input);
+//
+//        return properties.getProperty("databaseName");
+//    }
 
     /**
      * Initializes the database with the properties file.
      * @throws IOException If unable to find file.
      */
     public void startConnection() throws IOException {
-        databaseConnection.initializeProperties(getPropertyFilePath());
+        databaseConnection.initializeProperties();
     }
 
-    private String getPropertyFilePath() {
-        return propertyFilePath;
-    }
-
-    protected void setPropertyFilePath(String propertyFilePath) {
-        this.propertyFilePath = propertyFilePath;
-    }
+//    private String getPropertyFilePath() {
+//        return propertyFilePath;
+//    }
+//
+//    protected void setPropertyFilePath(String propertyFilePath) {
+//        this.propertyFilePath = propertyFilePath;
+//    }
 }

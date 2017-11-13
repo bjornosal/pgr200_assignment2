@@ -13,6 +13,7 @@ public class ClientThread implements Runnable
     private Socket threadSocket;
     private int id;
     private ExceptionHandler exceptionHandler;
+    private String sessionPropertiesFileName;
 
     /**
      * Instantiates the ClientThread.
@@ -32,8 +33,11 @@ public class ClientThread implements Runnable
         try (PrintWriter outputToClient = new PrintWriter(threadSocket.getOutputStream(), true);
              BufferedReader inputFromClient = new BufferedReader(new InputStreamReader(threadSocket.getInputStream()))
         ) {
-            InputHandler inputHandler = new InputHandler(outputToClient, inputFromClient);
+            generateSessionPropertiesFileName();
+
+            InputHandler inputHandler = new InputHandler(outputToClient, inputFromClient, sessionPropertiesFileName);
             inputHandler.startMenuLoop();
+            //TODO delete propertiesfile
         } catch(SocketException e) {
             System.out.println("Client disconnected");
         } catch(IOException exception) {
@@ -50,6 +54,10 @@ public class ClientThread implements Runnable
 
     private void setId(int id) {
         this.id = id;
+    }
+
+    private void generateSessionPropertiesFileName() {
+        sessionPropertiesFileName = "propertyFileFor_" + getId() + threadSocket.getInetAddress();
     }
 
 }
