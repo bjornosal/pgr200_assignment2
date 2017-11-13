@@ -3,6 +3,7 @@ package no.salvesen.assignment2;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
+import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -17,6 +18,7 @@ public class ClientThread implements Runnable
     private int id;
     private ExceptionHandler exceptionHandler;
     private String sessionPropertiesFileName;
+    private boolean fileIsDeleted = false;
 
     /**
      * Instantiates the ClientThread.
@@ -46,6 +48,8 @@ public class ClientThread implements Runnable
 
         } catch(SocketException e) {
             System.out.println("Client disconnected");
+        } catch(FileSystemException e) {
+            System.out.println("Unable to delete properties file.");
         } catch(IOException exception) {
             System.out.println(exceptionHandler.outputIOException("There is an issue with the file."));
             exception.printStackTrace();

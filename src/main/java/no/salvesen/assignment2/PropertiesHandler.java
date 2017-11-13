@@ -2,11 +2,10 @@ package no.salvesen.assignment2;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Properties;
 
 public class PropertiesHandler {
@@ -48,10 +47,12 @@ public class PropertiesHandler {
         }
     }
 
-    public void deleteSessionPropertiesForClient() throws IOException {
+    public boolean fileIsFinishedSettingUp() throws IOException {
         if(isSessionOnlyProperties()) {
-            Files.delete(Paths.get(propertyFilePath));
+            File sessionPropertiesFile = new File(propertyFilePath);
+            return sessionPropertiesFile.exists();
         }
+        return true;
     }
 
     public boolean isSessionOnlyProperties() {
