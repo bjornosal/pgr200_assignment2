@@ -51,7 +51,14 @@ public class InputHandler {
             menuChoice = inputFromClient.readLine();
             switch (menuChoice) {
                 case "1":
-                    databaseHandler.setPropertyFilePath("./src/files/defaultDatabaseLogin.properties");
+                    if(!isDefaultDatabaseLoginPropertiesFileIsEmpty()) {
+                        outputToClient.println("Default login has not been set up,\n\rplease set up before continuing.");
+                        setUserProperties(properties);
+                    }
+                    else {
+                        databaseHandler.setPropertyFilePath("./src/files/defaultDatabaseLogin.properties");
+                    }
+
                     finished = true;
                     break;
                 case "2":
@@ -310,20 +317,25 @@ public class InputHandler {
         properties.setProperty("databaseName", databaseName);
         properties.setProperty("databaseUser", databaseUser);
         properties.setProperty("databasePassword", databasePassword);
+        File chosenTypeOfLogin;
 
-        File userEnteredProperties = new File("./src/files/userEnteredDatabaseLogin.properties");
+        outputToClient.println("Use these properties as default? Y/N");
+        if(inputFromClient.readLine().equalsIgnoreCase("Y")) {
+            chosenTypeOfLogin = new File("src/files/defaultDatabaseLogin.properties");
+        } else {
+            chosenTypeOfLogin = new File("./src/files/userEnteredDatabaseLogin.properties");
+        }
 
-        try (FileOutputStream fileOut = new FileOutputStream(userEnteredProperties)) {
+        try (FileOutputStream fileOut = new FileOutputStream(chosenTypeOfLogin)) {
             properties.store(fileOut, "Added by user");
             outputToClient.println("Property file set up. Attempting to connect.\n");
-            databaseHandler.setPropertyFilePath("./src/files/userEnteredDatabaseLogin.properties");
+            databaseHandler.setPropertyFilePath(chosenTypeOfLogin.getPath());
         }
     }
 
-    private boolean hasDefaulDatabaseLoginBeenSet() {
-        File defaultLoginFile = new File("src/files/defaultDatabaseLogin.properties");
-
-        return false;
+    private boolean isDefaultDatabaseLoginPropertiesFileIsEmpty() {
+        File defaultDatabaseLogin = new File("src/files/defaultDatabaseLogin.properties");
+        return defaultDatabaseLogin.length() > 0;
     }
 
     /**

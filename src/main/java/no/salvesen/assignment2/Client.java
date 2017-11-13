@@ -10,6 +10,9 @@ public class Client
 {
     private ExceptionHandler exceptionHandler;
 
+    private final String SERVER_HOST = "localhost";
+    private final int SERVER_PORT = 8888;
+
     /**
      * The entry point of application.
      *
@@ -27,7 +30,7 @@ public class Client
     {
         exceptionHandler = new ExceptionHandler();
 
-        try(Socket socket = new Socket("localhost",8888);
+        try(Socket socket = new Socket(SERVER_HOST,SERVER_PORT);
             PrintWriter outputToServer = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader inputFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             BufferedReader inputFromClient = new BufferedReader(new InputStreamReader(System.in))) {
