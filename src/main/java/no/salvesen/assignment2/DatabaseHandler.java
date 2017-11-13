@@ -324,7 +324,6 @@ public class DatabaseHandler{
         for(int i = 0; i < fileReader.getTableColumnCount(); i++) {
             resultFormat.append("%-").append(maxLengthOfColumn.get(i)).append("s | ");
         }
-
         return resultFormat.toString();
     }
 
@@ -517,20 +516,6 @@ public class DatabaseHandler{
     }
 
     /**
-     * Gets the database name from the properties file.
-     * @return String Database name
-     * @throws IOException If unable to find properties file.
-     */
-//    private String getDatabaseNameFromProperties() throws IOException {
-//        Properties properties = new Properties();
-//        InputStream input = new FileInputStream(getPropertyFilePath());
-//
-//        properties.load(input);
-//
-//        return properties.getProperty("databaseName");
-//    }
-
-    /**
      * Initializes the database with the properties file.
      * @throws IOException If unable to find file.
      */
@@ -538,11 +523,4 @@ public class DatabaseHandler{
         databaseConnection.initializeProperties();
     }
 
-//    private String getPropertyFilePath() {
-//        return propertyFilePath;
-//    }
-//
-//    protected void setPropertyFilePath(String propertyFilePath) {
-//        this.propertyFilePath = propertyFilePath;
-//    }
 }

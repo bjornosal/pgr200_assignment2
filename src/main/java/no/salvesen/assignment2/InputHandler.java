@@ -16,7 +16,7 @@ public class InputHandler {
     private ExceptionHandler exceptionHandler;
     private PropertiesHandler propertiesHandler;
 
-    private String sessionPropertiesFilePath;
+    private String sessionPropertiesFileName;
     private PrintWriter outputToClient;
     private BufferedReader inputFromClient;
     private boolean connected = true;
@@ -29,14 +29,14 @@ public class InputHandler {
      * @throws IOException  the io exception
      * @throws SQLException the sql exception
      */
-    public InputHandler(PrintWriter outputToClient, BufferedReader inputFromClient, String sessionPropertiesFilePath) throws IOException, SQLException {
+    public InputHandler(PrintWriter outputToClient, BufferedReader inputFromClient, String sessionPropertiesFileName) throws IOException, SQLException {
         fileReader = new FileReader();
         exceptionHandler = new ExceptionHandler();
         menu = new Menu();
         propertiesHandler = new PropertiesHandler();
         databaseHandler = new DatabaseHandler(propertiesHandler);
 
-        this.sessionPropertiesFilePath = sessionPropertiesFilePath;
+        this.sessionPropertiesFileName = sessionPropertiesFileName;
         this.outputToClient = outputToClient;
         this.inputFromClient = inputFromClient;
     }
@@ -186,6 +186,8 @@ public class InputHandler {
                     break;
                 case "8":
                     outputToClient.println("CLOSE_SOCKET");
+//                    propertiesHandler.deleteSessionPropertiesForClient();
+                    setConnected(false);
                     break;
                 default:
                     outputToClient.println("Incorrect choice, please try again.");
@@ -237,6 +239,7 @@ public class InputHandler {
                     showMainMenu();
                     break;
                 case "9":
+//                    propertiesHandler.deleteSessionPropertiesForClient();
                     outputToClient.println("CLOSE_SOCKET");
                     setConnected(false);
                     return;
@@ -323,9 +326,12 @@ public class InputHandler {
         if(inputFromClient.readLine().equalsIgnoreCase("Y")) {
             chosenTypeOfLogin = new File("src/files/defaultDatabaseLogin.properties");
         } else {
-            chosenTypeOfLogin = new File(sessionPropertiesFilePath);
+            propertiesHandler.setSessionOnlyProperties(true);
+            String filePath = sessionPropertiesFileName;
+            chosenTypeOfLogin = new File(filePath);
+            outputToClient.println("Your file was created at: ");
+            outputToClient.println(filePath);
         }
-
         try (FileOutputStream fileOut = new FileOutputStream(chosenTypeOfLogin)) {
             properties.store(fileOut, "Added by user");
             outputToClient.println("Property file set up. Attempting to connect.\n");

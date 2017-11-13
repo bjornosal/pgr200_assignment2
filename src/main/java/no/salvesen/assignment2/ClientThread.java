@@ -3,6 +3,9 @@ package no.salvesen.assignment2;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 
 /**
@@ -37,11 +40,15 @@ public class ClientThread implements Runnable
 
             InputHandler inputHandler = new InputHandler(outputToClient, inputFromClient, sessionPropertiesFileName);
             inputHandler.startMenuLoop();
-            //TODO delete propertiesfile
+
+            Path path = Paths.get(sessionPropertiesFileName);
+            Files.delete(path);
+
         } catch(SocketException e) {
             System.out.println("Client disconnected");
         } catch(IOException exception) {
             System.out.println(exceptionHandler.outputIOException("There is an issue with the file."));
+            exception.printStackTrace();
         } catch (SQLException e) {
             System.out.println(exceptionHandler.outputSQLException("foreignkey"));
         }
@@ -57,7 +64,7 @@ public class ClientThread implements Runnable
     }
 
     private void generateSessionPropertiesFileName() {
-        sessionPropertiesFileName = "propertyFileFor_" + getId() + threadSocket.getInetAddress();
+        sessionPropertiesFileName = "src/files/propertyFileFor_ID_" + getId() +".properties";
     }
 
 }

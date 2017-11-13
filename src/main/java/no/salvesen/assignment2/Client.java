@@ -2,6 +2,9 @@ package no.salvesen.assignment2;
 
 import java.io.*;
 import java.net.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * The type Client.
@@ -14,6 +17,7 @@ public class Client
     private final int SERVER_PORT = 8888;
 
     private boolean clientIsConnected = true;
+    private String propertiesFilePath;
 
     /**
      * The entry point of application.
@@ -57,7 +61,6 @@ public class Client
         try {
             if (inputFromClient.ready()) {
                 String input = inputFromClient.readLine();
-
                 outputToServer.println(input);
             }
         } catch(IOException e){
@@ -79,7 +82,6 @@ public class Client
 
                 if (messageReceivedFromServer.equals("CLOSE_SOCKET")) {
                     System.out.println("Have a nice day!");
-
                     socket.close();
                     clientIsConnected = false;
                 } else {
