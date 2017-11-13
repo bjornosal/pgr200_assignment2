@@ -5,12 +5,22 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.sql.SQLException;
 
+/**
+ * The type Client thread.
+ */
 public class ClientThread implements Runnable
 {
     private Socket threadSocket;
     private int id;
     private ExceptionHandler exceptionHandler;
 
+    /**
+     * Instantiates the ClientThread.
+     *
+     * @param id     the id
+     * @param socket the socket
+     * @throws IOException the io exception
+     */
     public ClientThread(int id, Socket socket) throws IOException {
         setId(id);
         threadSocket = socket;

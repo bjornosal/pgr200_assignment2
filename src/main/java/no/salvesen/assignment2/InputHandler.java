@@ -4,6 +4,9 @@ import java.io.*;
 import java.sql.SQLException;
 import java.util.Properties;
 
+/**
+ * The type Input handler.
+ */
 public class InputHandler {
 
 
@@ -16,6 +19,14 @@ public class InputHandler {
     private BufferedReader inputFromClient;
     private boolean connected = true;
 
+    /**
+     * Instantiates a new Input handler.
+     *
+     * @param outputToClient  the output to client
+     * @param inputFromClient the input from client
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public InputHandler(PrintWriter outputToClient, BufferedReader inputFromClient) throws IOException, SQLException {
         fileReader = new FileReader();
         exceptionHandler = new ExceptionHandler();
@@ -39,18 +50,14 @@ public class InputHandler {
             outputToClient.println(menu.propertiesMenu());
             menuChoice = inputFromClient.readLine();
             switch (menuChoice) {
-
-                //Use default properties
                 case "1":
                     databaseHandler.setPropertyFilePath("./src/files/defaultDatabaseLogin.properties");
                     finished = true;
                     break;
-                //use properties previously set by user
                 case "2":
                     databaseHandler.setPropertyFilePath("./src/files/userEnteredDatabaseLogin.properties");
                     finished = true;
                     break;
-                //Enter new properties
                 case "3":
                     setUserProperties(properties);
                     finished = true;
@@ -79,7 +86,7 @@ public class InputHandler {
         try {
             setUpProperties();
         } catch (IOException e) {
-            exceptionHandler.outputIOException("WriteProp");
+            exceptionHandler.outputIOException("writeprop");
         } catch(SQLException e) {
             exceptionHandler.outputIOException("createdatabase");
         }
@@ -96,7 +103,7 @@ public class InputHandler {
         try {
             showMainMenu();
         } catch (SQLException e) {
-            exceptionHandler.outputSQLException("createTable");
+            exceptionHandler.outputSQLException("createtable");
             e.printStackTrace();
         } catch (FileNotFoundException e) {
             exceptionHandler.outputFileNotFoundException();
@@ -229,7 +236,6 @@ public class InputHandler {
                 default:
                     outputToClient.println("Incorrect choice, please try again.");
             }
-
         }
     }
 
@@ -300,19 +306,24 @@ public class InputHandler {
         outputToClient.println("Password: ");
         String databasePassword = inputFromClient.readLine();
 
-        //Filling property file
         properties.setProperty("serverName", serverName);
         properties.setProperty("databaseName", databaseName);
         properties.setProperty("databaseUser", databaseUser);
         properties.setProperty("databasePassword", databasePassword);
+
         File userEnteredProperties = new File("./src/files/userEnteredDatabaseLogin.properties");
 
         try (FileOutputStream fileOut = new FileOutputStream(userEnteredProperties)) {
             properties.store(fileOut, "Added by user");
             outputToClient.println("Property file set up. Attempting to connect.\n");
             databaseHandler.setPropertyFilePath("./src/files/userEnteredDatabaseLogin.properties");
-
         }
+    }
+
+    private boolean hasDefaulDatabaseLoginBeenSet() {
+        File defaultLoginFile = new File("src/files/defaultDatabaseLogin.properties");
+
+        return false;
     }
 
     /**
