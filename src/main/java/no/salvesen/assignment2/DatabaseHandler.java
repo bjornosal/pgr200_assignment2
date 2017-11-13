@@ -13,12 +13,28 @@ public class DatabaseHandler{
     private String propertyFilePath;
     private ArrayList<String> foreignKeysToBeAdded;
 
+    /**
+     * Instantiates a new Database handler.
+     *
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public  DatabaseHandler() throws IOException, SQLException {
         databaseConnection = new DatabaseConnection();
         fileReader  = new FileReader();
         foreignKeysToBeAdded = new ArrayList<>();
     }
 
+    /**
+     * Instantiates a new Database handler.
+     *
+     * @param subjectPathName           the subject path name
+     * @param roomPathName              the room path name
+     * @param lecturerPathName          the lecturer path name
+     * @param lecturerInSubjectPathName the lecturer in subject path name
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public  DatabaseHandler(String subjectPathName, String roomPathName, String lecturerPathName, String lecturerInSubjectPathName) throws IOException, SQLException {
         databaseConnection = new DatabaseConnection();
         fileReader  = new FileReader(subjectPathName, roomPathName, lecturerPathName, lecturerInSubjectPathName);
@@ -26,6 +42,12 @@ public class DatabaseHandler{
 
     }
 
+    /**
+     * Sets up database.
+     *
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public void setUpDatabase() throws IOException, SQLException {
         createDatabase();
         databaseConnection.setDataSourceDatabaseName(getPropertyFilePath());
@@ -176,6 +198,13 @@ public class DatabaseHandler{
         }
     }
 
+    /**
+     * Gets subject name and lecturer name based on primary keys.
+     *
+     * @return the subject name and lecturer name based on primary keys
+     * @throws SQLException          the sql exception
+     * @throws FileNotFoundException the file not found exception
+     */
     public String getSubjectNameAndLecturerNameBasedOnPrimaryKeys() throws SQLException, FileNotFoundException {
         fileReader.readFile(fileReader.getFileByTableName("lecturer_in_subject"));
         String result = "";
@@ -331,7 +360,6 @@ public class DatabaseHandler{
      */
     private String createMaxLengthSelect() {
         StringBuilder query = new StringBuilder("SELECT ");
-        //Build bigger select and run that query, take all results into an array
         for(int i = 0; i < fileReader.getTableColumnCount(); i++) {
             query.append("max(length(").append(fileReader.getColumnNames().get(i)).append("))");
             if(i < fileReader.getTableColumnCount()-1) {
@@ -390,7 +418,7 @@ public class DatabaseHandler{
      * @throws SQLException
      * @throws IOException
      */
-    public void dropDatabase() throws SQLException, IOException {
+    protected void dropDatabase() throws SQLException, IOException {
         try (Connection connection = databaseConnection.getConnection()) {
             Statement stmt = connection.createStatement();
             String query = "DROP SCHEMA " + getDatabaseNameFromProperties() + ";";
@@ -510,7 +538,6 @@ public class DatabaseHandler{
         databaseConnection.initializeProperties(getPropertyFilePath());
     }
 
-
     private String getPropertyFilePath() {
         return propertyFilePath;
     }
@@ -518,8 +545,4 @@ public class DatabaseHandler{
     protected void setPropertyFilePath(String propertyFilePath) {
         this.propertyFilePath = propertyFilePath;
     }
-
-
-
-
 }
