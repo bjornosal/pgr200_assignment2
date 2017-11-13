@@ -58,14 +58,9 @@ public class InputHandler {
                     else {
                         databaseHandler.setPropertyFilePath("./src/files/defaultDatabaseLogin.properties");
                     }
-
                     finished = true;
                     break;
                 case "2":
-                    databaseHandler.setPropertyFilePath("./src/files/userEnteredDatabaseLogin.properties");
-                    finished = true;
-                    break;
-                case "3":
                     setUserProperties(properties);
                     finished = true;
                     break;

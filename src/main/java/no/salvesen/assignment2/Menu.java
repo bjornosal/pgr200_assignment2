@@ -57,6 +57,15 @@ public class Menu {
     }
 
     /**
+     * Sets the content of the properties menu
+     */
+    private void setPropertiesMenuOptions() {
+        propertiesMenuChoices = new String[2];
+        propertiesMenuChoices[0] = "Use default database properties.";
+        propertiesMenuChoices[1] = "Set session-login.";
+    }
+
+    /**
      * Sets the content of the main menu.
      */
     private void setMainMenuOptions() {
@@ -92,15 +101,6 @@ public class Menu {
         tableChoices[5] = "Fill a table with information from file.";
     }
 
-    /**
-     * Sets the content of the properties menu
-     */
-    private void setPropertiesMenuOptions() {
-        propertiesMenuChoices = new String[3];
-        propertiesMenuChoices[0] = "Use default database properties";
-        propertiesMenuChoices[1] = "Use properties set by user";
-        propertiesMenuChoices[2] = "Set new database properties";
-    }
 
     /**
      * Gets menu header

@@ -37,10 +37,31 @@ public class Client
 
             while (true) {
 
-                forwardMessageFromClient(outputToServer, inputFromClient);
+//                forwardMessageFromClient(outputToServer, inputFromClient);
+                try {
+                    if (inputFromClient.ready()) {
+                        String input = inputFromClient.readLine();
 
+                        outputToServer.println(input);
+                    }
+                } catch(IOException e){
+                    exceptionHandler.outputIOException("message");
+                }
 
-                messageFromServer(inputFromServer, socket);
+                try {
+                    if (inputFromServer.ready()) {
+                        String messageReceivedFromServer = inputFromServer.readLine();
+
+                        if (messageReceivedFromServer.equals("CLOSE_SOCKET")) {
+                            socket.close();
+                        } else {
+                            System.out.println(messageReceivedFromServer);
+                        }
+                    }
+                } catch (IOException e) {
+                    exceptionHandler.outputIOException("message");
+                }
+//                messageFromServer(inputFromServer, socket);
             }
         }catch(IOException e) {
             exceptionHandler.outputIOException("message");
