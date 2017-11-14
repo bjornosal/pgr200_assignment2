@@ -46,10 +46,6 @@ public class InputHandler {
      * @throws IOException If issues with file.
      * @throws SQLException if issue with SQL queries.
      */
-
-
-    //TODO Check if database exists. If do -> ask if overwrite.
-    //TODO IF no, ask for new name.
     public void setUpProperties() throws IOException, SQLException {
         boolean finished = false;
         String menuChoice;

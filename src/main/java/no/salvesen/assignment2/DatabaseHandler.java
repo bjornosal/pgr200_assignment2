@@ -10,6 +10,7 @@ public class DatabaseHandler{
     private FileReader fileReader;
     private ArrayList<String> foreignKeysToBeAdded;
     private PropertiesHandler propertiesHandler;
+    private PrintFormatHandler printFormatHandler;
 
     /**
      * Instantiates a new Database handler.
@@ -19,6 +20,7 @@ public class DatabaseHandler{
      */
     public  DatabaseHandler(PropertiesHandler propertiesHandler) throws IOException, SQLException {
         fileReader  = new FileReader();
+        printFormatHandler = new PrintFormatHandler(fileReader);
         this.propertiesHandler = propertiesHandler;
         databaseConnection = new DatabaseConnection(propertiesHandler);
         foreignKeysToBeAdded = new ArrayList<>();
@@ -215,7 +217,8 @@ public class DatabaseHandler{
         try (Connection connection = databaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             ResultSet resultSet = preparedStatement.executeQuery();
-            result += resultStringBuilder(resultSet);
+//            result += resultStringBuilder(resultSet);
+            result += printFormatHandler.resultStringBuilder(resultSet, getColumnCountOfTable(fileReader.getTableName()), getMaxLengthOfColumnsByTableName());
         }
         return result;
     }
@@ -238,7 +241,9 @@ public class DatabaseHandler{
             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, columnValue);
             ResultSet resultSet = preparedStatement.executeQuery();
-            result += resultStringBuilder(resultSet);
+//            result += resultStringBuilder(resultSet);
+
+            result += printFormatHandler.resultStringBuilder(resultSet, getColumnCountOfTable(fileReader.getTableName()), getMaxLengthOfColumnsByTableName());
         }
         return result;
     }
@@ -307,12 +312,13 @@ public class DatabaseHandler{
         try(Connection connection = databaseConnection.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             ResultSet resultSet = preparedStatement.executeQuery();
-            result += resultStringBuilder(resultSet);
+//            result += resultStringBuilder(resultSet);
+            result += printFormatHandler.resultStringBuilder(resultSet, getColumnCountOfTable(fileReader.getTableName()), getMaxLengthOfColumnsByTableName());
         }
         return result;
     }
 
-    //TODO Move file to PrintFormatHandler
+    //TODO Moved file to PrintFormatHandler
     /**
      * Creates a format for the result to be printed out on based on the MetaData.
      * @return String ready for a String.Format print.
@@ -327,7 +333,6 @@ public class DatabaseHandler{
         return resultFormat.toString();
     }
 
-    //TODO Move file to PrintFormatHandler
     /**
      * To get the max length that a column should be for the result format.
      * @return ArrayList with the maximum length a column should be.
@@ -353,7 +358,6 @@ public class DatabaseHandler{
         return formatLengthForAllColumns;
     }
 
-    //TODO Move file to PrintFormatHandler
     /**
      * Creates a statement to get the max length.
      * Helper method for getMaxLengthOfColumnsByTableName()
@@ -521,6 +525,7 @@ public class DatabaseHandler{
         }
     }
 
+    //TODO Moved to printformathandler
     /**
      * Gets the header to be put at top of results that are printed.
      * @param tableName Which table to get result for.
