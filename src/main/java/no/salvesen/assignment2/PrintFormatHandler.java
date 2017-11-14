@@ -13,13 +13,16 @@ public class PrintFormatHandler {
         this.fileReader = fileReader;
     }
 
-    //TODO Move file to PrintFormatHandler
+
     /**
      * Dynamic creation of result based on information from table file and ResultSet
-     * @param resultSet ResultSet for the query.
-     * @return A prepared string to print out.
-     * @throws SQLException If unable to get column count, or build a ResultHeader based on file.
-     * @throws FileNotFoundException If unable to find file.
+     *
+     * @param resultSet          the result set
+     * @param columnCount        the column count
+     * @param maxLengthPerColumn the max length per column
+     * @return the string
+     * @throws SQLException          the sql exception
+     * @throws FileNotFoundException the file not found exception
      */
     public String resultStringBuilder(ResultSet resultSet, int columnCount, ArrayList<String> maxLengthPerColumn) throws SQLException, FileNotFoundException {
         String[] rowResult = new String[columnCount];
@@ -37,10 +40,10 @@ public class PrintFormatHandler {
         return result.toString();
     }
 
-    //TODO Move file to PrintFormatHandler
     /**
      * Creates a format for the result to be printed out on based on the MetaData.
      * @return String ready for a String.Format print.
+     * @param maxLengthPerColumn max length of each column
      * @throws SQLException If unable to get connection.
      */
     private String getResultFormat(ArrayList<String> maxLengthPerColumn) throws SQLException {
@@ -51,13 +54,13 @@ public class PrintFormatHandler {
         return resultFormat.toString();
     }
 
-
     /**
      * Gets the header to be put at top of results that are printed.
-     * @param tableName Which table to get result for.
-     * @return String A String to be added to a print.
-     * @throws FileNotFoundException If unable to find file.
-     * @throws SQLException If unable to get connection.
+     * @param tableName table to get header for
+     * @param maxLengthPerColumn max length per column
+     * @return header for results
+     * @throws FileNotFoundException if no file
+     * @throws SQLException if issue with query
      */
     private String getResultHeader(String tableName, ArrayList<String> maxLengthPerColumn) throws FileNotFoundException, SQLException {
         fileReader.readFile(fileReader.getFileByTableName(tableName));

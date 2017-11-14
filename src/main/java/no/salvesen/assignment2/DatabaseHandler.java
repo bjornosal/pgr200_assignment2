@@ -217,7 +217,6 @@ public class DatabaseHandler{
         try (Connection connection = databaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             ResultSet resultSet = preparedStatement.executeQuery();
-//            result += resultStringBuilder(resultSet);
             result += printFormatHandler.resultStringBuilder(resultSet, getColumnCountOfTable(fileReader.getTableName()), getMaxLengthOfColumnsByTableName());
         }
         return result;
@@ -273,29 +272,7 @@ public class DatabaseHandler{
 
         return searchQuery.toString();
     }
-//TODO Move file to PrintFormatHandler
-    /**
-     * Dynamic creation of result based on information from table file and ResultSet
-     * @param resultSet ResultSet for the query.
-     * @return A prepared string to print out.
-     * @throws SQLException If unable to get column count, or build a ResultHeader based on file.
-     * @throws FileNotFoundException If unable to find file.
-     */
-    private String resultStringBuilder(ResultSet resultSet) throws SQLException, FileNotFoundException {
-        String[] rowResult = new String[getColumnCountOfTable(fileReader.getTableName())];
-        StringBuilder result = new StringBuilder();
-        result.append(getResultHeader(fileReader.getTableName()));
-        while(resultSet.next()) {
-            for(int i = 1; i <= getColumnCountOfTable(fileReader.getTableName()); i++) {
-                rowResult[i - 1] = resultSet.getObject(i).toString();
-                if (i == getColumnCountOfTable(fileReader.getTableName())) {
-                    result.append("\n");
-                }
-            }
-            result.append(String.format(getResultFormat(),rowResult));
-        }
-        return result.toString();
-    }
+
 
     /**
      * Gets all rows based on table name
@@ -316,21 +293,6 @@ public class DatabaseHandler{
             result += printFormatHandler.resultStringBuilder(resultSet, getColumnCountOfTable(fileReader.getTableName()), getMaxLengthOfColumnsByTableName());
         }
         return result;
-    }
-
-    //TODO Moved file to PrintFormatHandler
-    /**
-     * Creates a format for the result to be printed out on based on the MetaData.
-     * @return String ready for a String.Format print.
-     * @throws SQLException If unable to get connection.
-     */
-    private String getResultFormat() throws SQLException {
-        StringBuilder resultFormat = new StringBuilder();
-        ArrayList<String> maxLengthOfColumn = getMaxLengthOfColumnsByTableName();
-        for(int i = 0; i < fileReader.getTableColumnCount(); i++) {
-            resultFormat.append("%-").append(maxLengthOfColumn.get(i)).append("s | ");
-        }
-        return resultFormat.toString();
     }
 
     /**
@@ -523,23 +485,6 @@ public class DatabaseHandler{
             foreignKeyToBeAddedToQuery.append(";");
             foreignKeysToBeAdded.add(foreignKeyToBeAddedToQuery.toString());
         }
-    }
-
-    //TODO Moved to printformathandler
-    /**
-     * Gets the header to be put at top of results that are printed.
-     * @param tableName Which table to get result for.
-     * @return String A String to be added to a print.
-     * @throws FileNotFoundException If unable to find file.
-     * @throws SQLException If unable to get connection.
-     */
-    private String getResultHeader(String tableName) throws FileNotFoundException, SQLException {
-        fileReader.readFile(fileReader.getFileByTableName(tableName));
-        String[] columnDisplayNames = new String[fileReader.getTableColumnCount()];
-        for (int i = 0; i < columnDisplayNames.length; i++) {
-            columnDisplayNames[i] = fileReader.getDisplayNames().get(i);
-        }
-        return String.format(getResultFormat(), columnDisplayNames);
     }
 
     /**
