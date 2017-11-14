@@ -46,6 +46,10 @@ public class InputHandler {
      * @throws IOException If issues with file.
      * @throws SQLException if issue with SQL queries.
      */
+
+
+    //TODO Check if database exists. If do -> ask if overwrite.
+    //TODO IF no, ask for new name.
     public void setUpProperties() throws IOException, SQLException {
         boolean finished = false;
         String menuChoice;
@@ -77,12 +81,17 @@ public class InputHandler {
         }
         databaseHandler.startConnection();
 
+        checkAndSetNewDatabaseName();
+
         try {
             databaseHandler.createDatabase();
+
         } catch (SQLException e) {
             exceptionHandler.outputDatabaseSQLException();
             setUpProperties();
         }
+
+
     }
 
     /**
@@ -306,7 +315,7 @@ public class InputHandler {
      * @param properties Properties that is being set up in caller method.
      * @throws IOException If issue with file or printing.
      */
-    private void setUserProperties(Properties properties) throws IOException {
+    private void setUserProperties(Properties properties) throws IOException, SQLException {
         outputToClient.println("Server name: ");
         String serverName = inputFromClient.readLine();
         outputToClient.println("Database name: ");
@@ -320,6 +329,7 @@ public class InputHandler {
         properties.setProperty("databaseName", databaseName);
         properties.setProperty("databaseUser", databaseUser);
         properties.setProperty("databasePassword", databasePassword);
+
         File chosenTypeOfLogin;
 
         outputToClient.println("Use these properties as default? Y/N");
@@ -328,6 +338,7 @@ public class InputHandler {
         } else {
             String filePath = sessionPropertiesFileName;
             chosenTypeOfLogin = new File(filePath);
+            propertiesHandler.setSessionFile(true);
         }
         try (FileOutputStream fileOut = new FileOutputStream(chosenTypeOfLogin)) {
             properties.store(fileOut, "Added by user");
@@ -340,6 +351,19 @@ public class InputHandler {
         return defaultDatabaseLogin.length() > 0;
     }
 
+    private void checkAndSetNewDatabaseName() throws IOException, SQLException {
+        while(databaseHandler.databaseExists() && propertiesHandler.isSessionFile()) {
+            outputToClient.println("Database with that name already exists.");
+            outputToClient.println("Create new database? - if not, will overwrite. Y/N");
+            if(inputFromClient.readLine().equalsIgnoreCase("y")) {
+                outputToClient.println("Database name:");
+                String databaseName = inputFromClient.readLine();
+                propertiesHandler.setDatabaseNameInProperties(databaseName);
+            } else {
+                break;
+            }
+        }
+    }
     /**
      * Sets the connected status of the client.
      * @param connected false if disconnecting.

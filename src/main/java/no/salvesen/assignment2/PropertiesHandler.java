@@ -12,9 +12,11 @@ public class PropertiesHandler {
     private String propertyFilePath;
 
     private ExceptionHandler exceptionHandler;
+    private boolean isSessionFile;
 
     public PropertiesHandler() {
         exceptionHandler = new ExceptionHandler();
+        isSessionFile = false;
     }
 
     public void initializeProperties(MysqlDataSource dataSource) throws IOException {
@@ -45,6 +47,14 @@ public class PropertiesHandler {
         }
     }
 
+    protected void setDatabaseNameInProperties(String databaseName) throws IOException {
+        Properties properties = new Properties();
+        try(InputStream input = new FileInputStream(propertyFilePath)) {
+            properties.load(input);
+            properties.setProperty("databaseName", databaseName);
+        }
+    }
+
    public void waitUntilFileIsClosed() {
        try {
            Thread.sleep(3000);
@@ -52,4 +62,12 @@ public class PropertiesHandler {
            System.out.println("Wait was interrupted.");
        }
    }
+
+   public void setSessionFile(boolean isSessionFile) {
+        this.isSessionFile = isSessionFile;
+   }
+
+    public boolean isSessionFile() {
+        return isSessionFile;
+    }
 }

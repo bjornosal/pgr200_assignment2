@@ -407,12 +407,13 @@ public class DatabaseHandler{
      * @throws IOException If unable to get access to the properties file.
      */
     public void createDatabase() throws SQLException, IOException {
-        try(Connection connection = databaseConnection.getConnection()) {
+        try (Connection connection = databaseConnection.getConnection()) {
             Statement stmt = connection.createStatement();
             String query = "CREATE SCHEMA IF NOT EXISTS " + propertiesHandler.getDatabaseNameFromProperties() + ";";
             stmt.executeUpdate(query);
         }
     }
+
 
     /**
      * Used to drop the schema
@@ -425,6 +426,25 @@ public class DatabaseHandler{
             String query = "DROP SCHEMA " + propertiesHandler.getDatabaseNameFromProperties() + ";";
             stmt.executeUpdate(query);
         }
+    }
+
+    /**
+     * Does database exist boolean.
+     *
+     * @return the boolean
+     * @throws SQLException the sql exception
+     * @throws IOException  the io exception
+     */
+    protected boolean databaseExists() throws SQLException, IOException {
+        try(Connection connection = databaseConnection.getConnection()) {
+            ResultSet resultSet = connection.getMetaData().getCatalogs();
+            while(resultSet.next()) {
+                if(resultSet.getString(1).equalsIgnoreCase(propertiesHandler.getDatabaseNameFromProperties())){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
