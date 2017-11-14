@@ -18,7 +18,6 @@ public class ClientThread implements Runnable
     private int id;
     private ExceptionHandler exceptionHandler;
     private String sessionPropertiesFileName;
-    private boolean fileIsDeleted = false;
 
     /**
      * Instantiates the ClientThread.
@@ -70,5 +69,4 @@ public class ClientThread implements Runnable
     private void generateSessionPropertiesFileName() {
         sessionPropertiesFileName = "src/files/propertyFileFor_ID_" + getId() +".properties";
     }
-
 }

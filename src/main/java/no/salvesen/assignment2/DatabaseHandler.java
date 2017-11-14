@@ -8,7 +8,6 @@ public class DatabaseHandler{
 
     private DatabaseConnection databaseConnection;
     private FileReader fileReader;
-    private String propertyFilePath;
     private ArrayList<String> foreignKeysToBeAdded;
     private PropertiesHandler propertiesHandler;
 
@@ -269,7 +268,7 @@ public class DatabaseHandler{
 
         return searchQuery.toString();
     }
-
+//TODO Move file to PrintFormatHandler
     /**
      * Dynamic creation of result based on information from table file and ResultSet
      * @param resultSet ResultSet for the query.
@@ -313,6 +312,7 @@ public class DatabaseHandler{
         return result;
     }
 
+    //TODO Move file to PrintFormatHandler
     /**
      * Creates a format for the result to be printed out on based on the MetaData.
      * @return String ready for a String.Format print.
@@ -327,6 +327,7 @@ public class DatabaseHandler{
         return resultFormat.toString();
     }
 
+    //TODO Move file to PrintFormatHandler
     /**
      * To get the max length that a column should be for the result format.
      * @return ArrayList with the maximum length a column should be.
@@ -352,6 +353,7 @@ public class DatabaseHandler{
         return formatLengthForAllColumns;
     }
 
+    //TODO Move file to PrintFormatHandler
     /**
      * Creates a statement to get the max length.
      * Helper method for getMaxLengthOfColumnsByTableName()
@@ -522,5 +524,4 @@ public class DatabaseHandler{
     public void startConnection() throws IOException {
         databaseConnection.initializeProperties();
     }
-
 }
