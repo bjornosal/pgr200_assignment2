@@ -185,8 +185,8 @@ public class InputHandler {
                     showMainMenu();
                     break;
                 case "8":
+                    propertiesHandler.waitUntilFileIsClosed();
                     outputToClient.println("CLOSE_SOCKET");
-//                    propertiesHandler.fileIsFinishedSettingUp();
                     setConnected(false);
                     break;
                 default:
@@ -239,13 +239,10 @@ public class InputHandler {
                     showMainMenu();
                     break;
                 case "9":
-                    if(propertiesHandler.fileIsFinishedSettingUp()) {
-                        outputToClient.println("CLOSE_SOCKET");
-                        setConnected(false);
-                        return;
-                    } else {
-                        System.out.println("Setting up properties file. \nPlease wait until process is finished.");
-                    }
+                    propertiesHandler.waitUntilFileIsClosed();
+                    outputToClient.println("CLOSE_SOCKET");
+                    setConnected(false);
+                    return;
                 default:
                     outputToClient.println("Incorrect choice, please try again.");
             }
@@ -329,13 +326,11 @@ public class InputHandler {
         if(inputFromClient.readLine().equalsIgnoreCase("Y")) {
             chosenTypeOfLogin = new File("src/files/defaultDatabaseLogin.properties");
         } else {
-            propertiesHandler.setSessionOnlyProperties(true);
             String filePath = sessionPropertiesFileName;
             chosenTypeOfLogin = new File(filePath);
         }
         try (FileOutputStream fileOut = new FileOutputStream(chosenTypeOfLogin)) {
             properties.store(fileOut, "Added by user");
-            outputToClient.println("Property file set up. Attempting to connect.\n");
             propertiesHandler.setPropertyFilePath(chosenTypeOfLogin.getPath());
         }
     }
