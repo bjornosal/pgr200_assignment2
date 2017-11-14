@@ -12,11 +12,9 @@ public class PropertiesHandler {
 
     private String propertyFilePath;
 
-    private ExceptionHandler exceptionHandler;
     private boolean isSessionFile;
 
     public PropertiesHandler() {
-        exceptionHandler = new ExceptionHandler();
         isSessionFile = false;
     }
 

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class PrintFormatHandler {
 
-    FileReader fileReader;
+    private FileReader fileReader;
 
     public PrintFormatHandler(FileReader fileReader) {
         this.fileReader = fileReader;
