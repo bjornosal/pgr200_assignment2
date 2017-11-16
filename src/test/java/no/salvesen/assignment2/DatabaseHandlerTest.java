@@ -13,6 +13,8 @@ import static org.junit.Assert.*;
 
 public class DatabaseHandlerTest {
     private DatabaseHandler databaseHandler;
+    private PropertiesHandler propertiesHandler;
+    private FileReader fileReader;
 
     private final String subjectFilePathName = "src/test/files/Test_table_files/subject_test_file.csv";
     private final String lecturerFilePathName = "src/test/files/Test_table_files/lecturer_test_file.csv";
@@ -20,19 +22,25 @@ public class DatabaseHandlerTest {
     private final String lecturerInSubjectPathName = "src/test/files/Test_table_files/lecturer_in_subject_test_file.csv";
 
     public DatabaseHandlerTest() throws IOException, SQLException {
-        databaseHandler = new DatabaseHandler(subjectFilePathName, roomFilePathName, lecturerFilePathName, lecturerInSubjectPathName);
+        fileReader = new FileReader();
+        propertiesHandler = new PropertiesHandler();
+        databaseHandler = new DatabaseHandler(propertiesHandler, fileReader);
     }
 
     @Before
     public void setUp() throws Exception {
-//        databaseHandler.setPropertyFilePath("src/test/files/testDatabaseLogin.properties");
+        fileReader.setLecturer_in_subject_file(new File(lecturerInSubjectPathName));
+        fileReader.setRoomFile(new File(roomFilePathName));
+        fileReader.setSubjectFile(new File(subjectFilePathName));
+        fileReader.setLecturerFile(new File(lecturerFilePathName));
+
+        propertiesHandler.setPropertyFilePath("src/test/files/testDatabaseLogin.properties");
         databaseHandler.startConnection();
         databaseHandler.setUpDatabase();
     }
 
     @Test
     public void tearDownDatabaseAndSetBackUp() throws Exception {
-        assertThat(databaseHandler.getArrayListOfTableNames().size(), is(4));
         databaseHandler.tearDownDatabaseAndSetBackUp();
         assertThat(databaseHandler.getArrayListOfTableNames().size(), is(4));
     }
@@ -48,5 +56,4 @@ public class DatabaseHandlerTest {
     public void getRowsFromTableByColumnNameAndSearchColumnValue() throws Exception {
         assert(databaseHandler.getRowsFromTableByColumnNameAndSearchColumnValue("subject","code","pro100").contains("Creative Testing"));
     }
-
 }

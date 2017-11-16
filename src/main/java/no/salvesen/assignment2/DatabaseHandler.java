@@ -36,11 +36,28 @@ public class DatabaseHandler{
      * @throws IOException  the io exception
      * @throws SQLException the sql exception
      */
-    public  DatabaseHandler(String subjectPathName, String roomPathName, String lecturerPathName, String lecturerInSubjectPathName) throws IOException, SQLException {
+    public  DatabaseHandler(PropertiesHandler propertiesHandler, String subjectPathName, String roomPathName, String lecturerPathName, String lecturerInSubjectPathName) throws IOException, SQLException {
         databaseConnection = new DatabaseConnection(propertiesHandler);
         fileReader  = new FileReader(subjectPathName, roomPathName, lecturerPathName, lecturerInSubjectPathName);
         foreignKeysToBeAdded = new ArrayList<>();
+    }
 
+
+    /**
+     * Instantiates a new Database handler for testing.
+     *
+     * @param propertiesHandler the properties handler
+     * @param filereader        the filereader
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
+    public DatabaseHandler(PropertiesHandler propertiesHandler, FileReader filereader) throws IOException, SQLException {
+        fileReader  = filereader;
+        printFormatHandler = new PrintFormatHandler(fileReader);
+        this.propertiesHandler = propertiesHandler;
+        databaseConnection = new DatabaseConnection(propertiesHandler);
+
+        foreignKeysToBeAdded = new ArrayList<>();
     }
 
     /**
