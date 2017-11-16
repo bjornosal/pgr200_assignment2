@@ -28,10 +28,6 @@ public class PropertiesHandlerTest {
         assertEquals("pgr200", dataSource.getUser());
     }
 
-    @Test
-    public void getDatabaseNameFromProperties() throws Exception {
-
-    }
 
     @Test
     public void setDatabaseNameInProperties() throws Exception {
@@ -39,5 +35,4 @@ public class PropertiesHandlerTest {
         assertEquals("pgr200_testing", propertiesHandler.getDatabaseNameFromProperties());
 
     }
-
 }

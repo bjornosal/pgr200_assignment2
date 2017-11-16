@@ -15,9 +15,9 @@ public class FileReaderTest {
 
     @Before
     public void setUp() throws Exception {
-        fileReader.setSubjectFile(new File("src/test/Test_table_files/subject_test_file.csv"));
-        fileReader.setLecturerFile(new File("src/test/Test_table_files/lecturer_test_file.csv"));
-        fileReader.setRoomFile(new File("src/test/Test_table_files/room_test_file.csv"));
+        fileReader.setSubjectFile(new File("src/test/files/Test_table_files/subject_test_file.csv"));
+        fileReader.setLecturerFile(new File("src/test/files/Test_table_files/lecturer_test_file.csv"));
+        fileReader.setRoomFile(new File("src/test/files/Test_table_files/room_test_file.csv"));
     }
 
     /**
@@ -32,6 +32,6 @@ public class FileReaderTest {
         assertThat(fileReader.getColumnNames().size(), is(5));
         //Column names and primary key
         assertThat(fileReader.getColumnSQLValues().size(), is(6));
-        assertThat(fileReader.getInsertionValues().size(), is(20));
+        assertThat(fileReader.getInsertionValues().size(), is(45));
     }
 }

@@ -47,8 +47,9 @@ public class DatabaseHandlerTest {
 
     @Test
     public void tearDownTableAndSetBackUpWithNewInformation() throws Exception {
+        tearDownDatabaseAndSetBackUp();
         assertThat(databaseHandler.getArrayListOfTableNames().size(), is(4));
-        databaseHandler.tearDownTableAndSetBackUpWithNewInformation("subject");
+        databaseHandler.tearDownTableAndSetBackUpWithNewInformation("room");
         assertThat(databaseHandler.getArrayListOfTableNames().size(), is(4));
     }
 

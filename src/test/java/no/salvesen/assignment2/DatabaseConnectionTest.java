@@ -21,7 +21,7 @@ public class DatabaseConnectionTest {
     @Test
     public void initializeProperties() throws Exception {
         databaseConnection.initializeProperties();
-        assertEquals(propertiesHandler.getDatabaseNameFromProperties(), "pgr200_assignment_1_testing");
+        assertEquals(propertiesHandler.getDatabaseNameFromProperties(), "pgr200_testing");
     }
 
     @Test
@@ -32,6 +32,6 @@ public class DatabaseConnectionTest {
     @Test
     public void setDataSourceDatabaseName() throws Exception {
         databaseConnection.setDataSourceDatabaseName();
-        assertEquals(propertiesHandler.getDatabaseNameFromProperties(), "pgr200_assignment_1_testing");
+        assertEquals(propertiesHandler.getDatabaseNameFromProperties(), "pgr200_testing");
     }
 }
