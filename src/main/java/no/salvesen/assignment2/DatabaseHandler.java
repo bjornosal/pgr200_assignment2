@@ -18,7 +18,7 @@ public class DatabaseHandler{
      * @throws IOException  the io exception
      * @throws SQLException the sql exception
      */
-    public  DatabaseHandler(PropertiesHandler propertiesHandler) throws IOException, SQLException {
+    public DatabaseHandler(PropertiesHandler propertiesHandler) throws IOException, SQLException {
         fileReader  = new FileReader();
         printFormatHandler = new PrintFormatHandler(fileReader);
         this.propertiesHandler = propertiesHandler;
@@ -27,33 +27,16 @@ public class DatabaseHandler{
     }
 
     /**
-     * Instantiates a new Database handler.
-     *
-     * @param subjectPathName           the subject path name
-     * @param roomPathName              the room path name
-     * @param lecturerPathName          the lecturer path name
-     * @param lecturerInSubjectPathName the lecturer in subject path name
-     * @throws IOException  the io exception
-     * @throws SQLException the sql exception
-     */
-    public  DatabaseHandler(PropertiesHandler propertiesHandler, String subjectPathName, String roomPathName, String lecturerPathName, String lecturerInSubjectPathName) throws IOException, SQLException {
-        databaseConnection = new DatabaseConnection(propertiesHandler);
-        fileReader  = new FileReader(subjectPathName, roomPathName, lecturerPathName, lecturerInSubjectPathName);
-        foreignKeysToBeAdded = new ArrayList<>();
-    }
-
-
-    /**
      * Instantiates a new Database handler for testing.
      *
      * @param propertiesHandler the properties handler
-     * @param filereader        the filereader
+     * @param fileReader        the filereader
      * @throws IOException  the io exception
      * @throws SQLException the sql exception
      */
-    public DatabaseHandler(PropertiesHandler propertiesHandler, FileReader filereader) throws IOException, SQLException {
-        fileReader  = filereader;
-        printFormatHandler = new PrintFormatHandler(fileReader);
+    public DatabaseHandler(PropertiesHandler propertiesHandler, FileReader fileReader) throws IOException, SQLException {
+        this.fileReader = fileReader;
+        printFormatHandler = new PrintFormatHandler(this.fileReader);
         this.propertiesHandler = propertiesHandler;
         databaseConnection = new DatabaseConnection(propertiesHandler);
 
@@ -70,6 +53,7 @@ public class DatabaseHandler{
         createDatabase();
         databaseConnection.setDataSourceDatabaseName();
     }
+
     /**
      * Removes all existing tables and recreate them.
      * Then fills them with data from the files.
@@ -137,7 +121,6 @@ public class DatabaseHandler{
         return tableNames;
     }
 
-
     /**
      * Gets the column count from the ResultSetMetaData
      * @param tableName Which table to get column count for.
@@ -147,7 +130,6 @@ public class DatabaseHandler{
     private int getColumnCountOfTable(String tableName) throws SQLException {
         return getResultSetMetaDataForEntireTable(tableName).getColumnCount();
     }
-
 
     /**
      * Creates a String that can be used for a prepared statement.

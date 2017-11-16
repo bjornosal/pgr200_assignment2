@@ -1,6 +1,7 @@
 package no.salvesen.assignment2;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import jdk.internal.util.xml.impl.Input;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -48,10 +49,26 @@ public class PropertiesHandler {
 
     protected void setDatabaseNameInProperties(String databaseName) throws IOException {
         Properties properties = new Properties();
+        String currentServerName;
+        String currentUser;
+        String currentPassword;
+
+        try(InputStream input = new FileInputStream(propertyFilePath)) {
+            properties.load(input);
+            currentServerName = properties.getProperty("serverName");
+            currentUser = properties.getProperty("databaseUser");
+            currentPassword = properties.getProperty("databasePassword");
+        }
+
         try(InputStream input = new FileInputStream(propertyFilePath);
             FileOutputStream fileOut = new FileOutputStream(propertyFilePath)) {
             properties.load(input);
+
             properties.setProperty("databaseName", databaseName);
+            properties.setProperty("serverName", currentServerName);
+            properties.setProperty("databaseUser",currentUser);
+            properties.setProperty("databasePassword",currentPassword);
+
             properties.store(fileOut, "Redefined by user");
         }
     }

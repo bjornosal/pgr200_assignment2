@@ -48,7 +48,7 @@ public class ClientThread implements Runnable
         } catch(SocketException e) {
             System.out.println("Client disconnected");
         } catch(FileSystemException e) {
-            System.out.println("Issues with deletion of properties file.");
+            System.out.println("Check that properties file has been deleted.");
         } catch(IOException exception) {
             System.out.println(exceptionHandler.outputIOException("There is an issue with the file."));
             exception.printStackTrace();
