@@ -15,6 +15,7 @@ public class DatabaseHandler{
     /**
      * Instantiates a new Database handler.
      *
+     * @param propertiesHandler a propertiesHandler
      * @throws IOException  the io exception
      * @throws SQLException the sql exception
      */
@@ -379,9 +380,10 @@ public class DatabaseHandler{
 
 
     /**
-     * Used to drop the schema
-     * @throws SQLException
-     * @throws IOException
+     * Drop database.
+     *
+     * @throws SQLException the sql exception
+     * @throws IOException  the io exception
      */
     protected void dropDatabase() throws SQLException, IOException {
         try (Connection connection = databaseConnection.getConnection()) {

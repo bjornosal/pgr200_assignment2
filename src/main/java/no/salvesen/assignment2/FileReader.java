@@ -33,9 +33,15 @@ public class FileReader {
         setLecturer_in_subject_file(new File("src/files/database files/lecturer_in_subject.csv"));
     }
 
+
     /**
      * Constructor for class FileReader.
      * Initializes files at param paths. Specifically for testing.
+     *
+     * @param subjectPathName           the subject path name
+     * @param roomPathName              the room path name
+     * @param lecturerPathName          the lecturer path name
+     * @param lecturerInSubjectPathName the lecturer in subject path name
      */
     public FileReader(String subjectPathName, String roomPathName, String lecturerPathName, String lecturerInSubjectPathName) {
         setSubjectFile(new File(subjectPathName));

@@ -1,11 +1,16 @@
 package no.salvesen.assignment2;
 
+/**
+ * The type Exception handler.
+ */
 public class ExceptionHandler {
 
 
     /**
-     * Prints out an error message to the user depending on where in the code the issue was presented.
-     * @param errorLocation Location in code error was thrown.
+     * Output io exception string.
+     *
+     * @param errorLocation the error location
+     * @return the string
      */
     public String outputIOException(String errorLocation) {
         switch(errorLocation.toLowerCase()) {
@@ -21,16 +26,22 @@ public class ExceptionHandler {
         return "An issue with IO. Unable to locate location of error.";
     }
 
+
     /**
-     * Prints out an error message if a file could not be found.
+     * Output file not found exception string.
+     *
+     * @return the string
      */
     public String outputFileNotFoundException() {
         return "Could not find file(s). Please check that file(s) is present.";
     }
 
+
     /**
-     * Prints out an error message to the user depending on where in the code the issue was presented.
-     * @param errorLocation Location in code error was thrown.
+     * Output sql exception string.
+     *
+     * @param errorLocation the error location
+     * @return the string
      */
     public String outputSQLException(String errorLocation) {
         switch(errorLocation.toLowerCase()) {
@@ -46,6 +57,11 @@ public class ExceptionHandler {
         return "Some error with SQL. Unable to locate location of error.";
     }
 
+    /**
+     * Output database sql exception string.
+     *
+     * @return the string
+     */
     public String outputDatabaseSQLException() {
 
         return "ERROR:\nPlease check that database is set up prior to connecting. \nIf database is set up, please check username and password.";

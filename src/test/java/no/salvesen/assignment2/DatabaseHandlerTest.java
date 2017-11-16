@@ -1,5 +1,6 @@
 package no.salvesen.assignment2;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,6 +13,8 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
 public class DatabaseHandlerTest {
+
+
     private DatabaseHandler databaseHandler;
     private PropertiesHandler propertiesHandler;
     private FileReader fileReader;
@@ -39,6 +42,7 @@ public class DatabaseHandlerTest {
         databaseHandler.setUpDatabase();
     }
 
+
     @Test
     public void tearDownDatabaseAndSetBackUp() throws Exception {
         databaseHandler.tearDownDatabaseAndSetBackUp();
@@ -47,7 +51,7 @@ public class DatabaseHandlerTest {
 
     @Test
     public void tearDownTableAndSetBackUpWithNewInformation() throws Exception {
-        tearDownDatabaseAndSetBackUp();
+        databaseHandler.tearDownDatabaseAndSetBackUp();
         assertThat(databaseHandler.getArrayListOfTableNames().size(), is(4));
         databaseHandler.tearDownTableAndSetBackUpWithNewInformation("room");
         assertThat(databaseHandler.getArrayListOfTableNames().size(), is(4));
@@ -55,6 +59,30 @@ public class DatabaseHandlerTest {
 
     @Test
     public void getRowsFromTableByColumnNameAndSearchColumnValue() throws Exception {
+        databaseHandler.tearDownDatabaseAndSetBackUp();
+
         assert(databaseHandler.getRowsFromTableByColumnNameAndSearchColumnValue("subject","code","pro100").contains("Creative Testing"));
+    }
+
+    @Test
+    public void databaseExists() throws Exception {
+        databaseHandler.createDatabase();
+        assertTrue(databaseHandler.databaseExists());
+    }
+
+    @Test
+    public void getAllRowsByTableName() throws Exception {
+        databaseHandler.tearDownDatabaseAndSetBackUp();
+        String allRowsFromSubjectTable = databaseHandler.getAllRowsByTableName("subject");
+
+        assertTrue(allRowsFromSubjectTable.contains("PGR200"));
+        assertTrue(allRowsFromSubjectTable.contains("PGR100"));
+        assertTrue(allRowsFromSubjectTable.contains("PRO100"));
+        assertTrue(allRowsFromSubjectTable.contains("PRO101"));
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        databaseHandler.dropDatabase();
     }
 }

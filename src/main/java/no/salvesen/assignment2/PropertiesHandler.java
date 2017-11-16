@@ -1,7 +1,6 @@
 package no.salvesen.assignment2;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
-import jdk.internal.util.xml.impl.Input;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

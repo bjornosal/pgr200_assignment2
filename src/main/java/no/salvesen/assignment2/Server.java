@@ -12,7 +12,7 @@ public class Server {
         new Server();
     }
 
-    private Server(){
+    public Server(){
         try(ServerSocket sSocket = new ServerSocket(8888)) {
             System.out.println("Server started at " + new Date());
             int clientCounter = 0;

@@ -57,7 +57,7 @@ public class Client
      * @param outputToServer  the output to server
      * @param inputFromClient the input from client
      */
-    protected void forwardMessageFromClient(PrintWriter outputToServer, BufferedReader inputFromClient) {
+    private void forwardMessageFromClient(PrintWriter outputToServer, BufferedReader inputFromClient) {
         try {
             if (inputFromClient.ready()) {
                 String input = inputFromClient.readLine();
@@ -75,7 +75,7 @@ public class Client
      * @param inputFromServer the input from server
      * @param socket          the socket
      */
-    protected void messageFromServer(BufferedReader inputFromServer, Socket socket)  {
+    private void messageFromServer(BufferedReader inputFromServer, Socket socket)  {
         try {
             if (inputFromServer.ready()) {
                 String messageReceivedFromServer = inputFromServer.readLine();

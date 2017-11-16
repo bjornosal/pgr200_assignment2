@@ -11,13 +11,17 @@ import static org.junit.Assert.*;
 
 public class FileReaderTest {
 
-    private FileReader fileReader = new FileReader();
+    private FileReader fileReader;
 
     @Before
     public void setUp() throws Exception {
-        fileReader.setSubjectFile(new File("src/test/files/Test_table_files/subject_test_file.csv"));
-        fileReader.setLecturerFile(new File("src/test/files/Test_table_files/lecturer_test_file.csv"));
-        fileReader.setRoomFile(new File("src/test/files/Test_table_files/room_test_file.csv"));
+        String subjectPathName = "src/test/files/Test_table_files/subject_test_file.csv";
+        String lecturerPathName = "src/test/files/Test_table_files/lecturer_test_file.csv";
+        String lecturerInSubjectPathName = "src/test/files/Test_table_files/lecturer_in_subject_test_file.csv";
+        String roomPathName = "src/test/files/Test_table_files/room_test_file.csv";
+
+        fileReader = new FileReader(subjectPathName, roomPathName,lecturerPathName, lecturerInSubjectPathName);
+
     }
 
     /**

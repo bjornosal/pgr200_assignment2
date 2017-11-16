@@ -24,8 +24,9 @@ public class InputHandler {
     /**
      * Instantiates a new Input handler.
      *
-     * @param outputToClient  the output to client
-     * @param inputFromClient the input from client
+     * @param outputToClient            the output to client
+     * @param inputFromClient           the input from client
+     * @param sessionPropertiesFileName the session properties file name
      * @throws IOException  the io exception
      * @throws SQLException the sql exception
      */
