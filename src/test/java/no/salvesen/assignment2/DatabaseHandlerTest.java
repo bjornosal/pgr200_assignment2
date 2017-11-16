@@ -1,5 +1,6 @@
 package no.salvesen.assignment2;
 
+import com.mysql.jdbc.exceptions.MySQLSyntaxErrorException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -65,7 +66,7 @@ public class DatabaseHandlerTest {
     }
 
     @Test
-    public void databaseExists() throws Exception {
+    public void databaseExistsAfterBeingSetUp() throws Exception {
         databaseHandler.createDatabase();
         assertTrue(databaseHandler.databaseExists());
     }
@@ -83,6 +84,5 @@ public class DatabaseHandlerTest {
 
     @After
     public void tearDown() throws Exception {
-        databaseHandler.dropDatabase();
     }
 }

@@ -408,8 +408,8 @@ public class DatabaseHandler{
                     return true;
                 }
             }
+            return false;
         }
-        return false;
     }
 
     /**
