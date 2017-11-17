@@ -17,7 +17,6 @@ public class Client
     private final int SERVER_PORT = 8888;
 
     private boolean clientIsConnected = true;
-    private String propertiesFilePath;
 
     /**
      * The entry point of application.
@@ -81,6 +80,7 @@ public class Client
 
                 if (messageReceivedFromServer.equals("CLOSE_SOCKET")) {
                     System.out.println("Have a nice day!");
+
                     socket.close();
                     clientIsConnected = false;
                 } else {

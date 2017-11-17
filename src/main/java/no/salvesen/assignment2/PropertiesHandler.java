@@ -2,10 +2,7 @@ package no.salvesen.assignment2;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Properties;
 
 public class PropertiesHandler {
@@ -68,16 +65,24 @@ public class PropertiesHandler {
             properties.setProperty("databaseUser",currentUser);
             properties.setProperty("databasePassword",currentPassword);
 
-            properties.store(fileOut, "Redefined by user");
+            properties.store(fileOut, "Added by user.");
         }
     }
 
-    public void waitUntilFileIsClosed() {
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            System.out.println("Wait was interrupted.");
+    public void clearPropertiesFile() throws IOException {
+        Properties properties = new Properties();
+        try(InputStream input = new FileInputStream(propertyFilePath);
+            FileOutputStream fileOut = new FileOutputStream(propertyFilePath)) {
+
+            properties.load(input);
+            properties.remove("databaseName");
+            properties.remove("serverName");
+            properties.remove("databaseUser");
+            properties.remove("databasePassword");
+            properties.store(fileOut, "Deleted by user");
+
         }
+
     }
 
     public void setSessionFile(boolean isSessionFile) {

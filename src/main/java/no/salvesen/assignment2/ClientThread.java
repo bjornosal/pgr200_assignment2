@@ -41,13 +41,9 @@ public class ClientThread implements Runnable
             InputHandler inputHandler = new InputHandler(outputToClient, inputFromClient, sessionPropertiesFileName);
             inputHandler.startMenuLoop();
 
-            Path path = Paths.get(sessionPropertiesFileName);
-            Files.delete(path);
 
         } catch(SocketException e) {
             System.out.println("Client disconnected");
-        } catch(FileSystemException e) {
-            System.out.println("Check that properties file has been deleted.");
         } catch(IOException exception) {
             System.out.println(exceptionHandler.outputIOException("There is an issue with the file."));
             exception.printStackTrace();
