@@ -35,7 +35,7 @@ public class InputHandler {
         exceptionHandler = new ExceptionHandler();
         menu = new Menu();
         propertiesHandler = new PropertiesHandler();
-        databaseHandler = new DatabaseHandler(propertiesHandler);
+        databaseHandler = new DatabaseHandler(propertiesHandler, fileReader);
 
         this.sessionPropertiesFileName = sessionPropertiesFileName;
         this.outputToClient = outputToClient;
@@ -181,10 +181,15 @@ public class InputHandler {
                     fileReader.setLecturer_in_subject_file(new File(inputFromClient.readLine()));
                     break;
                 case "5":
-                    outputToClient.println("Existing files chosen");
+                    chooseTableToFillWithInformation();
                     break;
                 case "6":
-                    chooseTableToFillWithInformation();
+                    fileReader.setSubjectFile(new File("src/files/database files/subject.csv"));
+                    fileReader.setRoomFile(new File("src/files/database files/room.csv"));
+                    fileReader.setLecturerFile(new File("src/files/database files/lecturer.csv"));
+                    fileReader.setLecturer_in_subject_file(new File("src/files/database files/lecturer_in_subject.csv"));
+                    databaseHandler.tearDownDatabaseAndSetBackUp();
+                    outputToClient.println("Existing files chosen");
                     break;
                 case "7":
                     showMainMenu();

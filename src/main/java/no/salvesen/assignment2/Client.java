@@ -41,7 +41,6 @@ public class Client
             BufferedReader inputFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             BufferedReader inputFromClient = new BufferedReader(new InputStreamReader(System.in))) {
 
-
             while(clientIsConnected) {
                 forwardMessageFromClient(outputToServer, inputFromClient);
                 messageFromServer(inputFromServer, socket);

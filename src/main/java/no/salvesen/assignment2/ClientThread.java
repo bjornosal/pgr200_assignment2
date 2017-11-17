@@ -38,7 +38,6 @@ public class ClientThread implements Runnable
              BufferedReader inputFromClient = new BufferedReader(new InputStreamReader(threadSocket.getInputStream()))
         ) {
             generateSessionPropertiesFileName();
-
             InputHandler inputHandler = new InputHandler(outputToClient, inputFromClient, sessionPropertiesFileName);
             inputHandler.startMenuLoop();
 

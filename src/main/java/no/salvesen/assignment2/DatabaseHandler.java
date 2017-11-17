@@ -13,21 +13,6 @@ public class DatabaseHandler{
     private PrintFormatHandler printFormatHandler;
 
     /**
-     * Instantiates a new Database handler.
-     *
-     * @param propertiesHandler a propertiesHandler
-     * @throws IOException  the io exception
-     * @throws SQLException the sql exception
-     */
-    public DatabaseHandler(PropertiesHandler propertiesHandler) throws IOException, SQLException {
-        fileReader  = new FileReader();
-        printFormatHandler = new PrintFormatHandler(fileReader);
-        this.propertiesHandler = propertiesHandler;
-        databaseConnection = new DatabaseConnection(propertiesHandler);
-        foreignKeysToBeAdded = new ArrayList<>();
-    }
-
-    /**
      * Instantiates a new Database handler for testing.
      *
      * @param propertiesHandler the properties handler
@@ -240,8 +225,12 @@ public class DatabaseHandler{
             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, columnValue);
             ResultSet resultSet = preparedStatement.executeQuery();
-
-            result += printFormatHandler.resultStringBuilder(resultSet, getColumnCountOfTable(fileReader.getTableName()), getMaxLengthOfColumnsByTableName());
+            //source: https://stackoverflow.com/questions/867194/java-resultset-how-to-check-if-there-are-any-results/6813771#6813771
+            if(resultSet.isBeforeFirst()) {
+                result += printFormatHandler.resultStringBuilder(resultSet, getColumnCountOfTable(fileReader.getTableName()), getMaxLengthOfColumnsByTableName());
+            } else {
+                return "No results were found. Please try again.";
+            }
         }
         return result;
     }
