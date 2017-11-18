@@ -3,10 +3,6 @@ package no.salvesen.assignment2;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
-import java.nio.file.FileSystemException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 
 /**
@@ -37,7 +33,7 @@ public class ClientThread implements Runnable
         try (PrintWriter outputToClient = new PrintWriter(threadSocket.getOutputStream(), true);
              BufferedReader inputFromClient = new BufferedReader(new InputStreamReader(threadSocket.getInputStream()))
         ) {
-            generateSessionPropertiesFileName();
+            generateSessionPropertiesFilePath();
             InputHandler inputHandler = new InputHandler(outputToClient, inputFromClient, sessionPropertiesFileName);
             inputHandler.startMenuLoop();
 
@@ -52,6 +48,12 @@ public class ClientThread implements Runnable
         }
     }
 
+    /**
+     * Generates a filepath for the session property file.
+     */
+    private void generateSessionPropertiesFilePath() {
+        sessionPropertiesFileName = "src/files/propertyFileFor_ID_" + getId() +".properties";
+    }
 
     public int getId() {
         return id;
@@ -61,7 +63,5 @@ public class ClientThread implements Runnable
         this.id = id;
     }
 
-    private void generateSessionPropertiesFileName() {
-        sessionPropertiesFileName = "src/files/propertyFileFor_ID_" + getId() +".properties";
-    }
+
 }

@@ -12,6 +12,11 @@ public class DatabaseConnection {
     private MysqlDataSource dataSource;
     private PropertiesHandler propertiesHandler;
 
+    /**
+     * Instantiates a new Database connection.
+     *
+     * @param propertiesHandler the properties handler
+     */
     public DatabaseConnection(PropertiesHandler propertiesHandler) {
         dataSource = new MysqlDataSource();
         this.propertiesHandler = propertiesHandler;
@@ -36,6 +41,9 @@ public class DatabaseConnection {
         return dataSource.getConnection();
     }
 
+    /**
+     * Sets data source database name.
+     */
     public void setDataSourceDatabaseName() {
         Properties properties = new Properties();
         InputStream input = null;

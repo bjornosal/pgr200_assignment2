@@ -354,11 +354,21 @@ public class InputHandler {
         }
     }
 
+    /**
+     * Checks if the defaut database properties file has been set.
+     * @return true if not empty/has been set
+     */
     private boolean isDefaultDatabaseLoginPropertiesFileIsEmpty() {
         File defaultDatabaseLogin = new File("src/files/defaultDatabaseLogin.properties");
         return defaultDatabaseLogin.length() > 0;
     }
 
+
+    /**
+     * Checks if database name is in use. Prompts the user to make a choice depending
+     * @throws IOException the io exception
+     * @throws SQLException if unable to set database name
+     */
     private void checkAndSetNewDatabaseName() throws IOException, SQLException {
         while(databaseHandler.databaseExists() && propertiesHandler.isSessionFile()) {
             outputToClient.println("Database with that name already exists.");
@@ -376,7 +386,7 @@ public class InputHandler {
      * Sets the connected status of the client.
      * @param connected false if disconnecting.
      */
-    public void setConnected(boolean connected) {
+    private void setConnected(boolean connected) {
         this.connected = connected;
     }
 }

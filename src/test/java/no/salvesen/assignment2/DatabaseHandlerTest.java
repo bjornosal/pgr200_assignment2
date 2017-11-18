@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
+/**
+ * The type Database handler test.
+ */
 public class DatabaseHandlerTest {
 
 
@@ -25,12 +28,23 @@ public class DatabaseHandlerTest {
     private final String roomFilePathName = "src/test/files/Test_table_files/room_test_file.csv";
     private final String lecturerInSubjectPathName = "src/test/files/Test_table_files/lecturer_in_subject_test_file.csv";
 
+    /**
+     * Instantiates a new Database handler test.
+     *
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public DatabaseHandlerTest() throws IOException, SQLException {
-        fileReader = new FileReader();
+        fileReader = new FileReader(subjectFilePathName, roomFilePathName, lecturerFilePathName, lecturerInSubjectPathName);
         propertiesHandler = new PropertiesHandler();
         databaseHandler = new DatabaseHandler(propertiesHandler, fileReader);
     }
 
+    /**
+     * Sets up.
+     *
+     * @throws Exception the exception
+     */
     @Before
     public void setUp() throws Exception {
         fileReader.setLecturer_in_subject_file(new File(lecturerInSubjectPathName));
@@ -44,12 +58,22 @@ public class DatabaseHandlerTest {
     }
 
 
+    /**
+     * Tear down database and set back up.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void tearDownDatabaseAndSetBackUp() throws Exception {
         databaseHandler.tearDownDatabaseAndSetBackUp();
         assertThat(databaseHandler.getArrayListOfTableNames().size(), is(4));
     }
 
+    /**
+     * Tear down table and set back up with new information.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void tearDownTableAndSetBackUpWithNewInformation() throws Exception {
         databaseHandler.tearDownDatabaseAndSetBackUp();
@@ -58,6 +82,11 @@ public class DatabaseHandlerTest {
         assertThat(databaseHandler.getArrayListOfTableNames().size(), is(4));
     }
 
+    /**
+     * Gets rows from table by column name and search column value.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void getRowsFromTableByColumnNameAndSearchColumnValue() throws Exception {
         databaseHandler.tearDownDatabaseAndSetBackUp();
@@ -65,12 +94,22 @@ public class DatabaseHandlerTest {
         assert(databaseHandler.getRowsFromTableByColumnNameAndSearchColumnValue("subject","code","pro100").contains("Creative Testing"));
     }
 
+    /**
+     * Database exists after being set up.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void databaseExistsAfterBeingSetUp() throws Exception {
         databaseHandler.createDatabase();
         assertTrue(databaseHandler.databaseExists());
     }
 
+    /**
+     * Gets all rows by table name.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void getAllRowsByTableName() throws Exception {
         databaseHandler.tearDownDatabaseAndSetBackUp();
@@ -82,7 +121,15 @@ public class DatabaseHandlerTest {
         assertTrue(allRowsFromSubjectTable.contains("PRO101"));
     }
 
+    /**
+     * Tear down.
+     *
+     * @throws Exception the exception
+     */
     @After
     public void tearDown() throws Exception {
+        if(databaseHandler.databaseExists()) {
+            databaseHandler.dropDatabase();
+        }
     }
 }

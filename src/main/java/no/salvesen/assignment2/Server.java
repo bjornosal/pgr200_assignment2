@@ -12,6 +12,9 @@ public class Server {
         new Server();
     }
 
+    /**
+     * Instantiates a new Server.
+     */
     public Server(){
         try(ServerSocket sSocket = new ServerSocket(8888)) {
             System.out.println("Server started at " + new Date());
@@ -30,6 +33,11 @@ public class Server {
         }
     }
 
+    /**
+     *
+     * @param socket Socket that the client will receive.
+     * @param clientThread The thread created by the server.
+     */
     private void printInformationForThread(Socket socket, ClientThread clientThread) {
         System.out.println("IP address: " + socket.getInetAddress());
         System.out.println("Thread ID: " + clientThread.getId());
