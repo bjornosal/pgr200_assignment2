@@ -28,7 +28,7 @@ public class DatabaseConnection {
      * @throws IOException If no file is found or unable to load the InputStream.
      */
     public void initializeProperties() throws IOException {
-        propertiesHandler.initializeProperties(dataSource);
+        propertiesHandler.assignPropertiesToDatasource(dataSource);
     }
 
 

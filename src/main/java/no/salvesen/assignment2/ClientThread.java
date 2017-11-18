@@ -37,7 +37,6 @@ public class ClientThread implements Runnable
             InputHandler inputHandler = new InputHandler(outputToClient, inputFromClient, sessionPropertiesFileName);
             inputHandler.startMenuLoop();
 
-
         } catch(SocketException e) {
             System.out.println("Client disconnected");
         } catch(IOException exception) {

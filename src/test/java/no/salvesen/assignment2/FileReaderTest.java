@@ -27,7 +27,7 @@ public class FileReaderTest {
     /**
      * Asserts that the readFile method works as intended
      * by checking that all fields is the correct size according to the file.
-     * @throws Exception
+     * @throws Exception exception
      */
     @Test
     public void readFile() throws Exception {

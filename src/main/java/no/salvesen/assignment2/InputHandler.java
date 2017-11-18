@@ -196,8 +196,6 @@ public class InputHandler {
                     showMainMenu();
                     break;
                 case "8":
-                    //TODO Fix that user is able to log in with wrong ID
-                    //TODO fix that properties file is closed before ending application.
                     if(propertiesHandler.isSessionFile()) {
                         propertiesHandler.clearPropertiesFile();
                     }

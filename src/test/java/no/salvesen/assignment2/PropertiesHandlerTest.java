@@ -23,7 +23,7 @@ public class PropertiesHandlerTest {
 
     @Test
     public void initializeProperties() throws Exception {
-        propertiesHandler.initializeProperties(dataSource);
+        propertiesHandler.assignPropertiesToDatasource(dataSource);
         assertEquals("localhost", dataSource.getServerName());
         assertEquals("pgr200", dataSource.getUser());
     }

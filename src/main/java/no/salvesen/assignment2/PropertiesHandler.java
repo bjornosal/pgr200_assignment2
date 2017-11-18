@@ -27,7 +27,7 @@ public class PropertiesHandler {
      * @param dataSource the data source
      * @throws IOException the io exception
      */
-    public void initializeProperties(MysqlDataSource dataSource) throws IOException {
+    public void assignPropertiesToDatasource(MysqlDataSource dataSource) throws IOException {
         Properties properties = new Properties();
 
         try (InputStream input = new FileInputStream(propertyFilePath)) {

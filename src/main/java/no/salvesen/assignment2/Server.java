@@ -4,6 +4,7 @@ package no.salvesen.assignment2;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Date;
 
 public class Server {
@@ -24,12 +25,15 @@ public class Server {
                 Socket socket = sSocket.accept();
                 ClientThread clientThread = new ClientThread(clientCounter, socket);
                 new Thread(clientThread).start();
+
                 clientCounter++;
                 System.out.println("Client number " + clientCounter + " connected with: ");
                 printInformationForThread(socket, clientThread);
             }
-        } catch (IOException e) {
+        } catch (SocketException e) {
             System.out.println("Issue with socket.");
+        } catch (IOException e) {
+            System.out.println("Issue with file.");
         }
     }
 
