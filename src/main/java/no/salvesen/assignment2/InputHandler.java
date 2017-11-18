@@ -20,8 +20,6 @@ public class InputHandler {
     private PrintWriter outputToClient;
     private BufferedReader inputFromClient;
     private boolean connected = true;
-    private boolean finished = false;
-
 
     /**
      * Instantiates a new Input handler.
@@ -97,7 +95,7 @@ public class InputHandler {
      */
     public void startMenuLoop() {
         boolean connected = false;
-        while (!connected && !finished) {
+        while (!connected) {
             try {
                 setUpProperties();
             } catch (IOException e) {
