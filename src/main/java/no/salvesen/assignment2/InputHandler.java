@@ -60,6 +60,7 @@ public class InputHandler {
                     if(!isDefaultDatabaseLoginPropertiesFileIsEmpty()) {
                         outputToClient.println("Default login has not been set up,\nplease set up before continuing.");
                         setUserProperties(properties);
+                        setUp = true;
                     } else {
                         propertiesHandler.setPropertyFilePath("./src/files/defaultDatabaseLogin.properties");
                         setUp = true;

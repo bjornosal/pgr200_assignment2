@@ -41,7 +41,6 @@ public class ClientThread implements Runnable
             System.out.println("Client disconnected");
         } catch(IOException exception) {
             System.out.println(exceptionHandler.outputIOException("There is an issue with the file."));
-            exception.printStackTrace();
         } catch (SQLException e) {
             System.out.println(exceptionHandler.outputSQLException("foreignkey"));
         }
