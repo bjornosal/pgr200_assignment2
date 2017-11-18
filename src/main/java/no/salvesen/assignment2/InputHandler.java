@@ -20,6 +20,8 @@ public class InputHandler {
     private PrintWriter outputToClient;
     private BufferedReader inputFromClient;
     private boolean connected = true;
+    private boolean finished = false;
+
 
     /**
      * Instantiates a new Input handler.
@@ -48,10 +50,10 @@ public class InputHandler {
      * @throws SQLException if issue with SQL queries.
      */
     public void setUpProperties() throws IOException, SQLException {
-        boolean finished = false;
+        boolean setUp = false;
         String menuChoice;
 
-        while (!finished && connected) {
+        while (!setUp) {
             Properties properties = new Properties();
             outputToClient.println(menu.propertiesMenu());
             menuChoice = inputFromClient.readLine();
@@ -62,12 +64,12 @@ public class InputHandler {
                         setUserProperties(properties);
                     } else {
                         propertiesHandler.setPropertyFilePath("./src/files/defaultDatabaseLogin.properties");
+                        setUp = true;
                     }
-                    finished = true;
                     break;
                 case "2":
                     setUserProperties(properties);
-                    finished = true;
+                    setUp = true;
                     break;
                 default:
                     outputToClient.println("Incorrect choice, please try again.");
@@ -83,44 +85,45 @@ public class InputHandler {
             databaseHandler.createDatabase();
 
         } catch (SQLException e) {
-            exceptionHandler.outputDatabaseSQLException();
+            outputToClient.println(exceptionHandler.outputDatabaseSQLException());
             setUpProperties();
         }
-
-
     }
+
 
     /**
      * Starts the application loop,
      * and handles exceptions thrown by the methods.
      */
     public void startMenuLoop() {
-        try {
-            setUpProperties();
-        } catch (IOException e) {
-            exceptionHandler.outputIOException("writeprop");
-        } catch(SQLException e) {
-            exceptionHandler.outputIOException("createdatabase");
-        }
-        try {
-            databaseHandler.tearDownDatabaseAndSetBackUp();
-            connected = true;
-        } catch (SQLException e) {
-            exceptionHandler.outputSQLException("connect");
-        } catch (FileNotFoundException e) {
-            exceptionHandler.outputFileNotFoundException();
-        } catch (IOException e) {
-            e.printStackTrace();
+        boolean connected = false;
+        while (!connected && !finished) {
+            try {
+                setUpProperties();
+            } catch (IOException e) {
+                outputToClient.println(exceptionHandler.outputIOException("writeprop"));
+            } catch (SQLException e) {
+                outputToClient.println(exceptionHandler.outputSQLException("createdatabase"));
+            }
+            try {
+                databaseHandler.tearDownDatabaseAndSetBackUp();
+                connected = true;
+            } catch (SQLException e) {
+                outputToClient.println(exceptionHandler.outputSQLException("connect"));
+            } catch (FileNotFoundException e) {
+                outputToClient.println(exceptionHandler.outputFileNotFoundException());
+            } catch (IOException e) {
+                outputToClient.println(exceptionHandler.outputIOException("connect"));
+            }
         }
         try {
             showMainMenu();
         } catch (SQLException e) {
-            exceptionHandler.outputSQLException("createtable");
-            e.printStackTrace();
+            outputToClient.println(exceptionHandler.outputSQLException("createtable"));
         } catch (FileNotFoundException e) {
-            exceptionHandler.outputFileNotFoundException();
+            outputToClient.println(exceptionHandler.outputFileNotFoundException());
         } catch(IOException e) {
-            exceptionHandler.outputIOException("fileissue");
+            outputToClient.println(exceptionHandler.outputIOException("fileissue"));
         }
     }
 
